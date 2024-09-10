@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Offer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #343a40;
+            color: white;
+            height: 100vh;
+            padding-top: 20px;
+            position: fixed;
+        }
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 15px 20px;
+            margin: 10px 0;
+        }
+
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+
+        .container {
+            margin-left: 260px; /* Adjust for the sidebar width */
+            padding: 20px;
+            width: calc(100% - 260px);
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        p {
+            color: #999;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-group label {
+            width: 25%;
+            color: #333;
+        }
+
+        .form-group input, 
+        .form-group select {
+            width: 70%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        #snackbar {
+    visibility: hidden; /* Hidden by default */
+    min-width: 250px; /* Minimum width */
+    margin-left: -125px; /* Center the snackbar */
+    background-color: #333; /* Black background color */
+    color: #fff; /* White text color */
+    text-align: center; /* Centered text */
+    border-radius: 2px; /* Rounded borders */
+    padding: 16px; /* Padding */
+    position: fixed; /* Sit on top of the screen */
+    z-index: 1; /* Add a z-index if needed */
+    left: 50%; /* Center the snackbar horizontally */
+    bottom: 30px; /* 30px from the bottom */
+    font-size: 17px; /* Increase font size */
+}
+
+#snackbar.show {
+    visibility: visible; /* Show the snackbar */
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s; /* Fade in and out */
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+}
+
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+
+        <a href="/admin/dashboard">Dashboard</a>
+        <a href="/admin/loadusermanage">Customer</a>
+        <a href="/admin/loadOrderlist">Orders</a>
+        <a href="/admin/loadCategory">Product</a>
+        <a href="/admin/loadCoupon">Coupon</a>
+        <a href="/admin/loadOffer">Offers</a>
+        <a href="/admin/loadCategory">Categories</a>
+        <a href="/admin/logout">Logout</a>
+        <a href="/admin/loadOfferListing">Offer List</a>
+
+    </div>
+
+    <div class="container">
+        <div id="snackbar"></div>
+
+        <h2>Offers</h2>
+        <p>Offers / Add Offer</p>
+
+        <form action="/add-offer" method="POST">
+            <div class="form-group">
+                <label for="offerName">Offer Name</label>
+                <input type="text" id="offerName" name="offerName" value="" required>
+            </div>
+        
+            <div class="form-group">
+                <label for="offerType">Select Offer Type</label>
+                <select id="offerType" name="offerType" onchange="toggleOfferType()" required>
+                    <option value="">Select an offer type</option>
+                    <option value="product" <%= offerType === 'product' ? 'selected' : '' %>>Product Offer</option>
+                    <option value="category" <%= offerType === 'category' ? 'selected' : '' %>>Category Offer</option>
+                </select>
+            </div>
+        
+            <div class="form-group" id="productOfferField" style="display: <%= offerType === 'product' ? 'block' : 'none' %>;">
+                <label for="productOffer">Select Product</label>
+                <select id="productOffer" name="productOffer" onchange="toggleProductDetails()">
+                    <option value="">Select a product</option>
+                    <% products.forEach(function(product) { %>
+                        <option value="<%= product._id %>" <%= productOffer === product._id ? 'selected' : '' %>><%= product.productName %></option>
+                    <% }) %>
+                </select>
+            </div>
+        
+            <div class="form-group" id="productDetailsField" style="display: none;">
+                <label for="productDetails">Product Details</label>
+                <input type="text" id="productDetails" name="productDetails" value="<%= productDetails %>" placeholder="Enter product details">
+            </div>
+        
+            <div class="form-group" id="categoryOfferField" style="display: <%= offerType === 'category' ? 'block' : 'none' %>;">
+                <label for="categoryOffer">Select Category</label>
+                <select id="categoryOffer" name="categoryOffer">
+                    <option value="">Select a category</option>
+                    <% categories.forEach(function(category) { %>
+                        <option value="<%= category._id %>" <%= categoryOffer === category._id ? 'selected' : '' %>><%= category.name %></option>
+                    <% }) %>
+                </select>
+            </div>
+        
+            <div class="form-group">
+                <label for="discountPercentage">Offer Percentage %</label>
+                <input type="number" id="discountPercentage" name="discountPercentage" value="<%= discountPercentage %>" required>
+            </div>
+        
+            <div class="form-group">
+                <label for="maxRedeem">Max Redeem Amount</label>
+                <input type="number" id="maxRedeem" name="maxRedeem" value="<%= maxRedeem %>" required>
+            </div>
+        
+            <div class="form-group">
+                <label for="offerDescription">Offer Description</label>
+                <input type="text" id="offerDescription" name="offerDescription" value="<%= offerDescription %>" required>
+            </div>
+        
+            <div class="form-actions">
+                <button type="submit" class="btn btn-success">Add Offer</button>
+                <button type="reset" class="btn btn-secondary">Reset</button>
+            </div>
+        </form>
+        
+    </div>
+
+    <script>
+        function toggleOfferType() {
+            const offerType = document.getElementById('offerType').value;
+            const productField = document.getElementById('productOfferField');
+            const categoryField = document.getElementById('categoryOfferField');
+            const productDetailsField = document.getElementById('productDetailsField');
+
+            if (offerType === 'product') {
+                productField.style.display = 'flex';
+                categoryField.style.display = 'none';
+                productDetailsField.style.display = 'none'; // Hide until a product is selected
+            } else if (offerType === 'category') {
+                productField.style.display = 'none';
+                categoryField.style.display = 'flex';
+                productDetailsField.style.display = 'none';
+            }
+        }
+
+        function toggleProductDetails() {
+            const productSelected = document.getElementById('productOffer').value;
+            const productDetailsField = document.getElementById('productDetailsField');
+
+            if (productSelected) {
+                productDetailsField.style.display = 'flex';
+            } else {
+                productDetailsField.style.display = 'none';
+            }
+        }
+
+        document.querySelector('form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const formData = new FormData(this);
+    const offerData = {
+        offerName: formData.get('offerName'),
+        offerType: formData.get('offerType'),
+        productOffer: formData.get('productOffer') || null,
+        categoryOffer: formData.get('categoryOffer') || null,
+        discountPercentage: formData.get('discountPercentage'),
+        maxRedeem: formData.get('maxRedeem'),
+        offerDescription: formData.get('offerDescription')
+    };
+
+    fetch('/admin/addOffers', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(offerData)
+    }).then(response => response.json())
+      .then(data => {
+          // Handle success
+          showSnackbar(data.message)
+      }).catch(error => {
+          // Handle error
+          console.error('Error:', error);
+          showSnackbar(data.error)
+      });
+});
+
+function showSnackbar(message) {
+    var snackbar = document.getElementById("snackbar");
+    snackbar.textContent = message; // Set the message
+    snackbar.className = "show"; // Add the "show" class
+    setTimeout(function() { 
+        snackbar.className = snackbar.className.replace("show", ""); 
+    }, 3000); // Remove the "show" class after 3 seconds
+}
+
+    </script>
+</body>
+</html>

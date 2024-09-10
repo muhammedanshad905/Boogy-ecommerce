@@ -1,0 +1,322 @@
+
+<%- include('../layouts/header') %>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header area */
+.header_area {
+    background-color: #343a40;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header_area .navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.header_area .navbar-brand img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.header_area .nav-link1 {
+    color: #ffffff !important;
+    margin-right: 15px;
+    font-weight: 500;
+}
+
+.header_area .nav-link1:hover {
+    color: #dcdcdc !important;
+}
+
+.header_area .dropdown-menu {
+    background-color: #343a40;
+    border: none;
+}
+
+.header_area .dropdown-menu .nav-link {
+    color: #ffffff !important;
+}
+
+.header_area .dropdown-menu .nav-link:hover {
+    color: #dcdcdc !important;
+}
+
+.header_area .cart i,
+.header_area .search i {
+    color: #ffffff;
+}
+
+/* Login box area */
+.login_box_area {
+    padding: 50px 0;
+}
+
+.login_box_img {
+    text-align: center;
+}
+
+.login_box_img img {
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+.login_box_img .hover {
+    margin-top: 20px;
+}
+
+.login_box_img .hover h4 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.login_box_img .hover p {
+    color: #666;
+}
+
+.login_form_inner {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.login_form_inner .card-body {
+    padding: 0;
+}
+
+.login_form_inner .otp-field {
+    display: flex;
+    justify-content: space-between;
+}
+
+.login_form_inner .otp-field input {
+    width: 48px;
+    height: 48px;
+    text-align: center;
+    font-size: 24px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 0 4px;
+}
+
+.login_form_inner .otp-field input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.login_form_inner .primary-btn {
+    width: 100%;
+    background-color: #007bff;
+    border: none;
+    color: #ffffff;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login_form_inner .primary-btn:hover {
+    background-color: #0056b3;
+}
+
+.login_form_inner .resend {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.login_form_inner .resend a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.login_form_inner .resend a:hover {
+    text-decoration: underline;
+}
+
+#timer {
+    font-size: 14px;
+    color: #555;
+}
+
+#timer span {
+    font-weight: 700;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .login_box_img img {
+        margin-bottom: 20px;
+    }
+
+    .otp-field {
+        justify-content: center;
+    }
+}
+</style>
+<body>
+
+
+	<!-- Start Header Area -->
+	<header class="header_area sticky-header">
+		<div class="main_menu">
+			<nav class="navbar navbar-expand-lg navbar-light main_box1">
+				<div class="container">
+
+ 					<a class="navbar-brand logo_h" href="/home"><img src="/assets/img/logoWhite.png" alt=""></a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+					 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+
+                    <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+						<ul class="nav navbar-nav menu_nav ml-auto">
+							<li class="nav-item"><a class="nav-link1" href="/home">Home</a></li>
+							<li class="nav-item"><a class="nav-link1" href="/shop">Product</a></li>
+							<li class="nav-item submenu dropdown active">
+								<a href="#" class="nav-link1 dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true"
+								 aria-expanded="false">Login</a>
+								<ul class="dropdown-menu">
+									<li class="nav-item"><a class="nav-link" href="/login">My Profile</a></li>
+									<li class="nav-item"><a class="nav-link" href="/login">Orders</a></li>
+									<li class="nav-item"><a class="nav-link" href="/login">Wishlist</a></li>
+									<li class="nav-item"><a class="nav-link" href="/register">Sign Up</a></li>
+								</ul>
+							</li>
+						</ul>
+						<ul class="nav navbar-nav navbar-right">
+							<li class="nav-item"><a href="/login" class="cart"><span><i class="fa-solid fa-cart-shopping" style="color: #ffffff;"></i></span></a></li>
+							<li class="nav-item">
+								<button class="search"><span id="search"><i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i></span></button>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</div>
+		<div class="search_input" id="search_input_box">
+			<div class="container">
+				<form class="d-flex justify-content-between">
+					<input type="text" class="form-control" id="search_input" placeholder="Search Here">
+					<button type="submit" class="btn"></button>
+					<span id="close_search" title="Close Search"><i class="fa-solid fa-magnifying-glass"></i></span>
+				</form>
+			</div>
+		</div>
+	</header>
+    <br><br>
+	<section class="login_box_area section_gap">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="login_box_img">
+						<img class="img-fluid" src="/assets/img/login.png" alt="">
+						<div class="hover">
+							<h4>New to our website?</h4>
+							<p>Discover iconic timepieces from renowned global watch brands. Luxury, craftsmanship, and heritage await on our platform</p>
+							
+						</div>
+					</div>
+				</div>
+			<div class="col-lg-6">
+				<div class="login_form_inner">
+					<div class="card-body p-5 text-center">
+						<p>Please enter the OTP sent to <br> <%= message %>. <a href="">Change</a></p>
+
+					<form class="row login_form" action="/forgotOtpVerify" method="post" id="contactForm" novalidate="novalidate">
+						<div class="otp-field mb-4">
+							<input type="number" name="otp" maxlength="1" oninput="moveToNextInput(this)"/>
+							<input type="number" name="otp" maxlength="1" oninput="moveToNextInput(this)"/>
+							<input type="number" name="otp" maxlength="1" oninput="moveToNextInput(this)"/>
+							<input type="number" name="otp" maxlength="1" oninput="moveToNextInput(this)"/>
+							<input type="number" name="otp" maxlength="1" oninput="moveToNextInput(this)"/>
+							<input type="number" name="otp" maxlength="1" oninput="moveToNextInput(this)"/>
+						  </div>
+                          <!-- disabled -->
+			  
+						<div class="col-md-12 form-group">
+							<button type="submit" value="submit" class="primary-btn">Verify</button>
+						</div>
+					</form>
+					<p class="resend text-muted mb-0" id="resendOtpLink" style="display: none;">
+						Didn't receive code? <a href="/resendOTP" >Request again</a>
+					</p>
+					<p id="timer" >Time remaining: <span id="timerValue">3:00</span></p>
+                    <% if(typeof message !== "undefined"){
+                        %>
+                     <p style="color: red;"><%=message%></p> 
+                  <%
+                   }
+                  %>
+				</div>
+			  </div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--================End Otp =================-->
+
+
+
+<script>
+function startTimer(duration, display) {
+    var timer = duration;
+    var minutes, seconds;
+
+    var intervalId = setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+            clearInterval(intervalId); 
+            document.getElementById("resendOtpLink").style.display = "inline"; 
+            document.getElementById("timer").style.display = "none"; 
+        }
+    }, 1000);
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    var threeMinutes = 60 * 3;
+    var display = document.querySelector('#timerValue');
+    startTimer(threeMinutes, display);
+
+    document.getElementById("resendOtpLink").addEventListener("click", function(event) {
+        event.preventDefault();
+        startTimer(threeMinutes, display); 
+        document.getElementById("resendOtpLink").style.display = "none"; 
+        document.getElementById("timer").style.display = "block"; 
+    });
+});
+
+function moveToNextInput(currentInput) {
+    const currentValue = currentInput.value;
+    
+    if (currentValue !== "" && !isNaN(currentValue)) {
+        const nextInput = currentInput.nextElementSibling;
+        if (nextInput) {
+            nextInput.focus();
+        }
+    }
+    
+}
+
+</script>
+
+
+
+ <%- include('../layouts/footer') %>

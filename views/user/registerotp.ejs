@@ -1,0 +1,116 @@
+<%- include('../layouts/header') %>
+<link rel="stylesheet" href="/user/css/otp.css">
+<body>
+    <div class="main">
+        <div class="image">
+            <img class="logo" src="/user/img/logo.png" alt>
+        </div>
+       
+        <% if(locals.message) { %>
+            <p><%= locals.message %></p>
+        <% } %>
+        <p id="timer"></p>
+        <p id="txt">Seconds left</p>
+        <div class="form">
+            <form action="" method=""  id="form">
+                <div class="form-group">
+                    <input type="text" name="otp" class="inp"  id="otp">
+                </div>
+                <br>
+                <button type="submit" class="otpbtn">Verify</button>
+                <div id="message" style="color: green;"></div>
+                <div id="error" style="color: red;"></div>
+              
+            </form>
+            <p id="timer"></p>
+            <p id="txt">Seconds left</p>    
+            <div class="links">
+                <a class="resend" href="/resendOTP"  style="display:none"> Resend OTP</a>
+                <a class="login" href="/login">Login with Password</a>
+            </div>
+</body>
+
+
+<script>
+    const timerElement = document.getElementById("timer");
+    const otpInput = document.getElementById("otp");
+    const submitButton = document.querySelector(".otpbtn");
+    const message = document.getElementById("message");
+    const error = document.getElementById("error");
+    const txt = document.getElementById("txt");
+    const resendLink = document.querySelector(".resend");
+    const otpForm = document.getElementById("form");
+
+    let timer;
+    let countdown;
+
+    function startTimer(duration, display) {
+        let timer = duration, minutes, seconds;
+        countdown = setInterval(() => {
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            display.textContent = minutes + ":" + seconds;
+
+            if (--timer < 0) {
+                clearInterval(countdown);
+                display.textContent = "";
+                txt.style.display = "none";
+                resendLink.style.display = "block";
+            }
+        }, 1000);
+    }
+
+    otpForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+        
+        const otp = otpInput.value;
+        if (!otp) {
+            error.textContent = "Please enter the OTP.";
+            return;
+        }
+
+        fetch('/otpverify', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ otp: otp })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                message.textContent = "OTP verified successfully!";
+                error.textContent = "";
+                window.location.href = "/login";
+            } else {
+                error.textContent = "Invalid OTP. Please try again.";
+                message.textContent = "";
+                resendLink.style.display = "block";
+                clearInterval(countdown);
+            }
+        })
+        .catch(err => {
+            error.textContent = "An error occurred. Please try again.";
+            message.textContent = "";
+            clearInterval(countdown);
+        });
+    });
+
+    resendLink.addEventListener("click", function() {
+        clearInterval(countdown);
+        txt.style.display = "block";
+        resendLink.style.display = "none";
+        startTimer(180, timerElement);
+    });
+
+    window.onload = function () {
+        startTimer(60, timerElement); 
+    };
+</script>
+
+
+<%- include('../layouts/footer') %>

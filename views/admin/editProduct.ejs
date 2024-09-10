@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        .form-group img {
+            max-width: 150px;
+            height: auto;
+            margin-top: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.875rem;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Edit Product</h2>
+        <form id="editProductForm">
+            <div class="form-group">
+                <label for="productName">Product Name:</label>
+                <input type="text" class="form-control" id="productName" name="productName"
+                    value="<%= product.productName %>" required>
+                <div class="error-message" id="productNameError"></div>
+            </div>
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select class="form-control" id="category" name="category" required>
+                    <% categories.forEach(cat=> { %>
+                        <option value="<%= cat._id %>" <%=product.category==cat._id ? 'selected' : '' %>><%= cat.name %>
+                        </option>
+                        <% }) %>
+                </select>
+                <div class="error-message" id="categoryError"></div>
+            </div>
+            <div class="form-group">
+                <label for="price">Price:</label>
+                <input type="number" class="form-control" id="price" name="price" value="<%= product.price %>" required>
+                <div class="error-message" id="priceError"></div>
+            </div>
+            <div class="form-group">
+                <label for="quantity">Quantity:</label>
+                <input type="number" class="form-control" id="quantity" name="quantity" value="<%= product.quantity %>"
+                    required>
+                <div class="error-message" id="quantityError"></div>
+            </div>
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea class="form-control" id="description" name="description" rows="4"
+                    required><%= product.description %></textarea>
+                <div class="error-message" id="descriptionError"></div>
+            </div>
+            <div class="form-group">
+                <label for="discount">Discount:</label>
+                <input type="number" class="form-control" id="discount" name="discount" value="<%= product.discount %>">
+                <div class="error-message" id="discountError"></div>
+            </div>
+            <div class="form-group">
+                <label for="discountPrice">Discount Price:</label>
+                <input type="number" class="form-control" id="discountPrice" name="discountPrice"
+                    value="<%= product.discountPrice %>">
+                <div class="error-message" id="discountPriceError"></div>
+            </div>
+            <div class="d-flex">
+                <div class="form-group">
+                    <label for="productImages">Product Images 1:</label>
+                    <input type="file" class="form-control-file" id="productImage1" name="productImage1"
+                        accept="image/*">
+                    <% if (product.productImage.length> 0) { %>
+                        <img src="/assets/productImages/<%= product.productImage[0] %>" alt="Product Image">
+                        <% } %>
+                            <div class="error-message" id="imageError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="productImages">Product Images 2:</label>
+                    <input type="file" class="form-control-file" id="productImage2" name="productImage1"
+                        accept="image/*">
+                    <% if (product.productImage.length> 1) { %>
+                        <img src="/assets/productImages/<%= product.productImage[1] %>" alt="Product Image">
+                        <% } %>
+                            <div class="error-message" id="imageError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="productImages">Product Images 3:</label>
+                    <input type="file" class="form-control-file" id="productImage3" name="productImage1"
+                        accept="image/*">
+                    <% if (product.productImage.length> 2) { %>
+                        <img src="/assets/productImages/<%= product.productImage[2] %>" alt="Product Image">
+                        <% } %>
+                            <div class="error-message" id="imageError"></div>
+                </div>
+                <input id="productId" type="hidden" value="<%= product._id %>">
+                <div class="form-group">
+                    <label for="productImages">Product Images 4:</label>
+                    <input type="file" class="form-control-file" id="productImage4" name="productImage1"
+                        accept="image/*">
+                    <% if (product.productImage.length> 3) { %>
+                        <img src="/assets/productImages/<%= product.productImage[3] %>" alt="Product Image">
+                        <% } %>
+                            <div class="error-message" id="imageError"></div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Product</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('editProductForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const form = document.getElementById('editProductForm');
+            const formData = new FormData(form);
+            let valid = true;
+            const errorMessages = [];
+
+            // Clear previous errors
+            document.querySelectorAll('.error-message').forEach(elem => elem.textContent = '');
+
+            // Helper function to add error messages
+            function addError(element, message, errorId) {
+                valid = false;
+                document.getElementById(errorId).textContent = message;
+                errorMessages.push(message);
+            }
+
+            // Validate product name
+            const productName = document.getElementById('productName');
+            const productId = document.getElementById('productId').value
+            const namePattern = /^[a-zA-Z\s]+$/;
+            if (!productName.value.trim()) {
+                addError(productName, 'Product name is required.', 'productNameError');
+            } else if (!namePattern.test(productName.value.trim())) {
+                addError(productName, 'Product name must contain only letters and spaces.', 'productNameError');
+            }
+
+            // Validate category
+            const category = document.getElementById('category');
+            if (!category.value) {
+                addError(category, 'Please select a category.', 'categoryError');
+            }
+
+            // Validate price
+            const price = document.getElementById('price');
+            if (price.value <= 0) {
+                addError(price, 'Price must be greater than zero.', 'priceError');
+            }
+
+            // Validate quantity
+            const quantity = document.getElementById('quantity');
+            if (quantity.value <= 0) {
+                addError(quantity, 'Quantity must be greater than zero.', 'quantityError');
+            }
+
+            // Validate description
+            const description = document.getElementById('description');
+            if (!description.value.trim()) {
+                addError(description, 'Description is required.', 'descriptionError');
+            }
+
+            // Validate discount
+            const discount = document.getElementById('discount');
+            if (discount.value < 0) {
+                addError(discount, 'Discount cannot be negative.', 'discountError');
+            }
+
+            // Validate discount price
+            const discountPrice = document.getElementById('discountPrice');
+            if (discountPrice.value < 0) {
+                addError(discountPrice, 'Discount price cannot be negative.', 'discountPriceError');
+            }
+
+            // Validate images
+            const imageInput = ['procutImage1', 'productImage2', 'productImage3', 'prodctImage4']
+            const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/bmp', 'image/webp', 'image/svg+xml', 'image/tiff'];
+            imageInput.forEach((inputId) => {
+    const input = document.getElementById(inputId);
+    if (input && input.files.length > 0) {
+        Array.from(input.files).forEach((file) => {
+            if (!allowedTypes.includes(file.type)) {
+                addError(input, 'Only PNG, JPEG, and other specified images are allowed.', 'imageError');
+            }
+        });
+    }
+});
+
+
+            // Display error summary if there are errors
+            if (!valid) {
+                alert('Please fix the errors in the form.');
+                return; // Prevent form submission if validation fails
+            }
+
+            console.log(productId);
+            
+            // Proceed with form submission if validation passes
+            fetch(`/admin/updateProduct/${productId}`, {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = '/admin/loadProductmanage';
+                    } else {
+                        alert('Failed to update product');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while updating the product');
+                });
+        });
+    </script>
+</body>
+
+</html>

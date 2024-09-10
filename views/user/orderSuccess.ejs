@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+
+<!-- Mirrored from 3.37.186.116/email-template/email-order-success2.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 21 May 2024 15:39:18 GMT -->
+<!-- Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+
+<head>
+    <!--Required Meta Tags-->
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <!-- Title Of Site -->
+    <title>Email Order Success2 - Optimal Multipurpose eCommerce Bootstrap 5 Html Template</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        *,
+        ::before,
+        ::after {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        a:hover {
+            opacity: 0.88;
+        }
+        .icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #007bff; /* Change the color as needed */
+  font-size: 20px; /* Adjust size */
+}
+
+.icon-button:hover {
+  color: #0056b3; /* Hover effect */
+}
+
+    </style>
+</head>
+
+<body style="padding:0;margin:0;background-color:#f7f7f7;">
+    <table
+        style="table-layout:fixed; border-spacing:0; border-collapse:collapse; background-color:#f7f7f7; width:100%; margin:0 auto; padding:0;"
+        width="100%" cellspacing="0" cellpadding="0" bgcolor="#f7f7f7;">
+        <tbody>
+            <tr>
+                <td align="center" style="padding:25px 0;">
+                    <table
+                        style="table-layout:fixed; border-spacing:0; border-collapse:collapse; background-color:#fff; border-radius:10px; min-width: 320px; max-width:600px; margin:0 auto; box-shadow:0px 0px 14px -4px rgba(0,0,0,0.2);"
+                        width="650" cellspacing="0" cellpadding="0" bgcolor="#f7f7f7;">
+                        <tbody>
+                            <tr>
+                                <td align="center">
+                                    <table width="100%" cellspacing="0" cellpadding="0" border="0"
+                                        style="background-color:#f8f8f8; padding:25px 25px; border-radius:10px 10px 0 0;">
+                                        <tbody>
+                                            <tr>
+                                                <td align="center">
+                                                    <!-- <img style="text-decoration:none; height:auto; border:0; width:100%; max-width:150px; display:block;" title="logo" alt="logo" src="images/logo-black.png" width="150" border="0" align="middle" /> -->
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="padding:25px 25px;">
+                                    <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                        <tbody>
+                                            <tr>
+                                                <td align="center" style="padding:0;">
+                                                    <!-- <img style="text-decoration:none; height:auto; border:0; display:block;" alt="checkmark-success"  width="100" border="0" align="middle" /> -->
+                                                    <h1
+                                                        style="color:#2fd84b; font-family:'Roboto', Arial, Helvetica, sans-serif; font-size:22px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:center; margin:15px 0 10px; text-transform:none;">
+                                                        <strong>Your order is on its Way</strong></h1>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="center" style="padding:0;">
+                                                    <a href="#"
+                                                        style="background:#000; color:#fff; border:1px solid #000; font-family:'Roboto',Arial, Helvetica, sans-serif; font-size:13px; font-weight:600; line-height:1.5; text-align:center; margin:0 0 10px; text-decoration:none; padding:7px 22px; display:inline-block; letter-spacing:0.5px; border-radius:4px;">Track
+                                                        Your Order</a>
+                                                    <p
+                                                        style="color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:center; margin:0 0 0;">
+                                                        Please allow 24 hours to track your order</p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" style=" padding:0;">
+                                    <table width="100%" cellspacing="0" cellpadding="0" border="0"
+                                        style="background:#fff; padding:0 25px 25px 25px;">
+                                        <tbody> 
+                                            <tr>
+                                                <td align="left"
+                                                    style="background-color:#fbfbfb; border:0px solid #e8e8e8; padding:15px;width:50%;vertical-align:top;">
+                                                    <h3
+                                                        style="color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; font-size:15px; font-weight:normal; letter-spacing:0.5px; line-height:1.2; text-align:left; margin:0 0 10px; padding:0 0 10px; border-bottom:1px solid #e6e8eb;">
+                                                        <strong>Order Summary</strong></h3>
+                                                    <p
+                                                        style="color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:left; margin:0 0 2px;">
+                                                        <strong>Order id:<%= locals.orderId %></strong></p>
+                                                    <p
+                                                    <% if (order.date) { %>
+                                                        style="color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:left; margin:0 0 2px;">
+                                                        <strong>Order date:</strong><%= order.date.toDateString() %></p>
+                                                        <% } else { %>
+                                                        <p
+                                                        style="color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:left; margin:0 0 2px;">
+                                                        <strong>Order date:</strong>date not available</p>
+                                                        <% } %>
+                                                    <p
+                                                        style="color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:left; margin:0 0 0;">
+                                                        <strong>Order total:</strong> $<%= grandTotal %></p>
+                                                </td>
+                                                <td style="padding:0 10px;"></td>
+                                                <td align="left"
+                                                    style="background-color:#fbfbfb; border:0px solid #e8e8e8; padding:15px; width:50%;vertical-align:top;">
+                                                    <h3
+                                                        style="color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; font-size:15px; font-weight:normal; letter-spacing:0.5px; line-height:1.2; text-align:left; margin:0 0 10px; padding:0 0 10px; border-bottom:1px solid #e6e8eb;">
+                                                        <strong>Shipping Address</strong></h3>
+                                                            <p style="color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:left; margin:0 0 0;">
+                                                                <%= orders.address.firstname %>,<%= orders.address.lastname %></p>
+                                                                <p><%= orders.address.street %></p>
+                                                                <p><%= orders.address.city %></p>
+                                                                <p><%= orders.address.state %></p>
+                                                                <p><%= orders.address.postalCode %></p>
+                                                                <p><%= orders.address.phone%></p>
+                                                                <p><%= orders.address.email %></p>
+                                                           
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" style="padding:0 25px 30px 25px;">
+                                    <table width="100%" cellspacing="0" cellpadding="0" border="0"
+                                        style="background:#fff;border-collapse:collapse;">
+                                        <thead>
+                                            <tr>
+                                                <th align="center"
+                                                    style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; padding:10px; letter-spacing:0.5px; line-height:1.2; text-align:center;">
+                                                    Image</th>
+                                                <th align="center"
+                                                    style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; padding:10px; letter-spacing:0.5px; line-height:1.2; text-align:left;">
+                                                    Product Name</th>
+                                                <th align="center"
+                                                    style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; padding:10px; letter-spacing:0.5px; line-height:1.2; text-align:center;">
+                                                    Price</th>
+                                                <th align="center"
+                                                    style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; padding:10px; letter-spacing:0.5px; line-height:1.2; text-align:center;">
+                                                    Qty</th>
+                                                <th align="center"
+                                                    style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; padding:10px; letter-spacing:0.5px; line-height:1.2; text-align:center;">
+                                                    Subtotal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            
+                                            
+                                            <% order.forEach((orders)=>{%>
+                                            <tr>
+                                                <td
+                                                    style="border-bottom:1px solid #e8e8e8; border-collapse:collapse; padding:10px; text-align:center;">
+                                                    <img style="text-decoration:none; height:auto; border:0; display:block; margin:0 auto;"
+                                                        alt="product" src="/assets/productImages/<%= orders.productImage[0] %>" width="60" border="0"
+                                                        align="middle" /></td>
+                                                <td
+                                                    style="border-bottom:1px solid #e8e8e8; border-collapse:collapse; padding:10px;">
+                                                    <p
+                                                        style="color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; font-size:13px; font-weight:500; letter-spacing:0.5px; line-height:1.5; text-align:left; margin:0 0 2px;">
+                                                        <%= orders.productName %></p>
+                                                   
+                                                </td>
+                                                <td
+                                                    style="color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border-bottom:1px solid #e8e8e8; border-collapse:collapse; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:center; padding:10px; margin:0 0 0;">
+                                                    <%= orders.price %></td>
+                                                <td
+                                                    style="color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border-bottom:1px solid #e8e8e8; border-collapse:collapse; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:center; padding:10px; margin:0 0 0;">
+                                                    <%= orders.quantity %> </td>
+                                                <td
+                                                    style="color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border-bottom:1px solid #e8e8e8; border-collapse:collapse; font-size:13px; font-weight:500; letter-spacing:0.5px; line-height:1.5; text-align:center; padding:10px; margin:0 0 0;">
+                                                    <%= (orders.price * orders.quantity).toFixed(2) %></td> </td>
+                                            </tr>
+                                            <%   }) %>
+                                           
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="4"
+                                                    style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:right; padding:15px 10px 8px; margin:0 0 0;">
+                                                    Subtotal:</td>
+                                                <td
+                                                    style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; font-weight:500; letter-spacing:0.5px; line-height:1.5; text-align:center; padding:15px 10px 8px; margin:0 0 0;">
+                                                    $<%= subtotal %></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="4"
+                                                    style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:right; padding:0 10px 8px; margin:0 0 0;">
+                                                    Tax:</td>
+                                                <td
+                                                    style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; font-weight:500; letter-spacing:0.5px; line-height:1.5; text-align:center; padding:0 10px 8px; margin:0 0 0;">
+                                                    $4.87</td>
+                                            </tr>
+                                          
+                                            <tr>
+                                                <td colspan="4"
+                                                    style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:right; padding:0 10px 8px; margin:0 0 0;">
+                                                    Shipping:</td>
+                                                <td
+                                                    style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; font-weight:500; letter-spacing:0.5px; line-height:1.5; text-align:center; padding:0 10px 8px; margin:0 0 0;">
+                                                    $5.00</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="4"
+                                                    style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:right; padding:0 10px 15px; margin:0 0 0;">
+                                                    Grand Total:</td>
+                                                <td
+                                                    style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; font-weight:500; letter-spacing:0.5px; line-height:1.5; text-align:center; padding:0 10px 15px; margin:0 0 0;">
+                                                    $<%= grandTotal %>
+                                                 </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center">
+                                    <table width="100%" cellspacing="0" cellpadding="0" border="0"
+                                        style="background:#fff; padding:0 25px 30px 25px;">
+                                        <tbody>
+                                            <tr>
+                                                <td align="center" style="padding:0 5px;">
+                                                    <h2
+                                                        style="color:#000; font-family:'Roboto',Arial, Helvetica, sans-serif; font-size:14px; font-weight:500; letter-spacing:0.5px; line-height:1.5; text-align:center; margin:10px 0 0;">
+                                                        Products Quality</h2>
+                                                    <p
+                                                        style="color:#000; font-family:'Roboto',Arial, Helvetica, sans-serif; font-size:12px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:center; margin:5px 0 5px;">
+                                                        Comprehensive quality control and affordable prices</p>
+                                                </td>
+                                                <td align="center" style="padding:0 5px;">
+                                                    <h2
+                                                        style="color:#000; font-family:'Roboto',Arial, Helvetica, sans-serif; font-size:14px; font-weight:500; letter-spacing:0.5px; line-height:1.5; text-align:center; margin:10px 0 0;">
+                                                        Global Warehouse</h2>
+                                                    <p
+                                                        style="color:#000; font-family:'Roboto',Arial, Helvetica, sans-serif; font-size:12px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:center; margin:5px 0 5px;">
+                                                        Shop from 20+ warehouses world wide.</p>
+                                                </td>
+                                                <td align="center" style="padding:0 5px;">
+                                                    <h2
+                                                        style="color:#000; font-family:'Roboto',Arial, Helvetica, sans-serif; font-size:14px; font-weight:500; letter-spacing:0.5px; line-height:1.5; text-align:center; margin:10px 0 0;">
+                                                        Dedicated Support</h2>
+                                                    <p
+                                                        style="color:#000; font-family:'Roboto',Arial, Helvetica, sans-serif; font-size:12px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:center; margin:5px 0 5px;">
+                                                        24/7 Customer Service, We’re here & happy to help!</p>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center">
+                                    <table width="100%" cellspacing="0" cellpadding="0" border="0"
+                                        style="background-color:#f8f8f8; padding:25px 25px; border-radius:0 0 10px 10px;">
+                                        
+                                        <tbody>
+                                           
+                                 <tr>
+                                                <td align="center" style="padding:0 0;">
+                                                    <p
+                                                        style="color:#000; font-family:'Roboto',Arial, Helvetica, sans-serif; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:center; margin:0 0;">
+                                                        The daily newsletter was sent to info@example.com form company
+                                                        name because you subscribed. if you would not like to receive
+                                                        this email <a href="#"
+                                                            style="color:#444; padding:0; margin:0; text-decoration:underline; display:inline-block;padding:0 5px;">Unsubscribe</a>.
+                                                    </p>
+                                                </td>
+                                                <a href="/"
+                                                style="color:#000000; font-family:'Roboto',Arial, Helvetica,
+                                                sans-serif; font-size:13px; font-weight:600; line-height:1.5; text-align:center; margin:0 0 10px;
+                                                text-decoration:none; padding:7px 22px; display:inline-block; letter-spacing:0.5px;"
+                                                title="Go to home">
+                                                <i class="fas fa-home"></i>
+                                            </a>
+                                            
+                                            
+                                        <a href="/orderHistory"
+                                            style="color:#000000; font-family:'Roboto',Arial, Helvetica,
+                                            sans-serif; font-size:13px; font-weight:600; line-height:1.5; text-align:center; margin:0 0 10px;
+                                            text-decoration:none; padding:7px 22px; display:inline-block; letter-spacing:0.5px;"
+                                             title="order history">
+                                            <i class="fas fa-history"></i>
+                                        </a>
+                                                  
+                                 </tr>
+                                 <% if (orders.paymentStatus !== 'Paid'){ %>
+                                 
+                                    <a>
+                                        <button id="repayButton" data-order-id="<%= orders._id %>" class="icon-button">
+                                          <i class="fas fa-credit-card"></i>
+                                        </button>
+                                      </a>
+                                                                   <% } %>  
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+
+document.getElementById('repayButton').addEventListener('click', async function() {
+    const orderId = this.getAttribute('data-order-id'); // Get order ID
+
+    try {
+        const response = await fetch('/retryPayment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ orderId: orderId }), // Send orderId to backend
+        });
+
+        const result = await response.json();
+        
+        if (result.success) {
+            // Initialize Razorpay with the new order data
+            const options = {
+                "key": "rzp_test_kpxkrVCKFrnKcP", // Replace with your Razorpay key
+                "amount": result.amount,
+                "currency": result.currency,
+                "order_id": result.razorpayOrderId,
+                "handler": function (response) { 
+                    console.log('Payment successful:', response);
+                    fetch('/updateOrder', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        orderId: result.orderId,
+                        status: 'Paid' // Mark it as failed in the database
+                    })
+                });
+
+                
+                setTimeout(() => {
+                    window.location.href = `/loadOrdersuccess?orderId=${result.orderId}`;
+                }, 3000);
+                },
+                "prefill": {
+                    "name": "Your Customer Name",
+                    "email": "customer@example.com"
+                },
+                "theme": {
+                    "color": "#3399cc"
+                }
+            };
+
+            const razorpay = new Razorpay(options);
+
+            razorpay.on('payment.failed', async function (response) {
+                
+               
+            });
+
+            razorpay.open();
+        } else {
+            alert('Failed to retry payment. Please try again later.');
+        }
+    } catch (error) {
+        console.error('Error during repayment:', error);
+        alert('An error occurred while processing your payment. Please try again.');
+    }
+});
+
+
+        </script>
+
+</body>
+
+<!-- Mirrored from 3.37.186.116/email-template/email-order-success2.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 21 May 2024 15:39:28 GMT -->
+
+</html>

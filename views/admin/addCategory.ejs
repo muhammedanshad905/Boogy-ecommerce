@@ -1,0 +1,231 @@
+<%- include('../layouts/header') %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Categories</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F3F6F9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #ffffff;
+            height: 100vh;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: #000;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #F0F0F0;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin: 0 auto;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .form-container input,
+        .form-container textarea,
+        .form-container select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .form-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .error-messages {
+            color: red;
+            margin-bottom: 20px;
+        }
+
+        .logout {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>BOOGY</h2>
+        <ul>
+            <li><a href="/admin/dashboard">Dashboard</a></li>
+    <li><a href="/admin/loadOrderlist">Orders</a></li>
+    <li><a href="/admin/loadusermanage">Customers</a></li>
+    <li><a href="/admin/loadCoupon">Coupon</a></li>
+    <li><a href="/admin/loadOffer">Offers</a></li>
+    <li><a href="/admin/loadCategory">Categories</a></li>
+    <li><a href="/admin/loadProductmanage">Products</a></li>
+            <li><a href="/admin/logout">Logout</a></li>
+        </ul>
+    </div>
+    
+    <div class="content">
+        <div class="form-container">
+            <h2>Add New Categories</h2>
+            <div id="message" class="text-center fw-bold"></div>
+            <form id="add_category" onsubmit="addCategory(event)" enctype="multipart/form-data">
+                <label for="name">Category Name</label>
+                <input type="text" id="name" name="name" placeholder="Category Name" required>
+                
+                <label for="description">Description</label>
+                <textarea id="description" name="description" placeholder="Description" rows="4" required></textarea>
+                
+                <label for="categoryImage">Category Image</label>
+                <input type="file" id="categoryImage" name="categoryImage" required>
+                
+                <div id="error-messages" class="error-messages"></div>
+                <button type="submit">Add Category</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        async function addCategory(event) {
+            event.preventDefault();
+
+            const form = document.getElementById('add_category');
+            const name = document.getElementById('name').value.trim();
+            const description = document.getElementById('description').value.trim();
+            const categoryImage = document.getElementById('categoryImage').files[0];
+
+            // Validation function
+            function validateCategoryData(name, description, categoryImage) {
+                const errors = [];
+
+                if (!name) {
+                    errors.push('Category name is required');
+                } else if (!/^[A-Za-z]+$/.test(name)) {
+                    errors.push('Category name must contain only alphabetic characters');
+                }
+
+                if (!description) {
+                    errors.push('Description is required');
+                } else if (description.length < 10) {
+                    errors.push('Description must be at least 10 characters long');
+                }
+
+                if (!categoryImage) {
+                    errors.push('Category image is required');
+                } else if (!['image/png', 'image/jpeg'].includes(categoryImage.type)) {
+                    errors.push('Category image must be a PNG or JPG file');
+                }
+
+                return errors;
+            }
+
+            // Clear previous errors
+            const errorMessagesDiv = document.getElementById('error-messages');
+            errorMessagesDiv.innerHTML = '';
+
+            const errors = validateCategoryData(name, description, categoryImage);
+            if (errors.length > 0) {
+                const errorList = document.createElement('ul');
+                errors.forEach(error => {
+                    const li = document.createElement('li');
+                    li.textContent = error;
+                    errorList.appendChild(li);
+                });
+                errorMessagesDiv.appendChild(errorList);
+                return;
+            }
+
+            // Create FormData object for submission
+            const formData = new FormData(form);
+            let message = document.getElementById('message');
+            try {
+                const response = await fetch('/admin/addCategory', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                if(data.success){
+                    message.innerText = data.message;
+                    message.style.color = 'green'
+                    console.log('Category added successfully:', data);
+                    setTimeout(() => {
+                        window.location.href = '/admin/loadCategory';
+                    },1500)
+                }else{
+                    message.innerText = data.message;
+                    message.style.color = 'red';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error adding category: ' + error.message);
+            }
+        }
+    </script>
+
+    <%- include('../layouts/footer') %>
+</body>
+</html>

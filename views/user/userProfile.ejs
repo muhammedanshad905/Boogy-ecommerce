@@ -1,0 +1,588 @@
+
+<%- include('../layouts/header') %>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav {
+            background-color: #343a40;
+            padding: 1em;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 1em;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            flex: 1;
+            text-align: center;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0.5em 1em;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        nav ul li a:hover {
+            background-color: #495057;
+            border-radius: 4px;
+        }
+
+        main {
+            flex: 1;
+            padding: 2em;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin: 2em auto;
+            max-width: 800px;
+        }
+
+        .profile-details {
+            text-align: center;
+        }
+
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 1em;
+            border: 4px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-header h2 {
+            margin-bottom: 0.5em;
+            font-size: 1.5em;
+            color: #333;
+        }
+
+        .profile-info {
+            margin-bottom: 2em;
+        }
+
+        .profile-info p {
+            font-size: 1.1em;
+            color: #555;
+            margin: 0.5em 0;
+            text-align: left;
+        }
+
+        .profile-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1em;
+        }
+
+        .profile-actions button {
+            padding: 0.75em 1.5em;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            font-size: 1em;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .profile-actions button:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 2em 1em;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-content div {
+            flex: 1;
+            min-width: 200px;
+            margin: 1em;
+        }
+
+        .footer-content h3 {
+            border-bottom: 1px solid #777;
+            padding-bottom: 0.5em;
+            margin-bottom: 1em;
+            font-size: 1.2em;
+        }
+
+        .footer-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-content ul li {
+            margin-bottom: 0.5em;
+        }
+
+        .footer-content ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-content ul li a:hover {
+            color: #007bff;
+        }
+
+        /* Styles for modal */
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1050;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding-top: 60px;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-100px);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-header h4 {
+            margin: 0;
+            font-size: 1.5em;
+            color: #333;
+        }
+
+        .modal-body {
+            padding: 10px 0;
+        }
+
+        .modal-body form label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .modal-body form input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+            transition: border 0.3s;
+        }
+
+        .modal-body form input:focus {
+            border: 1px solid #007bff;
+            outline: none;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1em;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .btn {
+            padding: 0.5em 1.5em;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .message {
+            display: none;
+            margin-bottom: 1em;
+            padding: 0.75em;
+            border-radius: 4px;
+            font-size: 1em;
+            text-align: center;
+        }
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/loadWishlist">Wishlist</a></li>
+                <li><a href="/orderHistory">Orders</a></li>
+                <li><a href="/loadUserAddress">Addresses</a></li>
+                <li><a href="/loadWallet ">Wallet</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+        <main>
+            <div class="profile-details">
+                
+                <div class="profile-header">
+
+              
+                    <h2 id="userName"><%= user.firstname %></h2>
+                    <p id="userEmail"><%= user.email %></p>
+                </div>
+                <div class="profile-info">
+                    <p><strong>Account Status:</strong> <span id="accountStatus">Active</span></p>
+                </div>
+                <div class="profile-actions">
+                    <button id="editDetailsBtn">Edit Details</button>
+                    <button id="changePasswordBtn">Change Password</button>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <div class="footer-content">
+                <div>
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Help</h3>
+                    <ul>
+                        <li><a href="#">Customer Service</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">FAQs</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Follow Us</h3>
+                    <ul>
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Edit Details Modal -->
+   <!-- Edit Details Modal -->
+<div id="editDetailsModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-header">
+            <h4>Edit Details</h4>
+        </div>
+        <div class="modal-body">
+            <form id="editDetailsForm">
+                <label for="userNameInput">Name</label>
+                <input type="text" id="userNameInput" name="name" value="<%= user.firstname %>" required>
+                <div class=" text-danger error-message" id="userNameError"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary close">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Change Password Modal -->
+<div id="changePasswordModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-header">
+            <h4>Change Password</h4>
+        </div>
+        <div class="modal-body">
+            <form id="changePasswordForm">
+                <label for="currentPasswordInput">Current Password</label>
+                <input type="password" id="currentPasswordInput" name="currentPassword" required>
+                <div class="text-danger  error-message" id="currentPasswordError"></div>
+
+                <label for="newPasswordInput">New Password</label>
+                <input type="password" id="newPasswordInput" name="newPassword" required>
+                <div class="text-danger  error-message" id="newPasswordError"></div>
+
+                <label for="confirmPasswordInput">Confirm Password</label>
+                <input type="password" id="confirmPasswordInput" name="confirmPassword" required>
+                <div class="text-danger  error-message" id="confirmPasswordError"></div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary close">Close</button>
+                    <button type="submit" class="btn btn-primary">Change Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const editDetailsForm = document.getElementById('editDetailsForm');
+    const changePasswordForm = document.getElementById('changePasswordForm');
+
+    // Toggle modal display
+    const toggleModal = (modal) => {
+        modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+    };
+
+    // Validate input with a regex and show message
+    function validateInput(input, regex, errorMessageId, errorMessage) {        
+        const value = input.value.trim();        
+        if (!regex.test(value)) {
+            document.getElementById(errorMessageId).innerText = errorMessage;
+            return false;
+        } else {
+            document.getElementById(errorMessageId).innerText = '';
+            return true;
+        }
+    }
+
+    // Handle Edit Details Form submission
+    editDetailsForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const nameInput = document.getElementById('userNameInput');
+
+        const isNameValid = validateInput(
+            nameInput,
+            /^[A-Za-z]+$/,
+            'userNameError',
+            'Name should only contain letters and no spaces.'
+        );
+        
+        if (isNameValid) {
+            const formData = new FormData(editDetailsForm);
+            const obj = {
+                name : formData.get('name')
+            }            
+            try {
+                const response = await fetch('/editDetails', {
+                    method: 'POST',
+                    headers : {
+                        'Content-Type' : 'application/json'
+                    },
+                    body: JSON.stringify(obj)
+                });
+                const data = await response.json();
+                if (data.success) {
+                    document.getElementById('userNameError').innerText = 'Details updated successfully!';
+                    document.getElementById('userNameError').className = 'error-message success';
+                    setTimeout(() => {
+                        document.getElementById('editDetailsModal').style.display = 'none';
+                    }, 1000);
+                } else {
+                    document.getElementById('userNameError').innerText = 'Failed to update details.';
+                    document.getElementById('userNameError').className = 'error-message error';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('userNameError').innerText = 'An error occurred. Please try again.';
+                document.getElementById('userNameError').className = 'error-message error';
+            }
+            document.getElementById('userNameError').style.display = 'block';
+            setTimeout(() => document.getElementById('userNameError').style.display = 'none', 3000);
+        }
+    });
+
+    // Handle Change Password Form submission
+    changePasswordForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const currentPasswordInput = document.getElementById('currentPasswordInput');
+        const newPasswordInput = document.getElementById('newPasswordInput');
+        const confirmPasswordInput = document.getElementById('confirmPasswordInput');
+
+        const isCurrentPasswordValid = currentPasswordInput.value.trim() !== '';
+        const isNewPasswordValid = validateInput(
+            newPasswordInput,
+            /^[A-Za-z0-9]{6,}$/,
+            'newPasswordError',
+            'New password must be at least 6 characters long and contain no spaces.'
+        );
+        const isConfirmPasswordValid = newPasswordInput.value === confirmPasswordInput.value;
+
+        if (isCurrentPasswordValid && isNewPasswordValid && isConfirmPasswordValid) {
+            const formData = {
+                currentPassword: currentPasswordInput.value,
+                newPassword: newPasswordInput.value
+            };
+            try {
+                const response = await fetch('/changePassword', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                const data = await response.json();
+                if (data.success) {
+                    document.getElementById('newPasswordError').innerText = data.message;
+                    document.getElementById('newPasswordError').className = 'error-message success';
+                    setTimeout(() => {
+                        document.getElementById('changePasswordModal').style.display = 'none';
+                    }, 1000);
+                } else {
+                    document.getElementById('newPasswordError').innerText = data.message;
+                    document.getElementById('newPasswordError').className = 'error-message error';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('newPasswordError').innerText = 'An error occurred. Please try again.';
+                document.getElementById('newPasswordError').className = 'error-message error';
+            }
+            document.getElementById('newPasswordError').style.display = 'block';
+            setTimeout(() => document.getElementById('newPasswordError').style.display = 'none', 3000);
+        } else {
+            if (!isConfirmPasswordValid) {
+                document.getElementById('confirmPasswordError').innerText = 'Passwords do not match.';
+                document.getElementById('confirmPasswordError').className = 'error-message error';
+                document.getElementById('confirmPasswordError').style.display = 'block';
+                setTimeout(() => document.getElementById('confirmPasswordError').style.display = 'none', 3000);
+            }
+        }
+    });
+
+    // Event listeners for modals
+    document.querySelectorAll('.close').forEach(button => {
+        button.addEventListener('click', () => {
+            button.closest('.modal').style.display = 'none';
+        });
+    });
+
+    document.getElementById('editDetailsBtn').addEventListener('click', () => {
+        toggleModal(document.getElementById('editDetailsModal'));
+    });
+
+    document.getElementById('changePasswordBtn').addEventListener('click', () => {
+        toggleModal(document.getElementById('changePasswordModal'));
+    });
+});
+
+
+</script>    
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<%- include('../layouts/footer') %>
+

@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Funds to Wallet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('/assets/productImages/wallet.png'); /* Add your page background image URL */
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Styling for the wallet container and title */
+.wallet-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    font-family: Arial, sans-serif;
+}
+
+.wallet-title {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color:#afada1;
+    /* margin-top: 50px; */
+}
+
+/* Wallet card design */
+.wallet-card {
+    background-image: url('/assets/productImages/wallwt\ 2.png'); /* Add your wallet container background image URL */
+    background-size: cover;
+    background-position: center;
+    /* background-color: #f7f7f7; */
+    padding: 20px;
+    border-radius: 10px;
+    width: 320px;
+    height: 180px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Styling for wallet balance */
+.wallet-balance {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    margin-top: 60px;
+    margin-left: 40px;
+}
+
+#walletBalance {
+    color: #4c4e50; /* Highlighting the balance */
+}
+
+/* Button container */
+.btn-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+/* Styling for buttons */
+.add-funds-btn,
+.transaction-history-btn {
+    background: none; /* Remove background color */
+    border: none; /* Remove border */
+    padding: 0; /* Remove padding */
+    cursor: pointer; /* Maintain pointer cursor */
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 58px;
+}
+
+.add-funds-btn i,
+.transaction-history-btn i {
+    font-size: 24px; /* Adjust the icon size if necessary */
+    color: #5d676d; /* Set the color of the icon */
+}
+
+.add-funds-btn:hover i,
+.transaction-history-btn:hover i {
+    color: #287ba5; /* Change icon color on hover */
+}
+
+        .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Transparent overlay */
+    display: flex;
+    justify-content: flex-end; /* Align to the right */
+    align-items: center;
+}
+
+.modal-content {
+    background-image: url('/assets/productImages/card\ 2.png'); /* Add your background image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    width: 300px; /* Small modal width */
+    max-width: 300px;
+    height: auto;
+    text-align: center;
+    color: #2e0b0b; /* Ensure text is visible on background */
+    margin-right: 20px; /* Add space from the right edge */
+}
+
+
+.close {
+    color: #fff; /* Visible on the background image */
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal h2 {
+    font-size: 22px;
+    color: #a89b09; /* Adjust color for visibility */
+    margin-bottom: 20px;
+}
+
+#fundsAmount {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+#submitFundsBtn {
+    background-color: #c2be47;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+#submitFundsBtn:hover {
+    background-color: #219150;
+}
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        #closeHistoryModal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        #transactionHistory h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .transaction-entry {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .transaction-entry:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-date,
+        .transaction-details {
+            flex: 1;
+        }
+
+        .transaction-status {
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .transaction-status.credit {
+            color: green;
+        }
+
+        .transaction-status.debit {
+            color: red;
+        }
+
+        /* Scrollbar customization */
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 4px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background-color: #f1f1f1;
+            border-radius: 4px;
+        }
+
+
+        .transaction-entry {
+            margin: 10px 0;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .transaction-entry p {
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
+        }
+
+        .transaction-status {
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .credit {
+            color: #27ae60;
+        }
+
+        .debit {
+            color: #e74c3c;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+    width: 80px; /* Make the sidebar narrower to fit only icons */
+    height: 100vh;
+    background-color: rgba(51, 51, 51, 0.5); /* Transparent background */
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    transition: width 0.3s; /* Add transition for hover effect */
+}
+
+.sidebar-header {
+    padding: 10px;
+    text-align: center;
+    color: #fff;
+    font-size: 24px;
+    border-bottom: 1px solid #555;
+    background-color: rgba(68, 68, 68, 0.5); /* Transparent header */
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center icons */
+}
+
+.sidebar-menu li {
+    width: 100%;
+}
+
+.sidebar-menu li a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    color: #ccc;
+    text-decoration: none;
+    font-size: 24px; /* Adjust icon size */
+    border-bottom: 1px solid #444;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.sidebar-menu li a i {
+    font-size: 24px; /* Icon size */
+}
+
+.sidebar-menu li a:hover {
+    background-color: rgba(85, 85, 85, 0.5); /* Transparent hover effect */
+    color: #fff;
+}
+
+.sidebar-menu li a.active {
+    background-color: #007bff;
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    .sidebar-menu li {
+        display: inline-block;
+        width: auto;
+    }
+
+    .sidebar-menu li a {
+        padding: 10px;
+        font-size: 20px;
+    }
+}
+
+
+        .transaction-history-btn {
+    background: none; /* Remove background color */
+    border: none; /* Remove border */
+    padding: 0; /* Remove padding */
+    cursor: pointer; /* Maintain pointer cursor */
+    font-size: 18px; /* Adjust the icon size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #12e053; /* Set the icon color */
+}
+
+.transaction-history-btn i {
+    font-size: 24px; /* Adjust the icon size */
+}
+
+.transaction-history-btn:hover i {
+    color: #287ba5; /* Change icon color on hover */
+}
+
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        
+        <ul class="sidebar-menu">
+            <li><a href="/home"><i class="fas fa-home"></i></a></li>
+            <li><a href="/loadShopPage"><i class="fas fa-shopping-cart"></i></a></li>
+            <li><a href="/loadProfile"><i class="fas fa-user"></i></a></li>
+        </ul>
+    </div>
+    
+
+    <div class="wallet-container">
+        <h1 class="wallet-title">My Wallet</h1>
+        <div class="wallet-card">
+            <p class="wallet-balance">Current Balance: <span id="walletBalance"><%= wallet.balance %></span></p>
+            <div class="btn-container">
+                <button id="addFundsBtn" class="add-funds-btn">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <button id="transactionHistoryBtn" class="transaction-history-btn">
+                    <i class="fas fa-history"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- Add Funds Modal -->
+    <div id="addFundsModal" class="modal">
+        <div class="modal-content">
+            <span id="closeModal" class="close">&times;</span>
+            <h2>Add Funds</h2>
+            <input type="number" id="fundsAmount" placeholder="Enter amount" min="1">
+            <button id="submitFundsBtn">Add Funds</button>
+        </div>
+    </div>
+    
+
+    <!-- Transaction History Modal -->
+    <div id="transactionHistoryModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span id="closeHistoryModal" class="close">&times;</span>
+            <h2>Transaction History</h2>
+            <div id="transactionHistory">
+                <% wallet.transactions.forEach(tran=> { %>
+                    <div class="transaction-entry">
+                        <div class="transaction-date">
+                            <p><strong>Date:</strong>
+                                <%= tran.date %>
+                            </p>
+                        </div>
+                        <div class="transaction-details">
+                            <p><strong>Amount:</strong>
+                                <%= tran.amount %>
+                            </p>
+                            <p><strong>Payment Method:</strong>
+                                <%= tran.paymentMethod %>
+                            </p>
+                            <p class="transaction-status <%= tran.type.toLowerCase() %>">
+                                <%= tran.type %>
+                            </p>
+                        </div>
+                    </div>
+                    <% }) %>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script>
+        // Get elements
+        const addFundsBtn = document.getElementById('addFundsBtn');
+        const transactionHistoryBtn = document.getElementById('transactionHistoryBtn');
+        const addFundsModal = document.getElementById('addFundsModal');
+        const transactionHistoryModal = document.getElementById('transactionHistoryModal');
+        const closeModal = document.getElementById('closeModal');
+        const closeHistoryModal = document.getElementById('closeHistoryModal');
+
+        // Show Add Funds Modal
+        addFundsBtn.onclick = function () {
+            addFundsModal.style.display = 'flex';
+        }
+
+        // Show Transaction History Modal
+        transactionHistoryBtn.onclick = function () {
+            transactionHistoryModal.style.display = 'flex';
+        }
+
+        // Close Add Funds Modal
+        closeModal.onclick = function () {
+            addFundsModal.style.display = 'none';
+        }
+
+        // Close Transaction History Modal
+        closeHistoryModal.onclick = function () {
+            transactionHistoryModal.style.display = 'none';
+        }
+
+        // Close modals when clicking outside of them
+        window.onclick = function (event) {
+            if (event.target === addFundsModal) {
+                addFundsModal.style.display = 'none';
+            }
+            if (event.target === transactionHistoryModal) {
+                transactionHistoryModal.style.display = 'none';
+            }
+        }
+
+        document.getElementById('submitFundsBtn').addEventListener('click', function () {
+            var amount = parseFloat(document.getElementById('fundsAmount').value) * 100; // Convert to paise
+            if (amount > 0) {
+                fetch('/createOrder', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ amount: amount })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            var options = {
+                                key: "rzp_test_kpxkrVCKFrnKcP",
+                                amount: data.amount,
+                                currency: "INR",
+                                name: "Your Company Name",
+                                description: "Add Funds",
+                                order_id: data.order_id,
+                                handler: function (response) {
+                                    verifyPayment(response, amount);
+                                },
+                                prefill: {
+                                    name: "Your Name",
+                                    email: "youremail@example.com",
+                                    contact: "9999999999"
+                                },
+                                theme: {
+                                    color: "#3399cc"
+                                }
+                            };
+                            var rzp1 = new Razorpay(options);
+                            rzp1.open();
+                        } else {
+                            alert('Failed to create order. Please try again.');
+                        }
+                    });
+            } else {
+                alert('Please enter a valid amount.');
+            }
+        });
+
+        function verifyPayment(paymentDetails, amount) {
+            fetch('/verifyPayments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    razorpay_payment_id: paymentDetails.razorpay_payment_id,
+                    razorpay_order_id: paymentDetails.razorpay_order_id,
+                    razorpay_signature: paymentDetails.razorpay_signature,
+                    amount: amount // Ensure amount is included
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Payment successful! Wallet balance updated.');
+                        updateWalletBalance(amount / 100); // Convert back from paise
+                    } else {
+                        alert('Payment verification failed!');
+                    }
+                });
+        }
+
+        function updateWalletBalance(amount) {
+            const walletBalanceElement = document.getElementById('walletBalance');
+            const currentBalance = parseFloat(walletBalanceElement.innerText);
+            walletBalanceElement.innerText = (currentBalance + amount).toFixed(2);
+        }
+    </script>
+
+</body>
+
+</html>

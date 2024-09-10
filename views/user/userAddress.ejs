@@ -1,0 +1,553 @@
+
+<%- include('../layouts/header') %>
+
+
+
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Addresses</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+       /* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+nav {
+    background-color: #007BFF;
+    padding: 10px 20px;
+    color: #fff;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+nav li {
+    margin: 0;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+footer {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+footer h3 {
+    margin-top: 0;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.footer-content div {
+    margin: 10px 0;
+}
+
+.footer-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-content li {
+    margin: 5px 0;
+}
+
+.footer-content a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.footer-content a:hover {
+    text-decoration: underline;
+}
+
+/* Address Section Styles */
+.address-card button {
+    background: none;
+    border: none;
+    padding: 0;
+    color: #000000;
+    cursor: pointer;
+    font-size: 15px; /* Adjust the size of the icon */
+}
+
+.address-card button:hover {
+    color: #ff0000; /* Optional: Change icon color on hover */
+}
+
+.address-card i {
+    margin-right: 5px; /* Add some spacing between icons if needed */
+}
+
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 60px;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-header {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.close {
+    font-size: 24px;
+    font-weight: bold;
+    color: #888;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #333;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.form-group input:focus {
+    border-color: #007BFF;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Form Actions */
+.form-actions {
+    text-align: center;
+}
+
+.form-actions button {
+ 
+    color: #000000;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.form-actions button:hover {
+    background-color: #0056b3;
+}
+/* The snackbar container */
+#snackbar {
+    visibility: hidden; /* Hidden by default */
+    min-width: 250px; /* Set a default width */
+    margin-left: -125px; /* Center the snackbar */
+    background-color: #333; /* Black background color */
+    color: #fff; /* White text color */
+    text-align: center; /* Center the text */
+    border-radius: 2px; /* Rounded corners */
+    position: fixed; /* Sit on top of the screen */
+    z-index: 1; /* Make sure it stays on top */
+    bottom: 30px; /* Place it at the bottom */
+    left: 50%; /* Center it horizontally */
+    font-size: 17px; /* Font size */
+    padding: 16px; /* Padding */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3); /* Shadow for a more noticeable effect */
+    opacity: 0; /* Initially invisible */
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+}
+
+/* Snackbar styling for showing */
+#snackbar.show {
+    visibility: visible; /* Show the snackbar */
+    opacity: 1; /* Fully visible */
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    display: inline-block;
+    margin-right: 15px;
+}
+
+ul li a {
+    color: #000; /* Adjust the icon color */
+    font-size: 24px; /* Adjust icon size */
+    text-decoration: none;
+}
+
+ul li a:hover {
+    color: #ff0000; /* Change color on hover */
+}
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px; /* Adjust icon size */
+    color: #000; /* Icon color */
+}
+
+button:hover {
+    color: #ff0000; /* Change icon color on hover */
+}
+
+
+    </style>
+</head>
+<body>
+    <div id="snackbar"></div>
+
+    <div class="container">
+        <nav>
+            
+                <ul>
+                    <li><a href="/loadProfile"><i class="fas fa-user"></i></a></li>
+                    <li><a href="/loadWishlist"><i class="fas fa-heart"></i></a></li>
+                    <li><a href="/orderHistory"><i class="fas fa-box"></i></a></li>
+                    <li><a href="/loadWallet"><i class="fas fa-wallet"></i></a></li>
+                    <li><a href="/logout"><i class="fas fa-sign-out-alt"></i></a></li>
+                </ul>
+                
+            
+        </nav>
+  
+
+      <main>
+    <section class="address-section">
+        <div class="address-cards">
+            <% addresses.forEach(address => { %>
+                <div class="address-card">
+                    <p><%= address.firstname %>, <%= address.lastname %></p>
+                    <p><%= address.street %></p>
+                    <p><%= address.city %></p>
+                    <p><%= address.state %></p>
+                    <p><%= address.postalCode %></p>
+                    <p><%= address.phone %></p>
+                    <p><%= address.email %></p>
+                    <button onclick="openEditAddressModal('<%= address._id %>')">
+                        <i class="fas fa-edit"></i> 
+                    </button>
+                    <button onclick="confirmDeleteAddress('<%= address._id %>')">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>                    
+                </div>
+            <% }) %>
+        </div>
+        <div class="form-actions">
+            <button onclick="document.getElementById('editModal').style.display='block'">
+                <i class="fas fa-plus"></i> <!-- Plus icon for adding -->
+            </button>
+         </div>
+    </section>
+</main>
+
+
+        <footer>
+            <div class="footer-content">
+                <div>
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><a href="#">Email</a></li>
+                        <li><a href="#">Phone</a></li>
+                        <li><a href="#">Address</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Follow Us</h3>
+                    <ul>
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">Instagram</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Disclaimer</a></li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Add/Edit Address Modal -->
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Add/Edit Address</h2>
+                    <span class="close" onclick="document.getElementById('editModal').style.display='none'">&times;</span>
+                </div>
+                <div class="form-container">
+                    <form id="addressForm" onsubmit="return submitAddressForm(event)">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                            <span class=" text-danger error-message"  id="firstNameError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" required>
+                            <span class=" text-danger error-message" id="lastNameError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="stateCountry">State/Country</label>
+                            <input type="text" id="stateCountry" name="stateCountry" required>
+                            <span class=" text-danger error-message" id="stateCountryError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="streetAddress">Street Address</label>
+                            <input type="text" id="streetAddress" name="streetAddress" required>
+                            <span class=" text-danger error-message" id="streetAddressError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" name="city" required>
+                            <span class=" text-danger error-message" id="cityError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="postalCode">Postal Code</label>
+                            <input type="text" id="postalCode" name="postalCode" required>
+                            <span class=" text-danger error-message" id="postalCodeError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="text" id="phone" name="phone" required>
+                            <span class=" text-danger error-message" id="phoneError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                            <span class=" text-danger error-message" id="emailError"></span>
+                        </div>
+                        <input type="hidden" id="addressId" name="addressId">
+                        <div class="form-actions">
+                            <button type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+    <script src="snackbar.js"></script>
+    <script>
+        function validateInput(input, regex, errorMessageId, errorMessage) {
+    const value = input.value.trim();
+    if (!regex.test(value)) {
+        document.getElementById(errorMessageId).innerText = errorMessage;
+        return false;
+    } else {
+        document.getElementById(errorMessageId).innerText = '';
+        return true;
+    }
+}
+
+function submitAddressForm(event) {
+    event.preventDefault(); // Prevent form submission
+
+    const isFirstNameValid = validateInput(
+        document.getElementById('firstName'),
+        /^[A-Za-z]+$/,
+        'firstNameError',
+        'First name should only contain letters.'
+    );
+    const isLastNameValid = validateInput(
+        document.getElementById('lastName'),
+        /^[A-Za-z]+$/,
+        'lastNameError',
+        'Last name should only contain letters.'
+    );
+    const isStateCountryValid = validateInput(
+        document.getElementById('stateCountry'),
+        /^[A-Za-z\s]+$/,
+        'stateCountryError',
+        'State/Country should only contain letters.'
+    );
+    const isStreetAddressValid = validateInput(
+        document.getElementById('streetAddress'),
+        /^[A-Za-z0-9\s]+$/,
+        'streetAddressError',
+        'Street address is required.'
+    );
+    const isCityValid = validateInput(
+        document.getElementById('city'),
+        /^[A-Za-z\s]+$/,
+        'cityError',
+        'City should only contain letters.'
+    );
+    const isPostalCodeValid = validateInput(
+        document.getElementById('postalCode'),
+        /^[0-9]{6}$/,
+        'postalCodeError',
+        'Postal code should be 6 digits.'
+    );
+    const isPhoneValid = validateInput(
+        document.getElementById('phone'),
+        /^[1-9][0-9]{9}$/,
+        'phoneError',
+        'Phone number should be 10 digits and not start with 0.'
+    );
+    const isEmailValid = validateInput(
+        document.getElementById('email'),
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        'emailError',
+        'Please enter a valid email address.'
+    );
+
+    if (isFirstNameValid && isLastNameValid && isStateCountryValid && isStreetAddressValid &&
+        isCityValid && isPostalCodeValid && isPhoneValid && isEmailValid) {
+        // If all inputs are valid, proceed with form submission
+
+        const form = document.getElementById('addressForm');
+        const formData = new FormData(form);
+
+        const addressId = formData.get('addressId');
+        const url = addressId ? `/editAddress/${addressId}` : '/addAddress';
+        const method = addressId ? 'PUT' : 'POST';
+
+        const addressData = {
+            firstname: formData.get('firstName'),
+            lastname: formData.get('lastName'),
+            state: formData.get('stateCountry'),
+            street: formData.get('streetAddress'),
+            city: formData.get('city'),
+            postalCode: formData.get('postalCode'),
+            phone: formData.get('phone'),
+            email: formData.get('email'),
+        };
+
+        fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(addressData)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                showSnackbar('Address saved successfully');
+                location.reload();
+            } else {
+                showSnackbar('Error saving address: ' + result.error);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    } else {
+        // If validation fails, the form will not be submitted
+        return false;
+    }
+}
+
+        function confirmDeleteAddress(addressId) {
+        
+            fetch(`/deleteAddress/${addressId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showSnackbar('Address removed successfully')
+                    location.reload(); // Reload the page to update the address list
+                } else {
+                    showSnackbar('error while removing address')                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showSnackbar('error deleting ddress')        
+                });
+        
+    }
+    function showSnackbar(message) {
+    var snackbar = document.getElementById("snackbar");
+    snackbar.textContent = message;
+    snackbar.className = "show";
+
+    // Hide the snackbar after 3 seconds (3000 milliseconds)
+    setTimeout(function() {
+        snackbar.className = snackbar.className.replace("show", "");
+    }, 10000);
+}
+    </script>
+</body>
+</html>
+
+<%- include('../layouts/footer') %>
+

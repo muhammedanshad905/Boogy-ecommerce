@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Report</title>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .sales-report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .sales-report-header h2 {
+            font-size: 24px;
+            margin: 0;
+            color: #007bff;
+        }
+
+        .report-summary {
+            display: flex;
+            gap: 20px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .report-summary div {
+            background-color: #e9ecef;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+
+        .date-filter {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .date-filter input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 200px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .sales-report-table {
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        .sales-report-table table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+        }
+
+        .sales-report-table th,
+        .sales-report-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .sales-report-table th {
+            background-color: #f1f1f1;
+            color: #333;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .sales-report-table td {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .sales-report-table tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .export-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .excel-btn {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .excel-btn:hover {
+            background-color: #218838;
+        }
+
+        .pdf-btn {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .pdf-btn:hover {
+            background-color: #c82333;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #343a40;
+            padding: 15px 20px;
+            color: #fff;
+        }
+
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .navbar-nav {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar-nav li {
+            display: inline;
+        }
+
+        .navbar-nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .navbar-nav a:hover {
+            color: #007bff;
+        }
+
+        .navbar-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+        }
+
+        .navbar-profile span {
+            font-size: 16px;
+            font-weight: 500;
+            color: #000000;
+        }
+
+        .toggle-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        #toggleButton {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        #toggleButton:hover {
+            background-color: #0056b3;
+        }
+
+        #toggleOptions {
+            display: none;
+            position: absolute;
+            top: 40px;
+            left: 0;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        #toggleOptions.show {
+            display: block;
+        }
+
+        .option {
+            display: block;
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: white;
+            transition: background-color 0.3s;
+        }
+
+        .option:hover {
+            background-color: #f1f1f1;
+        }
+
+        .option:first-child {
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+
+        .option:last-child {
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+
+        .date-filter {
+            display: flex;
+            gap: 10px;
+        }
+
+        .date-filter input {
+            width: 200px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+        #toggleDateFilter {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#toggleDateFilter:hover {
+    background-color: #0056b3;
+}
+
+#dateFilter {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#dateFilter input {
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 150px;
+}
+
+#applyFilter {
+    padding: 8px 16px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#applyFilter:hover {
+    background-color: #218838;
+}
+
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">Boogyy</div>
+        <ul class="navbar-nav">
+            <li><a href="/admin/dashboard">Dashboard</a></li>
+            <li><a href="/admin/loadOrderlist">Orders</a></li>
+            <li><a href="/admin/loadusermanage">Customers</a></li>
+            <li><a href="/admin/loadCoupon">Coupon</a></li>
+            <li><a href="/admin/loadOffer">Offers</a></li>
+            <li><a href="/admin/loadCategory">Categories</a></li>
+            <li><a href="/admin/loadProductmanage">Products</a></li>
+        </ul>
+        <div class="navbar-profile">
+            <div class="toggle-container">
+                <button id="toggleButton">All Products</button>
+                <div id="toggleOptions" class="options">
+                    <span onclick="filterReport('day')" class="option">Day</span>
+                    <span onclick="filterReport('week')" class="option">week</span>
+                    <span onclick="filterReport('year')" class="option">Year</span>
+                    <span onclick="filterReport('all')" class="option">All</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="sales-report-header">
+            <h2>Sales Report</h2>
+            <div class="report-summary">
+                <div>Total order count: <span>
+                        <%= totalOrderCount %>
+                    </span></div>
+                <div>Total sales count: <span>
+                        <%= totalSalesCount %>
+                    </span></div>
+            </div>
+
+            <button id="toggleDateFilter">Custom Date</button>
+
+            <div id="dateFilter" style="display: none;">
+                <input type="text" id="startDate" placeholder="Start Date">
+                <input type="text" id="endDate" placeholder="End Date">
+                <button id="applyFilter">Apply Filter</button>
+            </div>
+            
+
+
+        </div>
+        <div class="sales-report-table" id="salesReport">
+            <table class="sales-table">
+                <thead>
+                    <tr>
+                        <th>Delivered Date</th>
+                        <th>Customer Name</th>
+                        <th>Payment Method</th>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Qty</th>
+                        <th>Total Price</th>
+                    </tr>
+                <tbody>
+                    <% if (order?.length> 0) { %>
+                        <% for (let i=0; i < order.length; i++) { %>
+                            <tr>
+                                <td>
+                                    <%= new Date(order[i].createdAt).toLocaleDateString() %>
+                                </td>
+                                <td>
+                                    <%= order[i].address.firstname %>
+                                </td>
+                                <td>
+                                    <%= order[i].paymentMethod %>
+                                </td>
+                                <td>
+                                    <% for(let product of order[i].orderedItems){%>
+                                        <p>
+                                            <%= product.productName %>
+                                        </p>
+                                        <%} %>
+                                </td>
+                                <td>
+                                    <% for(let product of order[i].orderedItems){%>
+                                        <p>
+                                            <%= product.price %>
+                                        </p>
+                                        <%} %>
+                                </td>
+                                <td>
+                                    <% for(let product of order[i].orderedItems){%>
+                                        <p>
+                                            <%= product.quantity %>
+                                        </p>
+                                        <%} %>
+                                </td>
+                                <td>₹ <%= order[i].totalAmount%>
+                                </td>
+                            </tr>
+                            <% } %>
+                                <tr></tr>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="11">No sales records found.</td>
+                                    </tr>
+                                    <% } %>
+                </tbody>
+            </table>
+            <h3>total is : ₹<%= grandTotal %>
+            </h3>
+        </div>
+
+
+        <div class="export-buttons">
+            <button class="btn excel-btn" onclick="downloadExcel()">.Excel</button>
+            <button class="btn pdf-btn" onclick="downloadPDF('salesReport')">.Pdf</button>
+        </div>
+    </div>
+</body>
+
+
+<script>
+    document.getElementById('toggleButton').addEventListener('click', function () {
+        var toggleOptions = document.getElementById('toggleOptions');
+        toggleOptions.classList.toggle('show');
+    });
+
+  
+    function filterReportByDate(startDate, endDate) {
+ 
+        fetch(`/admin/updateSalesReport?startDate=${startDate}&endDate=${endDate}`)
+            .then(response => response.json())
+            .then(data => {
+                // Update the page with the filtered data
+                updateSalesReport(data.salesReport,data.totalOrderCount,data.totalSalesCount,data.grandTotal);
+            })
+            .catch(error => console.error('Error:', error));
+        ;
+    }
+
+    function filterReport(filter) {
+
+        fetch(`/admin/updateSalesReport?filter=${filter}`)
+            .then(response => response.json())
+            .then(data => {
+                // Update the page with the filtered data
+                updateSalesReport(data.salesReport,data.totalOrderCount,data.totalSalesCount,data.grandTotal);
+            })
+            .catch(error => console.error('Error:', error));
+        ;
+    }
+    // Function to update the sales report section with new data
+    function updateSalesReport(orders,totalOrderCount,totalSalesCount,grandTotal) {
+        
+        const salesTableBody = document.querySelector('.sales-report-table tbody');
+        salesTableBody.innerHTML = ''; // Clear existing rows
+
+        if (orders.length > 0) {
+            orders.forEach(order => {
+                let row = `<tr>
+                    <td>${new Date(order.createdAt).toLocaleDateString()}</td>
+                    <td>${order.address.firstname}</td>
+                    <td>${order.paymentMethod}</td>
+                    <td>${order.orderedItems.map(product => `<p>${product.productName}</p>`).join('')}</td>
+                    <td>${order.orderedItems.map(product => `<p>${product.price}</p>`).join('')}</td>
+                    <td>${order.orderedItems.map(product => `<p>${product.quantity}</p>`).join('')}</td>
+                    <td>₹ ${order.totalAmount}</td>
+                </tr>`;
+                salesTableBody.insertAdjacentHTML('beforeend', row);
+            });
+        } else {
+            let noDataRow = `<tr><td colspan="7">No sales records found.</td></tr>`;
+            salesTableBody.insertAdjacentHTML('beforeend', noDataRow);
+        }
+        console.log(grandTotal,'egftert');
+        
+        // Update the totals
+        document.querySelector('.report-summary div:nth-child(1) span').textContent = totalOrderCount;
+        document.querySelector('.report-summary div:nth-child(2) span').textContent = totalSalesCount;
+        document.querySelector('.sales-report-table h3').textContent = `Total is: ₹${grandTotal}`;
+    }
+
+    // coustem date
+
+    document.getElementById('toggleDateFilter').addEventListener('click', function() {
+            var dateFilter = document.getElementById('dateFilter');
+            dateFilter.style.display = dateFilter.style.display === 'none' ? 'block' : 'none';
+        });
+
+        // JavaScript to apply the filter
+        document.getElementById('applyFilter').addEventListener('click', function() {
+            var startDate = document.getElementById('startDate').value;
+            var endDate = document.getElementById('endDate').value;
+
+            if (startDate && endDate) {
+                filterReportByDate(startDate, endDate);
+            } else {
+                alert('Please select both start and end dates.');
+            }
+        });
+
+        function filterReportByDate(startDate, endDate) {
+            fetch(`/admin/updateSalesReport?startDate=${startDate}&endDate=${endDate}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Assuming updateSalesReport is a function that updates your table
+                    updateSalesReport(data.salesReport,data.totalOrderCount,data.totalSalesCount,data.grandTotal);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+  
+        function downloadExcel() {
+      const tableRows = document.querySelectorAll('.sales-table  tbody tr');
+      const data = Array.from(tableRows).map(row => {
+          const cells = row.querySelectorAll('td');
+          return {
+              createdAt: cells[0].textContent.trim(),
+              firstname: cells[1].textContent.trim(),
+              paymentMethod: cells[2].textContent.trim(),
+              productName: cells[3].textContent.trim(),
+              price: cells[4].textContent.trim(),
+              quantity: cells[5].textContent.trim(),
+              totalAmount: cells[6].textContent.trim(),
+             
+          };
+          
+          
+        });
+        console.log( data,' data');
+
+      fetch('/admin/downloadExcel', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ data: data }),
+      })
+      .then(response => response.blob())
+      .then(blob => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          a.download = 'sales-report.xlsx';
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+      })
+      .catch(error => console.error('Error downloading Excel:', error));
+     }
+
+
+     function downloadPDF(salesReport) {
+    const element = document.getElementById(salesReport); 
+
+    html2canvas(element).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new window.jspdf.jsPDF({
+            orientation: 'portrait',
+        });
+        const imgProps= pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save('download.pdf');
+    });
+}
+
+
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+</html>

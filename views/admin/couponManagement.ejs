@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coupons</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .sidebar {
+            height: 100vh;
+            padding-top: 20px;
+        }
+
+        .sidebar .nav-link {
+            color: #333;
+            font-weight: bold;
+        }
+
+        .sidebar .nav-link.active {
+            color: #007bff;
+        }
+
+        .coupon-list {
+            margin-top: 20px;
+        }
+
+        .coupon-item {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            background-color: #f8f9fa;
+        }
+
+        .coupon-actions button {
+            margin-left: 10px;
+        }
+
+        .pagination .page-link {
+            color: #007bff;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+        }
+
+        .modal-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+            
+            border-color: #1e7e34;
+        }
+
+        /* Snackbar container */
+#snackbar {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px; /* Center the snackbar */
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    bottom: 30px; /* Position it at the bottom of the screen */
+    left: 50%;
+    font-size: 17px;
+}
+
+/* Show the snackbar */
+#snackbar.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* Fade-in animation */
+@-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;} 
+    to {bottom: 30px; opacity: 1;}
+}
+
+/* Fade-out animation */
+@-webkit-keyframes fadeout {
+    from {opacity: 1;} 
+    to {opacity: 0;}
+}
+
+/* Fade-in animation */
+@keyframes fadein {
+    from {bottom: 0; opacity: 0;} 
+    to {bottom: 30px; opacity: 1;}
+}
+
+/* Fade-out animation */
+@keyframes fadeout {
+    from {opacity: 1;} 
+    to {opacity: 0;}
+}
+
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div id="snackbar"></div>
+
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/admin/dashboard">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/loadCategory">Category</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/loadproductmanage">Products</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/loadusermanage">Users</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/loadOrderlist">Orders</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Coupon</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/loadOffer">Offer</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Sales Report</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/logout">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+                <h2 class="text-center mt-4">Coupons</h2>
+                <div class="coupon-list">
+                    <% coupon.forEach(copn => { %>
+                    <div class="coupon-item d-flex justify-content-between align-items-center">
+                        <span>
+                            <%= copn.couponCode %> - <%= copn.couponDiscount %>% - <%= copn.couponDescription %>
+                        </span>
+                        <div class="coupon-actions">
+                            <button class="btn btn-warning btn-sm" data-id="<%= copn._id %>" 
+                                    data-code="<%= copn.couponCode %>" 
+                                    data-description="<%= copn.couponDescription %>" 
+                                    data-discount="<%= copn.couponDiscount %>" 
+                                    data-minpurchase="<%= copn.couponMinPurchase %>" 
+                                    data-redeem="<%= copn.couponRedeemAmount %>" 
+                                    data-expiry="<%= copn.couponExpiry %>"
+                                    onclick="openEditModal('<%= copn._id %>')">Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteCoupon('<%= copn._id %>')">Delete</button>
+                             <!-- editmodal  -->
+    <div class="modal fade" id="editCouponModal" tabindex="-1" role="dialog" aria-labelledby="editCouponModalLabel"
+    aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="editCouponModalLabel">Edit Coupon</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="editCoupon">
+                <div class="form-group">
+                    <input type="hidden" id="couponId" value="<%= copn._id %>" name="couponId">
+                    <label for="couponCode">code</label>
+                    <input type="text" class="form-control" name="editCouponCode" id="couponCode"
+                       value="<%= copn.couponCode %>" placeholder="Enter coupon code" required>
+                </div>
+                <div class="form-group">
+                    <label for="couponDescription">description</label>
+                    <input type="text" class="form-control" id="couponDescription" name="editCouponDescription"
+                      value="<%= copn.couponDescription %>"  placeholder="Enter description" required>
+                </div>
+                <div class="form-group">
+                    <label for="couponDiscount">discount</label>
+                    <input type="number" class="form-control" id="couponDiscount" name="editCouponDiscount"
+                       value="<%= copn.couponDiscount %>" placeholder="Enter discount percentage" min="0" max="100" required>
+                </div>
+                <div class="form-group">
+                    <label for="couponMinPurchase">minPurchase</label>
+                    <input type="number" class="form-control" id="couponMinPurchase" name="editCouponMinPurchase"
+                      value="<%= copn.couponMinPurchase %>"  placeholder="Enter minimum purchase amount" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="couponRedeemAmount">redeemAmout</label>
+                    <input type="number" class="form-control" id="couponRedeemAmount"
+                       value="<%= copn.couponRedeemAmount %>" name="editCouponRedeemAmount" placeholder="Enter redeem amount" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="couponExpiry">expr</label>
+                    <input type="date" class="form-control" id="couponExpiry" name="editCouponExpiry"
+                      value="<%= copn.couponExpiry.toISOString().split('T')[0] %>"  placeholder="dd-mm-yyyy" required>
+                </div>
+                <button type="submit" class="btn btn-success btn-block">Update Coupon</button>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+                        </div>
+                    </div>
+                    <% }) %>
+                </div>
+                <div class="text-center mt-4">
+                    <button id="addCouponButton" class="btn btn-success">Add Coupon</button>
+                </div>
+                <div class="pagination justify-content-center mt-4">
+                    <!-- Pagination -->
+                </div>
+            </main>
+        </div>
+    </div>
+    <!-- Add Coupon Modal -->
+    <div class="modal fade" id="addCouponModal" tabindex="-1" role="dialog" aria-labelledby="addCouponModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCouponModalLabel">Manage Coupons</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addCoupon">
+                        <div class="form-group">
+                            <label for="couponCode">Code</label>
+                            <input type="text" class="form-control" name="couponCode" id="couponCode"
+                                placeholder="Enter coupon code">
+                        </div>
+                        <div class="form-group">
+                            <label for="couponDescription">Description</label>
+                            <input type="text" class="form-control" id="couponDescription" name="couponDescription"
+                                placeholder="Enter description">
+                        </div>
+                        <div class="form-group">
+                            <label for="couponDiscount">Discount Percentage</label>
+                            <input type="text" class="form-control" id="couponDiscount" name="couponDiscount"
+                                placeholder="Enter discount percentage">
+                        </div>
+                        <div class="form-group">
+                            <label for="couponMinPurchase">Minimum Purchase</label>
+                            <input type="text" class="form-control" id="couponMinPurchase" name="couponMinPurchase"
+                                placeholder="Enter minimum purchase amount">
+                        </div>
+                        <div class="form-group">
+                            <label for="couponRedeemAmount">Redeem Amount</label>
+                            <input type="text" class="form-control" id="couponRedeemAmount" name="couponRedeemAmount"
+                                placeholder="Enter redeem amount">
+                        </div>
+                        <div class="form-group">
+                            <label for="couponExpiry">Expiry Date</label>
+                            <input type="date" class="form-control" id="couponExpiry" name="couponExpiry"
+                                placeholder="dd-mm-yyyy">
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block">Create Coupon</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.getElementById('addCouponButton').addEventListener('click', function () {
+            $('#addCouponModal').modal('show');
+        })
+
+        document.getElementById('addCoupon').addEventListener('submit', function () {
+            event.preventDefault();
+
+            const form = document.getElementById('addCoupon')
+            const formData = new FormData(form)
+
+            const jsonObject = {};
+            formData.forEach((value, key) => {
+                jsonObject[key] = value;
+            });            
+
+            fetch('/admin/addCoupon', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify(jsonObject)
+
+            }).then(response => response.json())
+                .then(data => {
+                    showSnackbar(data.message)
+                    // window.location.reload()
+                }).catch(Error => {
+                    console.log(Error);
+
+                });
+
+
+        })
+
+        // edit
+
+        function openEditModal(id) {
+            const couponId = id
+         
+            $('#editCouponModal').modal('show');
+        }
+
+        // Function to handle Edit Coupon form submission
+        document.getElementById('editCoupon').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const form = document.getElementById('editCoupon');
+            const formData = new FormData(form);
+            const jsonObject = {};
+            formData.forEach((value, key) => {
+                jsonObject[key] = value;
+            });
+            fetch('/admin/editCoupon', {
+                method: 'PUT',
+                headers: { 'Content-type': 'application/json' },
+                body: JSON.stringify(jsonObject)
+            }).then(response => response.json())
+                .then(data => {
+                    showSnackbar(data.message)
+                    location.reload();
+                }).catch(Error => {
+                    console.log(Error);
+                });
+        });
+
+
+        function deleteCoupon(id) {
+    if (confirm('Are you sure you want to delete this coupon?')) {
+        fetch(`/admin/deleteCoupon/${id}`, {
+            method: 'DELETE',
+            headers: { 'Content-type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === 'Coupon deleted successfully') {
+                showSnackbar(data.message);
+                location.reload(); // Reload the page to reflect the changes
+            } else {
+                 showSnackbar(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+}
+
+function showSnackbar() {
+    var x = document.getElementById("snackbar");
+    x.className = "show";
+    setTimeout(function() {
+        x.className = x.className.replace("show", "");
+    }, 3000);
+}
+
+
+    </script>
+        <script src="script.js"></script>
+
+</body>
+
+</html>
