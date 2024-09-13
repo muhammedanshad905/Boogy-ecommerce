@@ -134,7 +134,11 @@ userroute.post('/verifyPayments',walletController.verifyPayments)
 // search
 userroute.get('/searchProduct',userController.searchProduct)
 
+
 userroute.get('/UserLogout',auth.islogin,userController.UserLogout);
+userroute.use((req,res,next)=>{
+  res.status(404).render('error-404')
+})
 
 
 

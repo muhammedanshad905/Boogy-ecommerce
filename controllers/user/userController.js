@@ -657,8 +657,7 @@ const searchProduct = async (req, res) => {
     }
 };
 
-
-
+ 
 
 module.exports = {
     loadlogin,

@@ -261,7 +261,7 @@ const retryPayment = async (req, res) => {
 
 
 
-const loadOrderDetails=async(req,res)=>{
+const  loadOrderDetails=async(req,res)=>{
     try {
         const {orderId}= req.query
         
@@ -270,12 +270,14 @@ const loadOrderDetails=async(req,res)=>{
         }
         const order=await Order.findById(orderId)
         .populate('orderedItems')
+        if(order.userId != req.session.user_id){
+            return res.render('orderNotFound')
+        }
         const orderedItems=order.orderedItems;
         const orders = await Order.findById(orderId)
 
         const subtotal=calculateSubtotal(orderedItems)
         const grandTotal=calculateGrandTotal(orderedItems)
-        
         res.render('orderDetails',{
             order:orderedItems,
             subtotal,
@@ -285,7 +287,7 @@ const loadOrderDetails=async(req,res)=>{
             shippingAddress:order.shippingAddress || {},
         })
     } catch (error) {
-        
+        console.log(error)
     }
 }
 
