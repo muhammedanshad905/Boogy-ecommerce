@@ -81,4 +81,8 @@ adminroute.get('/loadSales',adminControl.loadSales)
 adminroute.get('/updateSalesReport',adminControl.updateSales)
 adminroute.post('/downloadExcel',adminControl.downloadExcel)
 
+adminroute.get('*', (req, res) => {
+    res.render('admin404')
+  })
+
 module.exports=adminroute 

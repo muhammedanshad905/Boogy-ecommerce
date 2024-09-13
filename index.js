@@ -40,8 +40,8 @@ mongoose.connect(process.env.MONGO_URI, {
     console.error('MongoDB connection error:', err);
 });
 
-app.use('/', userroute);
 app.use('/admin',adminroute)
+app.use('/', userroute);
 
 
 app.listen(8000, () => {
