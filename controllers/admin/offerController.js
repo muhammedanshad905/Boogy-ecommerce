@@ -36,13 +36,14 @@ const addOffers=async(req,res)=>{
             categoryOffer: offerType === 'category' ? categoryOffer : null,
             discountPercentage,
             maxRedeem,
-            offerDescription
+            offerDescription 
         });
      
         // Apply the offer to the product or category
         if (offerType === 'product') {
             const product = await Product.findById(productOffer);            
             product.offer = newOffer._id;
+            product.categoryOffer = product.categoryOffer || categoryOffer
             product.discountedPrice = product.price - (product.price * (discountPercentage / 100));
             
             await product.save();
@@ -59,7 +60,13 @@ const addOffers=async(req,res)=>{
                 }
             });
         }
-        await newOffer.save();
+
+        if(categoryOffer>productOffer){
+             return categoryOffer
+        }else{
+
+            await newOffer.save();
+        }
 
         res.status(201).json({ message: 'Offer added successfully' });
     } catch (error) {
@@ -67,6 +74,9 @@ const addOffers=async(req,res)=>{
     }
 
 }
+
+
+
 
 const loadOfferListing = async (req, res) => {
     try {
@@ -125,18 +135,24 @@ const offerStatusChange = async (req, res, next) => {
         if (shouldList) {
             // await Product.findByIdAndUpdate(offer.productOffer,{$addToSet: { offers: offerId } });
 
-            if(offer.productOffer!== null){
-                await Product.findByIdAndUpdate(offer.productOffer,{$push: { offer: offerId } });
-            }else{
-                console.log('asdfghjk');
-                
+            if(offer.productOffer){
+                await Product.findByIdAndUpdate(offer.productOffer,{$addToSet: { offer: offerId } });
+            }else if(offer.categoryOffer){                
                 await Product.updateMany({category:offer.categoryOffer},{$addToSet: { offer: offerId } });
             }
             
         } else {
-            if(offer.productOffer!== null){
-                await Product.findByIdAndUpdate(offer.productOffer,{ $pull: { offer: offerId } });
-            }else{
+            if(offer.productOffer){
+                const product=await Product.findById(offer.productOffer)
+                if(product){
+
+                    await Product.findByIdAndUpdate(offer.productOffer,{ $pull: { offer: offerId } });
+                    if(product.categoryOffer){
+                        product.offer = product.categoryOffer
+                        await product.save()
+                    }
+                }
+            }else if(offer.categoryOffer){
                 await Product.updateMany({category:offer.categoryOffer},{$pull: { offer: offerId } });
             }
         }

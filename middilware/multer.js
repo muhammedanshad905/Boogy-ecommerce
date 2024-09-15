@@ -64,7 +64,7 @@ const productUpload = multer({
     { name: 'productImage2', maxCount: 1 },
     { name: 'productImage3', maxCount: 1 },
     { name: 'productImage4', maxCount: 1 }
-]);
+])
 
 // Category upload middleware
 const categoryUpload = multer({

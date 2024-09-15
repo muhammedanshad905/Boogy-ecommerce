@@ -549,6 +549,7 @@
                                 </div>
 
                             </div>
+                           
                             <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                                 <div class="customer-box customer-coupon">
                                     <h3 class="rounded-1">
@@ -578,8 +579,8 @@
                                                                     on: <%= new
                                                                         Date(cpn.couponExpiry).toLocaleDateString() %>
                                                                         </small>
-                                                                <button type="button" class="apply-coupon-btn"
-                                                                    id="applyCoupon">Apply Coupon</button>
+                                                                        <button type="button" class="apply-coupon-btn" data-index="<%= cpn %>">Apply Coupon</button>
+
                                                             </li>
                                                             <% }) %>
                                                     </ul>
@@ -704,8 +705,7 @@
                 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                 <script>
-
-                    function toggleCoupons() {
+                      function toggleCoupons() {
                         const couponsDiv = document.getElementById('available-coupons');
                         const toggleButton = document.getElementById('toggle-coupons-btn');
 
@@ -717,6 +717,10 @@
                             toggleButton.textContent = 'Show Coupons';
                         }
                     }
+                </script>
+                <script>
+                   
+                  
 
 
                     document.getElementById('toggleAddressBtn').addEventListener('click', function () {
@@ -939,43 +943,48 @@
                             .catch(err => console.error(err));
                     })
 
-                    document.getElementById('applyCoupon').addEventListener('click', function (event) {
-                        event.preventDefault()
-                        var couponCode = document.getElementById('codeId').getAttribute('data-couponcode')
-                        var discountPercentage = document.getElementById('discountid').getAttribute('data-coupondiscount');
-                        var totalAmount = document.getElementById('grandtotal').getAttribute('data-grandTotal');
-                        var minimumAmount = document.getElementById('minId').getAttribute('data-couponmin');
+                    document.querySelectorAll('.apply-coupon-btn').forEach(button => {
+    button.addEventListener('click', function (event) {
+        event.preventDefault();
 
+        // Get the closest list item containing the coupon details
+        const listItem = this.closest('.list-group-item');
+        const couponCode = listItem.querySelector('[data-couponcode]').getAttribute('data-couponcode');
+        const discountPercentage = listItem.querySelector('[data-coupondiscount]').getAttribute('data-coupondiscount');
+        const totalAmount = document.getElementById('grandtotal').getAttribute('data-grandTotal');
+        const minimumAmount = listItem.querySelector('[data-couponmin]').getAttribute('data-couponmin');
 
-                        fetch('/applyCoupon', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ couponCode, totalAmount, discountPercentage })
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    Swal.fire({
-                                        title: "Coupen Applied",
-                                        text: "Coupen Applied Successfully",
-                                        icon: "success"
-                                    }).then(() => {
-                                        window.location.reload();
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        title: "Failed!",
-                                        text: data.message,
-                                        icon: "error"
-                                    });
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                            });
-                    });
+        fetch('/applyCoupon', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ couponCode, totalAmount, discountPercentage })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    title: "Coupon Applied",
+                    text: "Coupon applied successfully!",
+                    icon: "success"
+                }).then(() => {
+                    window.location.reload();
+                });
+            } else {
+                Swal.fire({
+                    title: "Failed!",
+                    text: data.message,
+                    icon: "error"
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+});
+
                 </script>
 
             </div>

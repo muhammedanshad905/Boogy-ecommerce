@@ -292,9 +292,7 @@ const prod = require('../../models/prductmodel/productmodel')
 
 const loadlogin = async (req, res) => {
     try {
-        const p = await prod.find({})
-        console.log(p);
-        
+        const p = await prod.find({})        
         res.render('login');
     } catch (error) {
         console.log(error);

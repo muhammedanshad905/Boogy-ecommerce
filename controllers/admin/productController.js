@@ -74,7 +74,7 @@ const addProduct = async (req, res) => {
         });
 
         await newProduct.save();
-        res.redirect('/admin//loadProductmanage');
+        res.redirect('/admin/loadProductmanage');
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal Server Error');
@@ -124,37 +124,36 @@ const updateProduct = async (req, res) => {
     try {
         const productId = req.params.id;
         const { productName, category, price, quantity, description, discount, discountPrice } = req.body;
-        // const productImages = [];
-        
-        const product=await Products.findById(productId)
 
-        if(!product){
-            return res.status(404).json({success:false,message:'product not found'})
+        const product = await Products.findById(productId);
+        if (!product) {
+            return res.status(404).json({ success: false, message: 'Product not found' });
         }
 
-        const productImages=product.productImage.slice();
+        const productImages = product.productImage.slice(); // Get existing images
 
+        // Check and update images
         if (req.files) {
             if (req.files.productImage1 && req.files.productImage1[0]) productImages[0] = req.files.productImage1[0].filename;
             if (req.files.productImage2 && req.files.productImage2[0]) productImages[1] = req.files.productImage2[0].filename;
             if (req.files.productImage3 && req.files.productImage3[0]) productImages[2] = req.files.productImage3[0].filename;
             if (req.files.productImage4 && req.files.productImage4[0]) productImages[3] = req.files.productImage4[0].filename;
         }
+
+        // Update the product details
         const updatedProduct = await Products.findByIdAndUpdate(productId, {
             productName,
             category,
             price,
             quantity,
             description,
-            productImage: productImages,
+            productImage: productImages, // Use updated images
             discount,
-            discountPrice:discountPrice?discountPrice : price
+            discountPrice: discountPrice ? discountPrice : price
         }, { new: true });
 
-        await product.save()
-
         if (!updatedProduct) {
-            return res.status(404).json({ success: false, message: 'Product not found' });
+            return res.status(404).json({ success: false, message: 'Failed to update product' });
         }
 
         res.status(200).json({ success: true, message: 'Product updated successfully' });
@@ -163,6 +162,7 @@ const updateProduct = async (req, res) => {
         res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 };
+
 
 
 module.exports={
