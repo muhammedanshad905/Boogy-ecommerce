@@ -79,22 +79,17 @@
                                                     <h1
                                                     style="color:#2fd84b; font-family:'Roboto', Arial, Helvetica, sans-serif; font-size:22px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:center; margin:15px 0 10px; text-transform:none;">
                                                     <strong>Your order is on its Way</strong></h1>
-                                                    <% } %>  
-
-                                                    <% if (orders.paymentStatus !== 'Paid'){ %>
-
-                                                    <h1
-                                                        style="color:#d10606; font-family:'Roboto', Arial, Helvetica, sans-serif; font-size:22px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:center; margin:15px 0 10px; text-transform:none;">
-                                                        <strong>Your order is canceld</strong></h1>
-                                                        <% } %>  
-
-                                                </td>
+                                                    <% }else{ %>  
+                                                        <h1
+                                                            style="color:#d10606; font-family:'Roboto', Arial, Helvetica, sans-serif; font-size:22px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:center; margin:15px 0 10px; text-transform:none;">
+                                                            <strong>Your order is canceld</strong></h1>
+                                                            <% } %>  
+    
+                                                    </td>
                                             </tr>
                                             <tr>
                                                 <td align="center" style="padding:0;">
-                                                    <a href="#"
-                                                        style="background:#000; color:#fff; border:1px solid #000; font-family:'Roboto',Arial, Helvetica, sans-serif; font-size:13px; font-weight:600; line-height:1.5; text-align:center; margin:0 0 10px; text-decoration:none; padding:7px 22px; display:inline-block; letter-spacing:0.5px; border-radius:4px;">Track
-                                                        Your Order</a>
+                                                   
                                                     <p
                                                         style="color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:center; margin:0 0 0;">
                                                         Please allow 24 hours to track your order</p>
@@ -314,7 +309,7 @@
                                         </a>
                                                   
                                  </tr>
-                                 <% if (orders.paymentStatus !== 'Paid'){ %>
+                                 <% if (orders.paymentStatus == 'Pending'){ %>
                                  
                                     <a>
                                         <button id="repayButton" data-order-id="<%= orders._id %>" class="icon-button">
