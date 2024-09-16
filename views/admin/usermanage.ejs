@@ -180,7 +180,6 @@ body {
                         <tr>
                             <th>Name</th>
                             <th>Email Address</th>
-                            <th>Mobile Number</th>
                             <th>Date</th>
                             <th>Action</th>
                         </tr>
@@ -190,7 +189,6 @@ body {
                         <tr>
                             <td><%= userData[i].firstname + ' ' + userData[i].lastname %></td>
                             <td><%= userData[i].email %></td>
-                            <td><%= userData[i].mobile %></td>
                             <td><%= new Date(userData[i].createdAt).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) %></td>
                             <% if (userData[i].is_block) { %>
                             <td><button class="btn btn-success" onclick="blockAndUnblockUser('<%= userData[i]._id %>', true)">Unblock</button></td>

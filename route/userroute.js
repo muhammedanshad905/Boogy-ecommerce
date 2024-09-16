@@ -106,6 +106,7 @@ userroute.post('/addToCartFromShop',cartController.addToCartFromShop)
 userroute.get('/loadCheckout',auth.islogin,cartController.loadCheckout)
 userroute.post('/addAddressC',auth.islogin,cartController.addAddress)
 userroute.post('/applyCoupon',auth.islogin,couponController.applyCoupon)
+userroute.post('/removeCuopon',auth.islogin,couponController.removeCuopon)
 userroute.post('/placeOrder',auth.islogin,cartController.placeOrder)
 userroute.post('/verifyPayment',auth.islogin,cartController.verifyPayment )
 // orderpage

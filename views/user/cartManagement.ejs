@@ -28,7 +28,7 @@
             visibility: hidden;
             min-width: 250px;
             margin-left: -125px;
-            background-color: #333;
+            background-color: rgb(123, 7, 7);
             color: #fff;
             text-align: center;
             border-radius: 2px;
@@ -96,7 +96,7 @@
     </style>
 
     <body class="my-wishlist-page">
-        <div id="snackbar">Some text some message..</div>
+        <div id="snackbar"></div>
 
         <!-- Page Loader -->
         <div id="pre-loader"><img src="/assets/images/loader.gif" alt="Loading..." /></div>
@@ -111,26 +111,7 @@
                         <div class="row g-0 align-items-center w-100">
                             <!--Social Icons-->
                             <div class="col-4 col-sm-4 col-md-4 col-lg-5 d-none d-lg-block">
-                                <ul class="social-icons list-inline">
-                                    <li class="list-inline-item"><a href="#"><i class="an an-facebook"
-                                                aria-hidden="true"></i><span class="tooltip-label">Facebook</span></a>
-                                    </li>
-                                    <li class="list-inline-item"><a href="#"><i class="an an-twitter"
-                                                aria-hidden="true"></i><span class="tooltip-label">Twitter</span></a>
-                                    </li>
-                                    <li class="list-inline-item"><a href="#"><i class="an an-pinterest-p"
-                                                aria-hidden="true"></i><span class="tooltip-label">Pinterest</span></a>
-                                    </li>
-                                    <li class="list-inline-item"><a href="#"><i class="an an-instagram"
-                                                aria-hidden="true"></i><span class="tooltip-label">Instagram</span></a>
-                                    </li>
-                                    <li class="list-inline-item"><a href="#"><i class="an an-tiktok"
-                                                aria-hidden="true"></i><span class="tooltip-label">TikTok</span></a>
-                                    </li>
-                                    <li class="list-inline-item"><a href="#"><i class="an an-whatsapp"
-                                                aria-hidden="true"></i><span class="tooltip-label">Whatsapp</span></a>
-                                    </li>
-                                </ul>
+                                
                             </div>
                             <!--End Social Icons-->
                             <!--Logo / Menu Toggle-->
@@ -158,8 +139,7 @@
                                 <!--End Search-->
                                 <!--Wishlist-->
                                 <div class="wishlist-link iconset">
-                                    <a href="my-wishlist.html"><i class="icon an an-heart-l"></i><span
-                                            class="wishlist-count counter d-flex-center justify-content-center position-absolute translate-middle rounded-circle">0</span><span
+                                    <a href="my-wishlist.html"><i class="icon an an-heart-l"></i></span><span
                                             class="tooltip-label">Wishlist</span></a>
                                 </div>
                                 <!--End Wishlist-->
@@ -179,8 +159,7 @@
                                 <div class="header-cart iconset">
                                     <a href="cart-style1.html" class="site-header__cart btn-minicart"
                                         data-bs-toggle="modal" data-bs-target="#minicart-drawer">
-                                        <i class="icon an an-sq-bag"></i><span
-                                            class="site-cart-count counter d-flex-center justify-content-center position-absolute translate-middle rounded-circle">2</span><span
+                                        <i class="icon an an-sq-bag"></i></span><span
                                             class="tooltip-label">Cart</span>
                                     </a>
                                 </div>
@@ -210,19 +189,7 @@
                                                         class="an an-angle-down-l"></i></a>
 
                                             </li>
-                                            <li class="lvl1 parent megamenu"><a href="#">Features <i
-                                                        class="an an-angle-down-l"></i><span
-                                                        class="navLbl new">New</span></a>
-
-                                            </li>
-                                            <li class="lvl1 parent dropdown"><a href="#;">Pages <i
-                                                        class="an an-angle-down-l"></i></a>
-
-                                            </li>
-                                            <li class="lvl1 parent dropdown"><a href="#;">Blog <i
-                                                        class="an an-angle-down-l"></i></a>
-
-                                            </li>
+                                           
                                         </ul>
                                     </nav>
                                     <!--End Desktop Menu-->
@@ -358,14 +325,7 @@
                                                         class="text-decoration-underline">Continue shopping</span></a>
                                             </td>
                                             <td colspan="3" class="text-end pt-3">
-                                                <button type="submit" name="clear"
-                                                    class="btn btn--link d-inline-flex align-items-center btn--small small--hide"><i
-                                                        class="me-1 icon an an-times-r"></i><span
-                                                        class="ms-1 text-decoration-underline">Clear Shoping
-                                                        Cart</span></button>
-                                                <button type="submit" name="update"
-                                                    class="btn btn--small d-inline-flex align-items-center rounded cart-continue ml-2"><i
-                                                        class="me-1 icon an an-sync-ar d-none"></i>Update Cart</button>
+                                                
                                             </td>
                                         </tr>
                                     </tfoot>
@@ -405,8 +365,15 @@
                                     <input type="checkbox" value="allen-vela" id="cart_tearm">
                                     <label for="cart_tearm">I agree with the terms and conditions</label>
                                 </div>
-                                <a href="/loadCheckout" id="cartCheckout"
-                                    class="btn btn--small-wide rounded mt-4 checkout">Proceed To Checkout</a>
+                                <%if(cart.length > 0){ %>
+
+                                    <a href="/loadCheckout" id="cartCheckout"
+                                        class="btn btn--small-wide rounded mt-4 checkout">Proceed To Checkout</a>
+                               <% }else{%>
+                                <button
+                                class="btn btn--small-wide rounded mt-4 checkout"  onclick="showEmptyCartMessage()">Proceed To Checkout</button>
+                             <%  } %>
+
                                 <div class="paymnet-img"><img src="/assets/images/payment-img.jpg" alt="Payment" />
                                 </div>
                                 <p class="mt-2"><a href="#">Checkout with Multiple Addresses</a></p>
@@ -515,6 +482,11 @@
             <script src="/assets/js/main.js"></script>
 
             <script>
+                 function showEmptyCartMessage() {
+        showSnackbar("Your cart is empty!");
+    }
+
+           
 
                 function decreaseQuantity(event) {
 
@@ -602,6 +574,18 @@
                         }
                     }).catch(error => console.error('error:', error))
                 }
+
+          
+            </script>
+            <script>
+                
+
+                                function showSnackbar(text) {
+                var x = document.getElementById("snackbar");
+                x.innerHTML=text
+                x.className = "show";
+                setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
             </script>
         </div>
         <!--End Page Wrapper-->

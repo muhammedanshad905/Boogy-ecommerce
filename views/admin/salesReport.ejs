@@ -376,8 +376,8 @@
             <button id="toggleDateFilter">Custom Date</button>
 
             <div id="dateFilter" style="display: none;">
-                <input type="text" id="startDate" placeholder="Start Date">
-                <input type="text" id="endDate" placeholder="End Date">
+                <input type="date" id="startDate" placeholder="Start Date">
+                <input type="date" id="endDate" placeholder="End Date">
                 <button id="applyFilter">Apply Filter</button>
             </div>
             
@@ -535,7 +535,7 @@
         });
 
         function filterReportByDate(startDate, endDate) {
-            fetch(`/admin/updateSalesReport?startDate=${startDate}&endDate=${endDate}`)
+            fetch(`/admin/updateSalesReport?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`)
                 .then(response => response.json())
                 .then(data => {
                     // Assuming updateSalesReport is a function that updates your table

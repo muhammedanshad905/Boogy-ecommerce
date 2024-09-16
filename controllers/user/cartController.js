@@ -33,7 +33,7 @@ const getCart = async (req, res) => {
                 }
             })
          
-            res.render('cartManagement', { cart: product });
+            res.render('cartManagement', { cart: product,userCart:userCart });
         }
     } catch (error) {
         console.log(error);
@@ -47,10 +47,12 @@ function calculateDiscountPrice(product) {
 
     if (product.offer.length > 0) {
         price -= price * (product.offer[product.offer.length-1].discountPercentage / 100);
+        console.log(price ,"prce discount");
+        
     }    
     return price;
 }
-
+ 
 const addToCart = async (req, res) => {
     try {
         const userId = req.session.user_id;
@@ -66,6 +68,7 @@ const addToCart = async (req, res) => {
         const productImage = product.productImage
         const avaliableStock = product.quantity
         const discountPrice =calculateDiscountPrice(product);
+        console.log(discountPrice,"discountPrice");
         
         if (!userId) {
             return res.status(401).json({ redirectUrl: '/login' });
@@ -216,7 +219,7 @@ const loadCheckout = async (req, res) => {
         let grandTotal = cartItems.reduce((total, item) => {
             return total + item.productId.price * item.quantity;
         }, 0);
-
+       
         if(req.session.coupon){
             let discountPercentage = req.session.coupon;
            let  discountAmount = grandTotal * discountPercentage / 100;
@@ -396,41 +399,72 @@ const verifyPayment = async (req, res) => {
 
 
 const addToCartFromHome = async (req, res) => {
+   
     try {
         const userId = req.session.user_id;
         const { quantity, id } = req.body;
-
         const productId = id;
-        const product = await Product.findById(id)
-        const productName = product.productName 
-        const price = product.price
+        const product = await Product.findById(id).populate('offer');
 
+        if (!product) {
+            return res.status(404).json({ success: false, message: 'product not found' })
+        }
+
+        const productName = product.productName
+        const productImage = product.productImage
+        const avaliableStock = product.quantity
+        const discountPrice =calculateDiscountPrice(product);
+        console.log(discountPrice,"discountPrice");
+        
         if (!userId) {
             return res.status(401).json({ redirectUrl: '/login' });
         }
 
         let cart = await Cart.findOne({ userId: userId });
 
-
         if (!cart) {
+            if (quantity > avaliableStock) {
+                return res.status(400).json({ success: false, message: `only ${avaliableStock} item in stock` })
+            }
+
             cart = new Cart({
                 userId: userId,
-                cartItems: [{ productId: productId, quantity: quantity, productName: productName, price: price }]
+                cartItems: [{
+                    productId: productId,
+                    quantity: quantity,
+                    productName: productName,
+                    price: discountPrice,
+                    productImage: productImage,
+                    offerId:product.offer ? product.offer._id : null
+                }]
             });
         } else {
             const existingItem = cart.cartItems.find(item => item.productId.equals(productId));
+
             if (existingItem) {
-                existingItem.quantity += quantity;
-            } else {
-                cart.cartItems.push({ productId: productId, quantity: quantity, productName: productName, price: price });
+                const newQuantity = existingItem.quantity += quantity;
+
+                if (newQuantity > avaliableStock) {
+                    return res.status(400).json({ success: false, message: `only ${avaliableStock}item in stock` })
+                }
+
+            } else { 
+                cart.cartItems.push({
+                    productId: productId,
+                    quantity: quantity,
+                    productName: productName,
+                    price: discountPrice,
+                    productImage: productImage,
+                    offerId:product.offer ? product.offer._id : null
+                });
             }
         }
 
         const cartData = await cart.save();
         if (cartData) {
-            res.status(200).json({ success: true, message: 'item added to cart' })
+            res.status(200).json({ success: true, message: 'added to cart' });
         } else {
-            res.status(400).json({ success: false, message: 'item added to cart' })
+            res.status(400).json({ success: false, message: 'not added to cart' })
         }
     } catch (error) {
         console.log(error);
@@ -442,38 +476,68 @@ const addToCartFromShop = async (req, res) => {
     try {
         const userId = req.session.user_id;
         const { quantity, id } = req.body;
-
         const productId = id;
-        const product = await Product.findById(id)
-        const productName = product.productName
-        const price = product.price
+        const product = await Product.findById(id).populate('offer');
 
+        if (!product) {
+            return res.status(404).json({ success: false, message: 'product not found' })
+        }
+
+        const productName = product.productName
+        const productImage = product.productImage
+        const avaliableStock = product.quantity
+        const discountPrice =calculateDiscountPrice(product);
+        console.log(discountPrice,"discountPrice");
+        
         if (!userId) {
             return res.status(401).json({ redirectUrl: '/login' });
         }
 
         let cart = await Cart.findOne({ userId: userId });
 
-
         if (!cart) {
+            if (quantity > avaliableStock) {
+                return res.status(400).json({ success: false, message: `only ${avaliableStock} item in stock` })
+            }
+
             cart = new Cart({
                 userId: userId,
-                cartItems: [{ productId: productId, quantity: quantity, productName: productName, price: price }]
+                cartItems: [{
+                    productId: productId,
+                    quantity: quantity,
+                    productName: productName,
+                    price: discountPrice,
+                    productImage: productImage,
+                    offerId:product.offer ? product.offer._id : null
+                }]
             });
         } else {
             const existingItem = cart.cartItems.find(item => item.productId.equals(productId));
+
             if (existingItem) {
-                existingItem.quantity += quantity;
-            } else {
-                cart.cartItems.push({ productId: productId, quantity: quantity, productName: productName, price: price });
+                const newQuantity = existingItem.quantity += quantity;
+
+                if (newQuantity > avaliableStock) {
+                    return res.status(400).json({ success: false, message: `only ${avaliableStock}item in stock` })
+                }
+
+            } else { 
+                cart.cartItems.push({
+                    productId: productId,
+                    quantity: quantity,
+                    productName: productName,
+                    price: discountPrice,
+                    productImage: productImage,
+                    offerId:product.offer ? product.offer._id : null
+                });
             }
         }
 
         const cartData = await cart.save();
         if (cartData) {
-            res.status(200).json({ success: true, message: 'item added to cart' })
+            res.status(200).json({ success: true, message: 'added to cart' });
         } else {
-            res.status(400).json({ success: false, message: 'item added to cart' })
+            res.status(400).json({ success: false, message: 'not added to cart' })
         }
     } catch (error) {
         console.log(error);

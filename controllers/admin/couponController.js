@@ -85,6 +85,10 @@ const deleteCoupon = async (req, res) => {
 const applyCoupon = async (req, res, next) => {
     try {
         const { couponCode, totalAmount,discountPercentage } = req.body
+
+        if (req.session.couponId) {
+            return res.status(400).json({ message: "A coupon has already been applied!" });
+        }
         const data = await Coupon.findOne({  couponCode: couponCode })
         
         
@@ -95,7 +99,7 @@ const applyCoupon = async (req, res, next) => {
             var newPrice=Math.floor(totalAmount - (totalAmount * discountPercentage / 100))
             req.session.coupon = data.couponDiscount;
             req.session.couponId = data._id
-            res.status(200).json({ success: true })
+            res.status(200).json({ success: true ,newPrice:newPrice})
         } else {
             res.status(400).json({ message: "coupen code is incorrect!" })
         }
@@ -104,11 +108,26 @@ const applyCoupon = async (req, res, next) => {
         next(error)
     }
 }
+const removeCuopon =async(req, res, next) => {
+    try {
+        // Remove coupon from session
+        req.session.coupon = null;
+        req.session.couponId = null;
+
+        return res.status(200).json({ success: true, message: "Coupon removed successfully!" });
+    } catch (error) {
+        console.log(error.message);
+        next(error);
+    }
+}
+
 
 module.exports={
     loadCoupon,
     addCoupon,
     editCoupon,
     deleteCoupon,
-    applyCoupon 
+    applyCoupon ,
+    removeCuopon
+
 }

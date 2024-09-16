@@ -114,7 +114,7 @@ const blockAndUnblockUser=async(req,res)=>{
 const loadSales=async(req,res)=>{
     try {
         
-        const order = await Order.find()
+        const order = await Order.find().sort({createdAt:-1})
         let grandTotal = 0
         let totalSalesCount = 0
         for(let orderData of order){
@@ -147,8 +147,17 @@ const updateSales =async(req,res)=>{
        
 
        let salesReport;
-
-       if (filter === 'day') {
+       if (startDate && endDate) {
+        const parsedStartDate = new Date(new Date(startDate).setHours(0, 0, 0, 0)); ;
+        const parsedEndDate =new Date(new Date(endDate).setHours(23, 59, 59, 999));
+        
+        salesReport = await Order.find({
+            createdAt: {
+                $gte: parsedStartDate,
+                $lte: parsedEndDate
+            }
+        });
+        }else if (filter === 'day') {
            salesReport = await Order.find({
                createdAt: {
                    $gte: new Date(new Date().setHours(0, 0, 0, 0)),
@@ -173,21 +182,12 @@ const updateSales =async(req,res)=>{
                    $lt: yearEnd
                }
            });
-       } else if (startDate && endDate) {
-        const parsedStartDate = parseDateString(startDate);
-        const parsedEndDate = parseDateString(endDate);
-        
-        salesReport = await Order.find({
-            createdAt: {
-                $gte: parsedStartDate,
-                $lte: parsedEndDate
-            }
-        });
-        }else{
+       }else{
         salesReport = await Order.find()
        }
        let grandTotal = 0
         let totalSalesCount = 0
+
         for(let orderData of salesReport){
             grandTotal += orderData.totalAmount
             for(let product of orderData.orderedItems){
@@ -196,7 +196,9 @@ const updateSales =async(req,res)=>{
         }
         
         const totalOrderCount = salesReport.length;
-       res.json({ salesReport,
+
+       res.json({ 
+        salesReport,
         totalOrderCount,
         totalSalesCount,
         grandTotal
