@@ -15,8 +15,6 @@
     <title>Email Order Success2 - Optimal Multipurpose eCommerce Bootstrap 5 Html Template</title>
     <!-- Favicon -->
     <link rel="shortcut icon" href="/assets/images/favicon.png" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
     <style>
         *,
         ::before,
@@ -29,18 +27,6 @@
         a:hover {
             opacity: 0.88;
         }
-        .icon-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #007bff; /* Change the color as needed */
-  font-size: 20px; /* Adjust size */
-}
-
-.icon-button:hover {
-  color: #0056b3; /* Hover effect */
-}
-
     </style>
 </head>
 
@@ -75,24 +61,15 @@
                                         <tbody>
                                             <tr>
                                                 <td align="center" style="padding:0;">
-                                                    <% if (orders.paymentStatus !== 'Pending'){ %>
-                                                        <h1
-                                                    style="color:#2fd84b; font-family:'Roboto', Arial, Helvetica, sans-serif; font-size:22px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:center; margin:15px 0 10px; text-transform:none;">
-                                                    <strong>Your order is on its Way</strong></h1>
-                                                        <% }else{ %>  
-                                                            <h1
-                                                            style="color:#d10606; font-family:'Roboto', Arial, Helvetica, sans-serif; font-size:22px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:center; margin:15px 0 10px; text-transform:none;">
-                                                            <strong>Your order is canceld</strong></h1>
-                                                            <% } %>  
-    
-                                                    </td>
+                                                    <!-- <img style="text-decoration:none; height:auto; border:0; display:block;" alt="checkmark-success"  width="100" border="0" align="middle" /> -->
+                                                    <h1
+                                                        style="color:#2fd84b; font-family:'Roboto', Arial, Helvetica, sans-serif; font-size:22px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:center; margin:15px 0 10px; text-transform:none;">
+                                                        <strong><%= orders.orderStatus %></strong></h1>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td align="center" style="padding:0;">
                                                    
-                                                    <p
-                                                        style="color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:center; margin:0 0 0;">
-                                                        Please allow 24 hours to track your order</p>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -103,7 +80,7 @@
                                 <td align="left" style=" padding:0;">
                                     <table width="100%" cellspacing="0" cellpadding="0" border="0"
                                         style="background:#fff; padding:0 25px 25px 25px;">
-                                        <tbody> 
+                                        <tbody>
                                             <tr>
                                                 <td align="left"
                                                     style="background-color:#fbfbfb; border:0px solid #e8e8e8; padding:15px;width:50%;vertical-align:top;">
@@ -112,7 +89,7 @@
                                                         <strong>Order Summary</strong></h3>
                                                     <p
                                                         style="color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:left; margin:0 0 2px;">
-                                                        <strong>Order id:<%= locals.orderId %></strong></p>
+                                                        <strong id="orderId" data-order-id="<%= orders._id %>">Order id:<%= orders._id %></strong></p>
                                                     <p
                                                     <% if (order.date) { %>
                                                         style="color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:left; margin:0 0 2px;">
@@ -162,12 +139,18 @@
                                                 <th align="center"
                                                     style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; padding:10px; letter-spacing:0.5px; line-height:1.2; text-align:center;">
                                                     Price</th>
+                                                    <th align="center"
+                                                    style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; padding:10px; letter-spacing:0.5px; line-height:1.2; text-align:center;">
+                                                    status</th>
                                                 <th align="center"
                                                     style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; padding:10px; letter-spacing:0.5px; line-height:1.2; text-align:center;">
                                                     Qty</th>
                                                 <th align="center"
                                                     style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; padding:10px; letter-spacing:0.5px; line-height:1.2; text-align:center;">
                                                     Subtotal</th>
+                                                    <th align="center"
+                                                    style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; padding:10px; letter-spacing:0.5px; line-height:1.2; text-align:center;">
+                                                    invoice</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -188,54 +171,22 @@
                                                    
                                                 </td>
                                                 <td
-                                                    style="color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border-bottom:1px solid #e8e8e8; border-collapse:collapse; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:center; padding:10px; margin:0 0 0;">
-                                                    <%= orders.price %></td>
+                                                style="color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border-bottom:1px solid #e8e8e8; border-collapse:collapse; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:center; padding:10px; margin:0 0 0;">
+                                                <%= orders.price %></td>
+                                                <td>
+                                                    <p> <%= orders.orderStatus %></p>
+                                                </td>
                                                 <td
                                                     style="color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border-bottom:1px solid #e8e8e8; border-collapse:collapse; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:center; padding:10px; margin:0 0 0;">
                                                     <%= orders.quantity %> </td>
                                                 <td
                                                     style="color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border-bottom:1px solid #e8e8e8; border-collapse:collapse; font-size:13px; font-weight:500; letter-spacing:0.5px; line-height:1.5; text-align:center; padding:10px; margin:0 0 0;">
-                                                    <%= (orders.price * orders.quantity).toFixed(2) %></td> </td>
+                                                    <%= (orders.price * orders.quantity).toFixed(2) %></td>     
                                             </tr>
                                             <%   }) %>
                                            
                                         </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="4"
-                                                    style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:right; padding:15px 10px 8px; margin:0 0 0;">
-                                                    Subtotal:</td>
-                                                <td
-                                                    style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; font-weight:500; letter-spacing:0.5px; line-height:1.5; text-align:center; padding:15px 10px 8px; margin:0 0 0;">
-                                                    $<%= subtotal %></td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="4"
-                                                    style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:right; padding:0 10px 8px; margin:0 0 0;">
-                                                    Tax:</td>
-                                                <td
-                                                    style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; font-weight:500; letter-spacing:0.5px; line-height:1.5; text-align:center; padding:0 10px 8px; margin:0 0 0;">
-                                                    $4.87</td>
-                                            </tr>
-                                          
-                                            <tr>
-                                                <td colspan="4"
-                                                    style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:right; padding:0 10px 8px; margin:0 0 0;">
-                                                    Shipping:</td>
-                                                <td
-                                                    style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; font-weight:500; letter-spacing:0.5px; line-height:1.5; text-align:center; padding:0 10px 8px; margin:0 0 0;">
-                                                    $5.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="4"
-                                                    style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:right; padding:0 10px 15px; margin:0 0 0;">
-                                                    Grand Total:</td>
-                                                <td
-                                                    style="background-color:#fbfbfb; color:#000; font-family:'Roboto', Arial, Helvetica, sans-serif; border:none; border-collapse:collapse; font-size:13px; font-weight:500; letter-spacing:0.5px; line-height:1.5; text-align:center; padding:0 10px 15px; margin:0 0 0;">
-                                                    $<%= grandTotal %>
-                                                 </td>
-                                            </tr>
-                                        </tfoot>
+                                       
                                     </table>
                                 </td>
                             </tr>
@@ -278,10 +229,11 @@
                                 <td align="center">
                                     <table width="100%" cellspacing="0" cellpadding="0" border="0"
                                         style="background-color:#f8f8f8; padding:25px 25px; border-radius:0 0 10px 10px;">
-                                        
                                         <tbody>
-                                           
-                                 <tr>
+                                            <tr>
+                                             
+                                            </tr>
+                                            <tr>
                                                 <td align="center" style="padding:0 0;">
                                                     <p
                                                         style="color:#000; font-family:'Roboto',Arial, Helvetica, sans-serif; font-size:13px; font-weight:normal; letter-spacing:0.5px; line-height:1.5; text-align:center; margin:0 0;">
@@ -291,32 +243,11 @@
                                                             style="color:#444; padding:0; margin:0; text-decoration:underline; display:inline-block;padding:0 5px;">Unsubscribe</a>.
                                                     </p>
                                                 </td>
-                                                <a href="/"
-                                                style="color:#000000; font-family:'Roboto',Arial, Helvetica,
-                                                sans-serif; font-size:13px; font-weight:600; line-height:1.5; text-align:center; margin:0 0 10px;
-                                                text-decoration:none; padding:7px 22px; display:inline-block; letter-spacing:0.5px;"
-                                                title="Go to home">
-                                                <i class="fas fa-home"></i>
-                                            </a>
-                                            
-                                            
-                                        <a href="/orderHistory"
-                                            style="color:#000000; font-family:'Roboto',Arial, Helvetica,
-                                            sans-serif; font-size:13px; font-weight:600; line-height:1.5; text-align:center; margin:0 0 10px;
-                                            text-decoration:none; padding:7px 22px; display:inline-block; letter-spacing:0.5px;"
-                                             title="order history">
-                                            <i class="fas fa-history"></i>
-                                        </a>
-                                                  
-                                 </tr>
-                                 <% if (orders.paymentStatus == 'Pending'){ %>
-                                 
-                                    <a>
-                                        <button id="repayButton" data-order-id="<%= orders._id %>" class="icon-button">
-                                          <i class="fas fa-credit-card"></i>
-                                        </button>
-                                      </a>
-                                                                   <% } %>  
+                                                <a href="/admin/dashboard"><button class="" type="button">Dashboard</button></a> 
+
+                                                <a href="/admin/loadOrderlist"><button class="" type="button">orderlist</button></a> 
+                                                
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </td>
@@ -327,80 +258,8 @@
             </tr>
         </tbody>
     </table>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-
-document.getElementById('repayButton').addEventListener('click', async function() {
-    const orderId = this.getAttribute('data-order-id'); // Get order ID
-
-    try {
-        const response = await fetch('/retryPayment', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ orderId: orderId }), // Send orderId to backend
-        });
-
-        const result = await response.json();
-        
-        if (result.success) {
-            // Initialize Razorpay with the new order data
-            const options = {
-                "key": "rzp_test_kpxkrVCKFrnKcP", // Replace with your Razorpay key
-                "amount": result.amount,
-                "currency": result.currency,
-                "order_id": result.razorpayOrderId,
-                "handler": function (response) { 
-                    console.log('Payment successful:', response);
-                    fetch('/updateOrder', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        orderId: result.orderId,
-                        status: 'Paid' // Mark it as failed in the database
-                    })
-                });
-
-                
-                setTimeout(() => {
-                    window.location.href = `/loadOrdersuccess?orderId=${result.orderId}`;
-                }, 3000);
-                },
-                "prefill": {
-                    "name": "Your Customer Name",
-                    "email": "customer@example.com"
-                },
-                "theme": {
-                    "color": "#3399cc"
-                }
-            };
-
-            const razorpay = new Razorpay(options);
-
-            razorpay.on('payment.failed', async function (response) {
-                
-               
-            });
-
-            razorpay.open();
-        } else {
-            alert('Failed to retry payment. Please try again later.');
-        }
-    } catch (error) {
-        console.error('Error during repayment:', error);
-        alert('An error occurred while processing your payment. Please try again.');
-    }
-});
 
 
-        </script>
-
+    
 </body>
-
-<!-- Mirrored from 3.37.186.116/email-template/email-order-success2.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 21 May 2024 15:39:28 GMT -->
-
 </html>

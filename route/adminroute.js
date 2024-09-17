@@ -58,6 +58,7 @@ adminroute.get('/blockAndUnblockProduct/:id',auth.isLogin,categorycontrol.blockA
 // order management
 adminroute.get('/loadOrderlist',orderController.loadOrderlist)
 adminroute.patch('/updateOrderStatus', orderController.updateOrderStatus)
+adminroute.get('/adminOrderDetails',auth.isLogin,orderController.adminOrderDetails)
 
 // offer management
 adminroute.get('/loadOffer',offerController.loadOffer)

@@ -187,12 +187,12 @@
                                         <tr>
 
                                             <td class="product-thumbnail text-center">
-                                                <a href="product-layout1.html">
+                                                <a href="/admin/adminOrderDetails?orderId=<%=orders.id%>">
                                                     <img src="" width="100" alt="<%= item.productName %>" title="<%= item.productName %>">
                                                 </a>
                                             </td>
                                             <td class="product-name">
-                                                <h6 class="mb-0"><a href="product-layout1.html"><%= item.productName %></a></h6>
+                                                <h6 class="mb-0"><a href="/admin/adminOrderDetails?orderId=<%=orders.id%>"><%= item.productName %></a></h6>
                                                 <p class="mb-0 text-muted small">
                                                     Order ID: <%= orders._id %> <br>
                                                     Order Date: <%= new Date(orders.createdAt).toDateString() %>

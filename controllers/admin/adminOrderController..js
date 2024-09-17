@@ -45,7 +45,56 @@ const updateOrderStatus = async (req, res, next) => {
     }
 }
 
+function calculateSubtotal(order) {
+    let subtotal = 0;
+    order.forEach(item => {
+        subtotal += item.price * item.quantity;
+    });
+    return subtotal.toFixed(2); 
+}
+
+function calculateGrandTotal(order) {
+    let subtotal = calculateSubtotal(order);
+    let tax = 4.87;
+    let discount = 0.00;
+    let shipping = 5.00; 
+
+    let grandTotal = parseFloat(subtotal) + tax - discount + shipping;
+    return grandTotal.toFixed(2);
+}
+const adminOrderDetails=async(req,res)=>{
+    try {
+        const {orderId}= req.query
+        
+        if(!orderId){
+            return res.status(400).send('orderId is required')
+        }
+        const order=await Order.findById(orderId)
+        .populate('orderedItems')
+        if(!order){
+            return res.render('orderNotFound')
+        }
+        const orderedItems=order.orderedItems;
+        const orders = await Order.findById(orderId)
+
+        const subtotal=calculateSubtotal(orderedItems)
+        const grandTotal=calculateGrandTotal(orderedItems)
+        res.render('adminOrderDetails',{
+            order:orderedItems,
+            subtotal,
+            grandTotal,
+            orders,
+            orderId:order.orderId,
+            shippingAddress:order.shippingAddress || {},
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
 module.exports={
     loadOrderlist,
     updateOrderStatus,
+    adminOrderDetails
 }

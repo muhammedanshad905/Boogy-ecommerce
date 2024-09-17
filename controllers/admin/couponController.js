@@ -120,6 +120,15 @@ const removeCuopon =async(req, res, next) => {
         next(error);
     }
 }
+const clearCouponOnRefresh = (req, res, next) => {
+    if (req.method === 'GET' && req.session.couponId) {
+        // Clear coupon session data on page refresh
+        req.session.coupon = null;
+        req.session.couponId = null;
+    }
+    next();
+};
+
 
 
 module.exports={
@@ -128,6 +137,7 @@ module.exports={
     editCoupon,
     deleteCoupon,
     applyCoupon ,
-    removeCuopon
+    removeCuopon,
+    clearCouponOnRefresh
 
 }
