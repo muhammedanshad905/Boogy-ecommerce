@@ -97,6 +97,8 @@ const applyCoupon = async (req, res, next) => {
         } else if (data !== null) {
 
             var newPrice=Math.floor(totalAmount - (totalAmount * discountPercentage / 100))
+            console.log(newPrice,"newprice");
+            
             req.session.coupon = data.couponDiscount;
             req.session.couponId = data._id
             res.status(200).json({ success: true ,newPrice:newPrice})

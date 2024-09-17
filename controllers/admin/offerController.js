@@ -63,9 +63,11 @@ const addOffers=async(req,res)=>{
 
         if(categoryOffer>productOffer){
              return categoryOffer
+        }else if (productOffer > categoryOffer){
+            return productOffer
         }else{
-
             await newOffer.save();
+
         }
 
         res.status(201).json({ message: 'Offer added successfully' });

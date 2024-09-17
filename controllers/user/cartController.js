@@ -217,7 +217,7 @@ const loadCheckout = async (req, res) => {
         let cartItems = cart ? cart.cartItems : [];
 
         let grandTotal = cartItems.reduce((total, item) => {
-            return total + item.productId.price * item.quantity;
+            return total + item.productId.price * item.quantity + 5 + 10;
         }, 0);
        
         if(req.session.coupon){
@@ -261,23 +261,7 @@ const addAddress = async (req, res) => {
     }
 }
 
-function calculateSubtotal(order) {
-    let subtotal = 0;
-    order.forEach(item => {
-        subtotal += item.price * item.quantity;
-    });
-    return subtotal.toFixed(2);
-}
 
-function calculateGrandTotal(order) {
-    let subtotal = calculateSubtotal(order);
-    let tax = 4.87;
-    let discount = 0.00;
-    let shipping = 5.00;
-
-    let grandTotal = parseFloat(subtotal) + tax - discount + shipping;
-    return grandTotal.toFixed(2);
-}
 
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
@@ -286,11 +270,14 @@ const razorpay = new Razorpay({
 
  const placeOrder = async (req, res) => {
     try {
-        const { paymentMethod, selectedAddressId } = req.body;
+        const { paymentMethod, selectedAddressId ,grandTotal } = req.body;        
+
         const userId = req.session.user_id;
         const cart = await Cart.findOne({ userId: userId }).populate('cartItems');
         const address = await Address.findById(selectedAddressId);
+        // const coupon= await  Coupon.find({})
         const orderItem = cart.cartItems;
+
 
 
 
@@ -302,34 +289,25 @@ const razorpay = new Razorpay({
             }
             await productId.save();
         }
+ 
+       
 
-        const calculateTotalAmount = (cart) => {
-            let totalAmount = 0;
-
-            cart.cartItems.forEach(item => {
-                totalAmount += item.price * item.quantity;
-            });
-
-            return totalAmount;
-        };
-
-        const totalAmount = calculateTotalAmount(cart);
-
+        const grandTotals = Number(grandTotal)
 
 
         let order = new Order({
             userId: userId,
             items: cart.cartItems,
             paymentMethod: paymentMethod,
-            totalAmount: totalAmount,
+            totalAmount:grandTotals,
             address: address,
             orderedItems: orderItem,
             status: 'Pending'
         });
-
+        
         if (paymentMethod === 'Razorpay') {
             const options = {
-                amount: totalAmount * 100,
+                amount: parseInt(grandTotals * 100),
                 currency: 'INR',
                 receipt: `receipt_order_${Date.now()}`,
             };

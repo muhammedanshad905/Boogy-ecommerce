@@ -306,12 +306,12 @@
                                                         </div>
                                                     <td style="display: flex; justify-content: center;"
                                                         id="product-total-<%= product.productId %>" class="product-total">
-                                                        
+                                                        <%= product.price * product.quantity %>
                                                         
                                                     </td>
+                                                    <% subtotal += product.price * product.quantity; %>
                                         
                                                     <!-- Update the subtotal -->
-                                                    <% subtotal += product.price * product.quantity; %>
                                                 </tr>
                                         <% }) %>
 
@@ -349,12 +349,14 @@
                                 </div>
                                 <div class="row border-bottom pb-2 pt-2">
                                     <span class="col-6 col-sm-6 cart__subtotal-title">Shipping</span>
-                                    <span class="col-6 col-sm-6 text-right">Free shipping</span>
+                                    <span class="col-6 col-sm-6 text-right">$5</span>
                                 </div>
                                 <div class="row border-bottom pb-2 pt-2">
                                     
-                                    <span class="col-6 col-sm-6 cart__subtotal-title cart__subtotal text-right"><span
-                                            class="money"> Total: $<%= (subtotal + 10).toFixed(2) %></span></span>
+                                    <span class="col-6 col-sm-6 cart__subtotal-title">Total</span>
+                                    <span class="col-6 col-sm-6 text-right"><span class="money" id="cart-GrandTotal">
+                                        
+                                        $<%=(subtotal + 10 +5).toFixed(2) %></span></span>
                                 </div>
                                 <p class="cart__shipping m-0">Shipping &amp; taxes calculated at checkout</p>
                                 <p class="cart__shipping pt-0 m-0 fst-normal freeShipclaim"><i
@@ -538,7 +540,7 @@
                                 document.getElementById(`product-total-${productId}`).textContent = `${productTotal.toFixed(2)}`;
                                 // Update the cart subtotal and grand total
                                 document.getElementById('cart-subtotal').textContent = `$${newSubtotal.toFixed(2)}`;
-                                document.getElementById('cart-grandtotal').textContent = `$${newGrandTotal.toFixed(2)}`;
+                                document.getElementById('cart-GrandTotal').textContent = `$${newGrandTotal.toFixed(2)}`;
 
                             } else {
                                 Swal.fire({
