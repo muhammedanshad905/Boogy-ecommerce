@@ -20,7 +20,7 @@ function calculateSubtotal(order) {
 
 function calculateGrandTotal(order) {
     let subtotal = calculateSubtotal(order);
-    let tax = 4.87;
+    let tax = 10;
     let discount = 0.00;
     let shipping = 5.00; 
 
@@ -44,7 +44,7 @@ const loadOrdersuccess=async(req,res)=>{
         const orders = await Order.findById(orderId)
 
         const subtotal=calculateSubtotal(orderedItems)
-        const grandTotal=calculateGrandTotal(orderedItems)
+        const grandTotal=order.totalAmount
         
         res.render('orderSuccess',{
             order:orderedItems,

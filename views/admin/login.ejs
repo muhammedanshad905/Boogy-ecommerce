@@ -157,13 +157,17 @@
                                             <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                                 <div class="form-group">
                                                     <label for="CustomerEmail" class="d-none">Email <span class="required">*</span></label>
-                                                    <input type="email" name="email" placeholder="Email" id="email" value="" required />
+                                                    <input type="email" name="email" placeholder="Email" id="email" value=""  />
+                                                    <span id="email-error" class="text-danger"></span>
+
                                                 </div>
                                             </div>
                                             <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                                                 <div class="form-group">
                                                     <label for="CustomerPassword" class="d-none">Password <span class="required">*</span></label>
-                                                    <input type="password" name="password" placeholder="Password" id="password" value="" required />                        	
+                                                    <input type="password" name="password" placeholder="Password" id="password" value=""  />     
+                                                    <span id="password-error" class="text-danger"></span>
+                   	
                                                 </div>
                                             </div>
                                         </div>
@@ -286,6 +290,13 @@
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
 
+            const emailError = document.getElementById('email-error');
+            const passwordError = document.getElementById('password-error');
+            
+            // Clear previous error messages
+            emailError.innerHTML = '';
+            passwordError.innerHTML = '';
+
             console.log({
                 
                email :email,
@@ -307,14 +318,17 @@
 
                 }),
             });
-            if(response.ok){
-                window.location.href = '/admin/dashboard';
-            }
-            else if(response.status == 400){
-                const data = await response.json();
-                console.log('data vannu',data);
-                alert(data.message)
-            }
+            if (response.ok) {
+        window.location.href = '/admin/dashboard';
+    } else {
+        const data = await response.json();
+        
+        if (data.field === 'email') {
+            emailError.innerHTML = data.message;
+        } else if (data.field === 'password') {
+            passwordError.innerHTML = data.message;
+        }
+    }
         }
         catch(err){
             console.log(err.message)

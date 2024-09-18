@@ -415,6 +415,7 @@
                         <div class="col-lg-6 col-md-12 col-sm-12">
                             <div class="your-order-payment">
                                 <div class="your-order">
+                                    <button style="display: none;" type="button" id="remove-coupon-btn">Remove Coupon</button>
                                     <h2 class="order-title mb-3">Your Order</h2>
                                     <div class="table-responsive order-table style2">
                                         <table
@@ -539,7 +540,8 @@
                                                                     on: <%= new
                                                                         Date(cpn.couponExpiry).toLocaleDateString() %>
                                                                         </small>
-                                                                        <button type="button" class="apply-coupon-btn" data-index="<%= cpn %>">Apply Coupon</button>
+
+                                                                        <button  type="button" class="apply-coupon-btn" data-index="<%= cpn %>">Apply Coupon</button>
 
                                                             </li>
                                                             <% }) %>
@@ -798,6 +800,8 @@
 
                     // razor pay
                     const grandTotal = document.getElementById('grandtotal').getAttribute('data-grandTotal');
+                    console.log(grandTotal,'gg');
+                    
                     document.getElementById('razBtn').addEventListener('click', function (event) {
                         event.preventDefault();
 
@@ -927,9 +931,54 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
+                const yy = document.getElementById('remove-coupon-btn');
+                console.log(yy,'gtf')
+                yy.style.display = 'block';
+                const tA = document.getElementById('grandtotal');
+                tA.textContent = data.newPrice
+                tA.setAttribute('old',`${data.oldPrice}`);
+                console.log(tA.getAttribute('old'));
+                
+                console.log(button,'frrde');
+                
+                button.style.display = 'none';
                 Swal.fire({
                     title: "Coupon Applied",
                     text: "Coupon applied successfully!",
+                    icon: "success"
+                })
+            } else {
+                Swal.fire({
+                    title: "Failed!",
+                    text: data.message,
+                    icon: "error"
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+});
+
+
+document.getElementById('remove-coupon-btn').addEventListener('click', function (event) {
+    event.preventDefault();
+
+    const totalAmount = document.getElementById('grandtotal').getAttribute('old');
+    fetch('/removeCoupon',{
+        method:'PUT',
+        headers : {
+            'Content-Type': 'application/json'
+        },
+        body:JSON.stringify({totalAmount})
+    })
+    .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    title: "Coupon Removed",
+                    text: "Coupon removed successfully!",
                     icon: "success"
                 }).then(() => {
                     window.location.reload();
@@ -945,9 +994,9 @@
         .catch(error => {
             console.error('Error:', error);
         });
-    });
-});
 
+
+})
                 </script>
 
             </div>

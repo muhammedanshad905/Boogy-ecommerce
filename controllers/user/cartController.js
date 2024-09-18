@@ -4,7 +4,7 @@ const Address = require('../../models/addressModel')
 const Order = require('../../models/orderModel')
 const Razorpay = require('razorpay')
 const crypto = require('crypto');
-const Coupon=require('../../models/couponModel')
+const Coupon=require('../../models/couponModel');
 
 
 
@@ -215,17 +215,21 @@ const loadCheckout = async (req, res) => {
         let address = await Address.find({ userId: req.session.user_id });
         let cart = await Cart.findOne({ userId: req.session.user_id }).populate('cartItems.productId');
         let cartItems = cart ? cart.cartItems : [];
+       
+        
 
         let grandTotal = cartItems.reduce((total, item) => {
-            return total + item.productId.price * item.quantity + 5 + 10;
+            return total + item.price * item.quantity + 5 + 10;
         }, 0);
+       
        
         if(req.session.coupon){
             let discountPercentage = req.session.coupon;
            let  discountAmount = grandTotal * discountPercentage / 100;
             grandTotal=Math.floor(grandTotal - discountAmount)
+            console.log(grandTotal,'grand total 2');
         }
-
+        
         res.render('checkoutManagement', { address, cart: cartItems, grandTotal ,coupon});
     } catch (error) {
         console.log(error);
@@ -271,7 +275,7 @@ const razorpay = new Razorpay({
  const placeOrder = async (req, res) => {
     try {
         const { paymentMethod, selectedAddressId ,grandTotal } = req.body;        
-
+        
         const userId = req.session.user_id;
         const cart = await Cart.findOne({ userId: userId }).populate('cartItems');
         const address = await Address.findById(selectedAddressId);
@@ -292,8 +296,13 @@ const razorpay = new Razorpay({
  
        
 
-        const grandTotals = Number(grandTotal)
+        let grandTotals = Number(grandTotal)
 
+        console.log(grandTotals,'an x');
+        if(req.session.couponId){
+            grandTotals = Math.floor(grandTotals - (grandTotals * req.session.coupon / 100))
+        }
+        
 
         let order = new Order({
             userId: userId,
@@ -321,6 +330,8 @@ const razorpay = new Razorpay({
             };
             await order.save();
 
+            console.log(razorpayOrder.amount,'vgtd');
+            
             return res.json({
                 success: true,
                 razorpayOrderId: razorpayOrder.id,
@@ -352,11 +363,12 @@ const verifyPayment = async (req, res) => {
             .digest('hex');
 
         for (let item of order.orderedItems) {
-            item.orderStatus = 'success'
+            item.orderStatus = 'success',
+            item.paymentStatus = 'Paid'
         }
 
         if (generated_signature === razorpay_signature) {
-            order.status = 'Paid';
+            order.paymentStatus = 'Paid';
             order.paymentDetails = {
                 orderId: razorpay_order_id,
                 paymentId: razorpay_payment_id,

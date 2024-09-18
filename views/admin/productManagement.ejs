@@ -325,13 +325,13 @@ body {
             <nav>
                 <div class="pagination">
                     <% if (currentPage > 1) { %>
-                        <a href="/admin/productManagement?page=<%= currentPage - 1 %>&search=<%= searchQuery %>">Previous</a>
+                        <a href="/admin/loadProductmanage?page=<%= currentPage - 1 %>&search=<%= searchQuery %>">Previous</a>
                     <% } %>
                     <% for (let i = 1; i <= totalPages; i++) { %>
-                        <a href="/admin/productManagement?page=<%= i %>&search=<%= searchQuery %>"><%= i %></a>
+                        <a href="/admin/loadProductmanage?page=<%= i %>&search=<%= searchQuery %>"><%= i %></a>
                     <% } %>
                     <% if (currentPage < totalPages) { %>
-                        <a href="/admin/productManagement?page=<%= currentPage + 1 %>&search=<%= searchQuery %>">Next</a>
+                        <a href="/admin/loadProductmanage?page=<%= currentPage + 1 %>&search=<%= searchQuery %>">Next</a>
                     <% } %>
                 </div>                
             </nav>

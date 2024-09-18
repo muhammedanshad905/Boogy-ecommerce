@@ -24,12 +24,12 @@ const verifyLogin = async (req, res) => {
         if (email === process.env.ADMIN_EMAIL) {
             if (password === process.env.ADMIN_PASSWORD) {
                 req.session.admin_id = email
-                return res.status(200).json({ success: true });
+                 res.status(200).json({ success: true });
             } else {
-                return res.status(400).json({ message: 'Incorrect Admin Email or Password' });
+                 res.status(400).json({ message: 'Incorrect Admin Email or Password',  field:"password"});
             }
         }else{
-            return res.status(400).json({ message: 'Incorrect Admin Email or Password' }); 
+             res.status(400).json({ message: 'Incorrect Admin Email or Password' ,field :"email"}); 
         }
 
     } catch (error) {

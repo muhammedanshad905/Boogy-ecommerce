@@ -101,7 +101,7 @@ const applyCoupon = async (req, res, next) => {
             
             req.session.coupon = data.couponDiscount;
             req.session.couponId = data._id
-            res.status(200).json({ success: true ,newPrice:newPrice})
+            res.status(200).json({ success: true ,newPrice:newPrice, oldPrice : totalAmount})
         } else {
             res.status(400).json({ message: "coupen code is incorrect!" })
         }
@@ -112,6 +112,9 @@ const applyCoupon = async (req, res, next) => {
 }
 const removeCuopon =async(req, res, next) => {
     try {
+        const {totalAmount}=req.body
+        console.log(totalAmount,'totalamount');
+        
         // Remove coupon from session
         req.session.coupon = null;
         req.session.couponId = null;
@@ -122,14 +125,7 @@ const removeCuopon =async(req, res, next) => {
         next(error);
     }
 }
-const clearCouponOnRefresh = (req, res, next) => {
-    if (req.method === 'GET' && req.session.couponId) {
-        // Clear coupon session data on page refresh
-        req.session.coupon = null;
-        req.session.couponId = null;
-    }
-    next();
-};
+
 
 
 
@@ -140,6 +136,5 @@ module.exports={
     deleteCoupon,
     applyCoupon ,
     removeCuopon,
-    clearCouponOnRefresh
 
 }

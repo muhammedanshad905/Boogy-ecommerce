@@ -325,7 +325,7 @@
             }).then(response => response.json())
                 .then(data => {
                     showSnackbar(data.message)
-                    // window.location.reload()
+                    window.location.reload()
                 }).catch(Error => {
                     console.log(Error);
 

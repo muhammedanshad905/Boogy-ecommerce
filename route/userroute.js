@@ -69,7 +69,7 @@ userroute.post('/otpverify',auth.isLogout,userController.verifyotp)
 userroute.get('/resendOTP',auth.isLogout,userController.resendOTP)
 userroute.get('/home',userController.loadhome)
 userroute.get('/productFilter',userController.productFilter)
-
+ 
 // product details
 userroute.get('/product/:id',userController.productDetails)
 // userProfile
@@ -107,7 +107,7 @@ userroute.get('/loadCheckout',auth.islogin,cartController.loadCheckout)
 userroute.post('/addAddressC',auth.islogin,cartController.addAddress)
 userroute.post('/applyCoupon',auth.islogin,couponController.applyCoupon)
 // userroute.get('/clearCouponOnRefresh',auth.islogin,couponController.clearCouponOnRefresh)
-userroute.post('/removeCuopon',auth.islogin,couponController.removeCuopon)
+userroute.put('/removeCoupon',auth.islogin,couponController.removeCuopon)
 userroute.post('/placeOrder',auth.islogin,cartController.placeOrder)
 userroute.post('/verifyPayment',auth.islogin,cartController.verifyPayment )
 // orderpage
