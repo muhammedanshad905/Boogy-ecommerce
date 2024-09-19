@@ -63,7 +63,10 @@ const loadOrderHistory=async(req,res)=>{
         const page = parseInt(req.query.page) || 1;
         const limit =parseInt(req.query.limit) ||5; // Number of items per page
         const skip = (page - 1) * limit;
-
+        let user = null;
+        if (req.session.user_id) {
+            user = await User.findById(req.session.user_id);
+        }
        const order=await Order.find({userId:req.session.user_id}).skip(skip).limit(limit).sort({createdAt:-1})
        const totalorders = await Order.countDocuments({userId:req.session.user_id});
 
@@ -71,7 +74,8 @@ const loadOrderHistory=async(req,res)=>{
         res.render('orderHistoryManage',{
             order,
             totalPages,
-            currentPage:page
+            currentPage:page,
+            user
         })
     } catch (error) {
         console.log(error);

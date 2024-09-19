@@ -5,6 +5,7 @@ const Order = require('../../models/orderModel')
 const Razorpay = require('razorpay')
 const crypto = require('crypto');
 const Coupon=require('../../models/couponModel');
+const User =require('../../models/login/userschema')
 
 
 
@@ -16,6 +17,11 @@ const getCart = async (req, res) => {
         const userCart = await Cart.findOne({ userId: req.session.user_id })
         .populate('cartItems.productId')
         .populate('cartItems.offerId')
+
+        // let user = null;
+        // if (req.session.user_id) {
+        //     user = await User.findById(req.session.user_id);
+        // }
 
         if (!userCart) {
             res.render('cartManagement', { cart: [] });
@@ -29,7 +35,9 @@ const getCart = async (req, res) => {
                     offerName: item.offerId ? item.offerId.offerName : null,
                     discountPercentage: item.offerId ? item.offerId.discountPercentage : null,
                     productId:item.productId._id,
-                    _id:item._id
+                    _id:item._id,
+                   
+
                 }
             })
          

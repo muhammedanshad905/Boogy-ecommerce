@@ -156,12 +156,12 @@
                                     <% if(user !== null){ %>
                                         <li><a href="/loadProfile">Profile</a></li>
                                         <li><a href="/orderHistory">Orders</a></li>
-                                        <li><a href="my-wishlist.html">Wishlist</a></li>
+                                        <li><a href="/loadWishlist">Wishlist</a></li>
                                         <li><a href="/UserLogout">Logout</a></li>
                                      <% }else{ %>
                                             <li><a href="/login">Login</a></li>
                                             <li><a href="/register">Sign Up</a></li>
-                                            <li><a href="my-wishlist.html">Wishlist</a></li> 
+                                            <li><a href="/loadWishlist">Wishlist</a></li> 
                                     <% } %>
                                     
                                 </ul>
@@ -189,7 +189,6 @@
                                     <ul id="siteNave" class="site-nav medium center hidearrow">
                                         <li class="lvl1 parent megamenu"><a href="/home">Home</a></li>
                                         <li class="lvl1 parent megamenu"><a href="/loadShopPage">Shop</a></li>
-                                        <li class="lvl1 parent megamenu"><a href="#prosection">Product</a></li>
                                         <% if(user !== null){ %>
                                             <li class="lvl1 parent megamenu"><a href="/loadProfile"><%= user.firstname %></a></li>
                                        <% }else{ %>

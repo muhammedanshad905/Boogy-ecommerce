@@ -65,10 +65,16 @@
                                 <div class="user-link iconset"><i class="icon an an-user-expand"></i><span class="tooltip-label">Account</span></div>
                                 <div id="userLinks">
                                     <ul class="user-links">
-                                        <li><a href="login.html">Login</a></li>
-                                        <li><a href="register.html">Sign Up</a></li>
-                                        <li><a href="my-wishlist.html">Wishlist</a></li>
-                                        <li><a href="compare-style1.html">Compare</a></li>
+                                        <% if(user !== null){ %>
+                                            <li><a href="/loadProfile">Profile</a></li>
+                                            <li><a href="/orderHistory">Orders</a></li>
+                                            <li><a href="/loadWishlist">Wishlist</a></li>
+                                            <li><a href="/UserLogout">Logout</a></li>
+                                         <% }else{ %>
+                                                <li><a href="/login">Login</a></li>
+                                                <li><a href="/register">Sign Up</a></li>
+                                                <li><a href="/loadWishlist">Wishlist</a></li> 
+                                        <% } %>
                                     </ul>
                                 </div>
                                 <!--End Setting Dropdown-->
@@ -179,6 +185,7 @@
                                             <h3 class="h4 text-uppercase">NEW CUSTOMER?</h3>
                                             <a href="/register" class="btn rounded">Create an account</a>
                                         </div>
+                                        <br>
                                         <div class="google-signin">
                                             <a href="/auth/google" class="btn btn-google">
                                                 <i class="icon an an-google"></i> Sign in with Google

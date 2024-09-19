@@ -281,7 +281,11 @@ const  verifyOtp = async (req, res) => {
 
 const getregister = async (req, res) => {
     try {
-        res.render('register')
+        let user = null;
+        if (req.session.user_id) {
+            user = await User.findById(req.session.user_id);
+        }
+        res.render('register',{user})
     } catch (error) {
         console.log(error);
         res.status(500).send('internal server errr')
@@ -292,8 +296,12 @@ const prod = require('../../models/prductmodel/productmodel')
 
 const loadlogin = async (req, res) => {
     try {
-        const p = await prod.find({})        
-        res.render('login');
+        const p = await prod.find({})  
+        let user = null;
+        if (req.session.user_id) {
+            user = await User.findById(req.session.user_id);
+        }      
+        res.render('login',{ user});
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal Server Error');
@@ -436,6 +444,10 @@ const productDetails = async (req, res) => {
                 options: { limit: 1, sort: { _id: -1 } } // Populate only the last offer
             });
 
+            let user = null;
+            if (req.session.user_id) {
+                user = await User.findById(req.session.user_id);
+            }
         const products = await Product.find({ isBlocked: false }).populate({
             path: 'offer',
             options: { limit: 1, sort: { _id: -1 } } // Populate only the last offer
@@ -444,7 +456,7 @@ const productDetails = async (req, res) => {
         if (!product) {
             return res.status(404).send('Product not found');
         }
-        res.render('singleProduct', { product, products });
+        res.render('singleProduct', { product, products,user });
        
     } catch (error) {
         console.error(error);
@@ -537,6 +549,10 @@ const loadShopPage = async (req, res) => {
                 options: { sort: { createdAt: -1 }, limit: 1 } // Fetch only the last offer
             });
 
+            let user = null;
+            if (req.session.user_id) {
+                user = await User.findById(req.session.user_id);
+            }
         const totalProducts = await Product.countDocuments({ isBlocked: false });
         const categories = await Category.find({ isBlocked: false }).populate({
             path: 'offer',
@@ -547,6 +563,7 @@ const loadShopPage = async (req, res) => {
         const totalPages = Math.ceil(totalProducts / limit);
 
         res.render('shopPage', {
+            user,
             products,
             categories,
             currentPage: page,
