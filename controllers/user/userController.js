@@ -292,13 +292,12 @@ const getregister = async (req, res) => {
     }
 }
 
-const prod = require('../../models/prductmodel/productmodel')
 
 const loadlogin = async (req, res) => {
     try {
-        const p = await prod.find({})  
-        let user = null;
+        let user 
         if (req.session.user_id) {
+
             user = await User.findById(req.session.user_id);
         }      
         res.render('login',{ user});
