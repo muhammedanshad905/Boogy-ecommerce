@@ -123,13 +123,17 @@
             <div class="header-main">
                 <header class="header-wrap container d-flex align-items-center">
                     <div class="row g-0 align-items-center w-100">
+                        <div class="logo mx-lg-auto"><a href="index.html"><img class="logo-img" style="max-width: 195px;
+    max-height: 82px;" src="/assets/logo/boogy logo .png" alt="Optimal Multipurpose eCommerce Bootstrap 5 Html Template" title="Optimal Multipurpose eCommerce Bootstrap 5 Html Template" /></a></div>
                         <!--Social Icons-->
                         <div class="col-4 col-sm-4 col-md-4 col-lg-5 d-none d-lg-block">
                             <ul class="social-icons list-inline">
                             </ul>
                         </div>
                         <!--End Social Icons-->
-                        <!--Logo / Menu Toggle-->
+                        <!--Logo / 
+                        
+                        Menu Toggle-->
                         <div class="col-6 col-sm-6 col-md-6 col-lg-2 d-flex">
                             <!--Mobile Toggle-->
                             <button type="button"
@@ -383,7 +387,24 @@
                         <div class="row">
                             <div class="col-12 col-sm-12 col-md-6 col-lg-6 banner-item">
                                 <div class="collection-grid-item">
-                                    <a href="shop-left-sidebar.html">
+                                    <% if (user){ %>
+                                        <a href="/loadShopPage">
+                                            <div class="img">
+                                                <img class="blur-up lazyload"
+                                                    data-src="assets/images/slideshow/1.png"
+                                                    src="assets/images/slideshow/1.png" alt="STREETSTYLE"
+                                                    title="STREETSTYLE" />
+                                            </div>
+                                            <div class="details center w-50 white-overlay rounded">
+                                                <div class="inner">
+                                                    <p class="mb-0">NEW COLLECTION</p>
+                                                    <h3 class="title mt-1 fs-3 redText">STREETSTYLE</h3>
+                                                    <span class="btn-primary rounded mt-3">Shop now</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                  <% }else{ %>
+                                    <a href="/login">
                                         <div class="img">
                                             <img class="blur-up lazyload"
                                                 data-src="assets/images/slideshow/1.png"
@@ -398,11 +419,13 @@
                                             </div>
                                         </div>
                                     </a>
+                                  <% } %>
+                                   
                                 </div>
                             </div>
                             <div class="col-12 col-sm-12 col-md-6 col-lg-6 banner-item">
                                 <div class="collection-grid-item">
-                                    <a href="shop-left-sidebar.html">
+                                    
                                         <div class="img">
                                             <img class="blur-up lazyload"
                                                 data-src="assets/images/slideshow/2.png"
@@ -416,7 +439,7 @@
                                                 <p class="btn--link text-center fs-6">Shop the collection</p>
                                             </div>
                                         </div>
-                                    </a>
+                                    
                                 </div>
                             </div>
                         </div>

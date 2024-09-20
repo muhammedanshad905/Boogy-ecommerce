@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="description">
     <!-- Title Of Site -->
-    <title>Checkout Style2 - Optimal Multipurpose eCommerce Bootstrap 5 Html Template</title>
+    <title>Boogy.Checkout</title>
     <!-- Favicon -->
     <link rel="shortcut icon" href="/assets/images/favicon.png" />
     <!-- Plugins CSS -->
@@ -219,15 +219,11 @@
                                     class="icon an an-times-l"></i><i class="icon an an-bars-l"></i></button>
                             <!--End Mobile Toggle-->
                             <!--Logo-->
-                            <div class="logo mx-lg-auto"><a href="index.html"><img class="logo-img"
-                                        src="/assets/images/logo.svg"
-                                        alt="Optimal Multipurpose eCommerce Bootstrap 5 Html Template"
-                                        title="Optimal Multipurpose eCommerce Bootstrap 5 Html Template" /><span
-                                        class="logo-txt d-none">Optimal</span></a></div>
+                            <div class="logo mx-lg-auto"><a href="index.html"><img class="logo-img" style="max-width: 195px;
+    max-height: 82px;" src="/assets/logo/boogy logo .png" alt="Optimal Multipurpose eCommerce Bootstrap 5 Html Template" title="Optimal Multipurpose eCommerce Bootstrap 5 Html Template" /></a></div>
                             <!--End Logo-->
                         </div>
-                        <!--End Logo / Menu Toggle-->
-                        <!--Right Action-->
+                      
                         <div class="col-6 col-sm-6 col-md-6 col-lg-5 icons-col text-right d-flex justify-content-end">
                             <!--Search-->
                             <div class="site-search iconset"><i class="icon an an-search-l"></i><span
@@ -235,7 +231,7 @@
                             <!--End Search-->
                             <!--Wishlist-->
                             <div class="wishlist-link iconset">
-                                <a href="my-wishlist.html"><i class="icon an an-heart-l"></i><span
+                                <a href="/loadWhislist"><i class="icon an an-heart-l"></i><span
                                         class="tooltip-label">Wishlist</span></a>
                             </div>
                             <!--End Wishlist-->
@@ -298,12 +294,12 @@
                 <!--Collection Banner-->
                 <div class="collection-header">
                     <div class="collection-hero">
-                        <div class="collection-hero__image"></div>
+                        <div class="collection-hero__image">
+                            <h1 class="collection-hero__title">CHECKOUT</h1>
+
+                        </div>
                         <div class="collection-hero__title-wrapper container">
-                            <h1 class="collection-hero__title">Checkout Style2</h1>
-                            <div class="breadcrumbs text-uppercase mt-1 mt-lg-2"><a href="index.html"
-                                    title="Back to the home page">Home</a><span>|</span><span class="fw-bold">Checkout
-                                    Style2</span></div>
+                            <div class="breadcrumbs text-uppercase mt-1 mt-lg-2"></span></div>
                         </div>
                     </div>
                 </div>
@@ -357,11 +353,10 @@
                                                     data-target="#addAddressModal">Add Address</button>
                                 </div>
 
-                                <form id="addAddressForm" style="display: none;" method="post" action="#">
+                                <form id="addAddressForm" style="display: none;" onsubmit="submitAddressForm(event)">
                                     <fieldset>
                                         <h2 class="login-title mb-3">Shipping Address</h2>
                                         <div class="row">
-
 
                                             <div class="form-group col-md-6 col-lg-6">
                                                 <label for="input-firstname">First Name <span
@@ -402,17 +397,16 @@
                                             <div class="form-group col-md-6 col-lg-6">
                                                 <label for="address_country2">Country <span
                                                         class="required-f">*</span></label>
-                                                <input name="Country" id="input-Country" type="text">
+                                                <input name="Country" id="input-Country" type="text" required>
 
                                             </div>
                                             <div class="form-group col-md-6 col-lg-6">
                                                 <label for="address_province2">State <span
                                                         class="required-f">*</span></label>
-                                                <input name="state" id="input-State" type="text">
+                                                <input name="state" id="input-State" type="text" required>
                                             </div>
 
-                                            <button class="btn" type="button"
-                                                onclick="submitAddressForm(event)">save</button>
+                                            <button class="btn" type="submit">save</button>
                                         </div>
                                     </fieldset>
                                 </form>
