@@ -295,12 +295,8 @@ const getregister = async (req, res) => {
 
 const loadlogin = async (req, res) => {
     try {
-        let user 
-        if (req.session.user_id) {
-
-            user = await User.findById(req.session.user_id);
-        }      
-        res.render('login',{ user});
+             
+        res.render('login');
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal Server Error');
