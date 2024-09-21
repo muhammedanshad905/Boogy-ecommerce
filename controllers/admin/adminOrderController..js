@@ -9,9 +9,8 @@ const loadOrderlist=async(req,res)=>{
         const limit =parseInt(req.query.limit) ||5; // Number of items per page
         const skip = (page - 1) * limit;
 
-        const order=await Order.find().skip(skip).limit(limit).sort({createdAt:-1})
+        const order=await Order.find().skip(skip).limit(limit).sort({createdAt:-1})        
         const totalorders=await Order.countDocuments()
-
         const totalPages=Math.ceil(totalorders/limit)
 
         res.render('orderListing',{
@@ -75,6 +74,8 @@ const adminOrderDetails=async(req,res)=>{
             return res.render('orderNotFound')
         }
         const orderedItems=order.orderedItems;
+        console.log(orderedItems,'orderditems');
+        
         const orders = await Order.findById(orderId)
 
         const subtotal=calculateSubtotal(orderedItems)

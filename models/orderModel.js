@@ -23,10 +23,11 @@ const orderSchema = new mongoose.Schema({
             type: String,
             required: true
         },
-        productImage: {
-            type: [String],
-            required: true
-        },
+        productImage: [
+            {
+                type: String,
+            },
+        ],
         quantity: {
             type: Number,
             required: true
@@ -38,7 +39,6 @@ const orderSchema = new mongoose.Schema({
         orderStatus: {
             type: String,
             default: 'Pending',
-            required: true
         },
       
         orderDate: {

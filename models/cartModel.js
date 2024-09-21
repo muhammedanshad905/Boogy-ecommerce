@@ -21,11 +21,7 @@ const cartSchema = mongoose.Schema({
             productName: {
                 type: String,
             },
-            productImage: [
-                {
-                    type: String,
-                },
-            ],
+         
             price: {
                 type: Number,
                 required: true, // Ensure price is provided

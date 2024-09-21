@@ -223,7 +223,9 @@ const loadCheckout = async (req, res) => {
         let address = await Address.find({ userId: req.session.user_id });
         let cart = await Cart.findOne({ userId: req.session.user_id }).populate('cartItems.productId');
         let cartItems = cart ? cart.cartItems : [];
-       
+        
+        console.log(cartItems,"cartItems");
+        console.log( cart ,' cart ');
         
 
         let grandTotal = cartItems.reduce((total, item) => {
@@ -235,7 +237,6 @@ const loadCheckout = async (req, res) => {
             let discountPercentage = req.session.coupon;
            let  discountAmount = grandTotal * discountPercentage / 100;
             grandTotal=Math.floor(grandTotal - discountAmount)
-            console.log(grandTotal,'grand total 2');
         }
         
         res.render('checkoutManagement', { address, cart: cartItems, grandTotal ,coupon});
@@ -285,13 +286,35 @@ const razorpay = new Razorpay({
         const { paymentMethod, selectedAddressId ,grandTotal } = req.body;        
         
         const userId = req.session.user_id;
-        const cart = await Cart.findOne({ userId: userId }).populate('cartItems');
         const address = await Address.findById(selectedAddressId);
         // const coupon= await  Coupon.find({})
-        const orderItem = cart.cartItems;
+        // const cart = await Cart.findOne({ userId: userId }).populate('cartItems');
+        // const orderItem = cart.cartItems;
+        const cart = await Cart.findOne({ userId: req.session.user_id }).populate('cartItems.productId');
+        const orderItem = cart ? cart.cartItems : [];
 
+            // console.log(orderItem ,'place order orderitems');
 
+            // console.log(cart,'place order cart');
 
+            let orderditems=[]
+
+            orderItem.forEach(items => {
+                
+                orderditems.push(
+                    {
+                        productId:items.productId,
+                        productName:items.productName,
+                        productImage:items.productId.productImage[0],
+                        price:items.price,
+                        quantity:items.quantity
+
+                    }
+                )
+                
+            });
+
+console.log(orderditems,'orderditems ooo');
 
         for (let item of cart.cartItems) {
 
@@ -302,11 +325,9 @@ const razorpay = new Razorpay({
             await productId.save();
         }
  
+
        
-
         let grandTotals = Number(grandTotal)
-
-        console.log(grandTotals,'an x');
         if(req.session.couponId){
             grandTotals = Math.floor(grandTotals - (grandTotals * req.session.coupon / 100))
         }
@@ -318,7 +339,7 @@ const razorpay = new Razorpay({
             paymentMethod: paymentMethod,
             totalAmount:grandTotals,
             address: address,
-            orderedItems: orderItem,
+            orderedItems:orderditems,
             status: 'Pending'
         });
         
@@ -338,7 +359,7 @@ const razorpay = new Razorpay({
             };
             await order.save();
 
-            console.log(razorpayOrder.amount,'vgtd');
+            // console.log(razorpayOrder.amount,'vgtd');
             
             return res.json({
                 success: true,

@@ -437,6 +437,7 @@ const getTopSellingProducts = async (req, res) => {
             { $sort: { totalQuantity: -1 } },
             { $limit: 5 }
         ]);
+console.log(topProducts,'topProducts');
 
         res.status(200).json(topProducts);
     } catch (err) {

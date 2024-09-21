@@ -422,6 +422,7 @@
                                             class="bg-white table table-bordered align-middle table-hover text-center mb-1">
                                             <thead>
                                                 <tr>
+                                                    <th>product image</th>
                                                     <th class="text-start">Product name</th>
                                                     <th>Price</th>
                                                     <th>Qty</th>
@@ -431,6 +432,9 @@
                                             <% cart.forEach((items)=>{%>
                                                 <tbody>
                                                     <tr id="item-row-<% items._id%>">
+                                                        <td>
+                                                            <img src="/assets/productImages/<%= items.productId.productImage[0]%>">
+                                                        </td>
                                                         <td>
                                                             <%= items.productName %>
                                                         </td>
