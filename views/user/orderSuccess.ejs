@@ -353,7 +353,6 @@ document.getElementById('repayButton').addEventListener('click', async function(
                 "currency": result.currency,
                 "order_id": result.razorpayOrderId,
                 "handler": function (response) { 
-                    console.log('Payment successful:', response);
                     fetch('/updateOrder', {
                     method: 'POST',
                     headers: {
@@ -367,7 +366,7 @@ document.getElementById('repayButton').addEventListener('click', async function(
 
                 
                 setTimeout(() => {
-                    window.location.href = `/loadOrdersuccess?orderId=${result.orderId}`;
+                    window.location.reload();
                 }, 3000);
                 },
                 "prefill": {

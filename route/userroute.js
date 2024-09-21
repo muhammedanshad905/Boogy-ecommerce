@@ -117,7 +117,7 @@ userroute.patch('/cancelOrder',auth.islogin,orderController.cancelOrder)
 userroute.post('/retryPayment', auth.islogin,orderController.retryPayment);
 userroute.patch('/returnOrder',auth.islogin,orderController.returnOrder)
 userroute.post('/updateOrderStatus',orderController.razorpayFailure)
-// userroute.post('/updateOrder',orderController.paymentFailure )
+userroute.post('/updateOrder',orderController.paymentFailure )
 
 userroute.get('/loadOrderDetails',auth.islogin,orderController.loadOrderDetails)
 userroute.get('/loadInvoice',auth.islogin,orderController.loadInvoice)

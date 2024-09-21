@@ -358,7 +358,13 @@ console.log(orderditems,'orderditems ooo');
                 signature: null
             };
             await order.save();
+            
+            const cart = await Cart.updateOne(
+                { userId: req.session.user_id },
+                { $set: { cartItems: [] } }
+            );
 
+            
             // console.log(razorpayOrder.amount,'vgtd');
             
             return res.json({
@@ -370,6 +376,10 @@ console.log(orderditems,'orderditems ooo');
             });
         } else {
             await order.save();
+            const cart = await Cart.updateOne(
+                { userId: req.session.user_id },
+                { $set: { cartItems: [] } }
+            );
             res.json({ success: true, orderId: order._id });
         }
     } catch (error) {

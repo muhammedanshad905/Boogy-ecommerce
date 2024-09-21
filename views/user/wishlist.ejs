@@ -207,7 +207,7 @@
                                                     </span>
                                                 </td>
                                                 <td class="product-subtotal text-center">
-                                                    <a data-product-id="<%= product._id %>" onclick="addToCart(event)"><button class="btn" type="button">Add to cart</button></a>
+                                                    <a data-product-id="<%= product._id %>" data-quantity="<%= product.quantity %>" onclick="addToCart(event)"><button class="btn" type="button">Add to cart</button></a>
                                                 </td>
                                             </tr>
                                         <% }) %>
@@ -312,6 +312,12 @@
         function addToCart(event) {            
         
             const productId = event.currentTarget.getAttribute('data-product-id');
+            const productq = event.currentTarget.getAttribute('data-quantity');
+
+            if(productq < 1){
+                showSnackbar('quantity is 0')
+                return;
+            }
             const quantity = 1; // Default quantity, adjust as needed
             fetch('/addToCartFromWishlist', {
                 method: 'POST',

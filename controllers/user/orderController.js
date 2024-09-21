@@ -200,30 +200,30 @@ const razorpayFailure = async (req, res) => {
     }
 };
 
-// const paymentFailure = async (req, res) => {
-//     try {
-//         const { orderId } = req.body;
+const paymentFailure = async (req, res) => {
+    try {
+        const { orderId } = req.body;
 
-//         if (!orderId) {
-//             return res.status(400).json({ message: 'Order ID not found' });
-//         }
+        if (!orderId) {
+            return res.status(400).json({ message: 'Order ID not found' });
+        }
 
-//         const order = await Order.findById(orderId);
+        const order = await Order.findById(orderId);
 
-//         if (!order) {
-//             return res.status(404).json({ message: 'Order not found' });
-//         }
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
 
-//         order.orderStatus = 'Pending';
-//         order.paymentStatus = 'Failed';
-//         await order.save();
+        order.orderStatus = 'Pending';
+        order.paymentStatus = 'Paid';
+        await order.save();
 
-//         res.status(200).json({ success: true, message: 'Payment failure recorded. You can retry payment.' });
-//     } catch (error) {
-//         console.error('Payment failure error:', error);
-//         return res.status(500).json({ success: false, error: 'Failed to record payment failure.' });
-//     }
-// };
+        res.status(200).json({ success: true, message: 'Payment failure recorded. You can retry payment.' });
+    } catch (error) {
+        console.error('Payment failure error:', error);
+        return res.status(500).json({ success: false, error: 'Failed to record payment failure.' });
+    }
+};
 
 const retryPayment = async (req, res) => {
     try {
@@ -373,5 +373,5 @@ module.exports={
       loadInvoice,
       razorpayFailure,
       retryPayment,
-    //   paymentFailure 
+      paymentFailure 
 }

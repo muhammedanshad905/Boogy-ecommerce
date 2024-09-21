@@ -316,7 +316,7 @@
             
                                         <div class="button-set style0 d-none d-md-block">
                                             <ul>
-                                                <li><a class="btn-icon btn cartIcon pro-addtocart-popup" data-product-id="<%= product._id %>" onclick="addToCart(event)"><i class="icon an an-cart-l"></i> <span class="tooltip-label top">Add to Cart</span></a></li>           
+                                                <li><a class="btn-icon btn cartIcon pro-addtocart-popup" data-quantity="<%= product.quantity %>"  data-product-id="<%= product._id %>" onclick="addToCart(event)"><i class="icon an an-cart-l"></i> <span class="tooltip-label top">Add to Cart</span></a></li>           
                                             </ul>
                                         </div>
                                         <div class="wishlist-link iconset">
@@ -791,6 +791,13 @@
         function addToCart(event) {            
         
             const productId = event.currentTarget.getAttribute('data-product-id');
+            const productq = event.currentTarget.getAttribute('data-quantity');
+            
+            if(productq < 1){
+                showSnackbar('quantity is 0')
+                return;
+            }
+
             const quantity = 1; // Default quantity, adjust as needed
             fetch('/addToCartFromHome', {
                 method: 'POST',

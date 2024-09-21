@@ -46,6 +46,7 @@ const addToCartFromWishlist=async(req,res)=>{
         const productId = id;
         const product=await Product.findById(id)
         const productName=product.productName
+        const avaliableStock =product.quantity
         const price=product.price
 
         if (!userId) {
@@ -56,6 +57,9 @@ const addToCartFromWishlist=async(req,res)=>{
         
 
         if (!cart) {
+            if (quantity > avaliableStock) {
+                return res.status(400).json({ success: false, message: `only ${avaliableStock} item in stock` })
+            }
             cart = new Cart({
                 userId: userId,
                 cartItems: [{ productId: productId, quantity: quantity,productName:productName,price:price }]
@@ -63,7 +67,10 @@ const addToCartFromWishlist=async(req,res)=>{
         } else {
             const existingItem = cart.cartItems.find(item => item.productId.equals(productId));
             if (existingItem) {
-                existingItem.quantity += quantity;
+                let newQuantity = existingItem.quantity += quantity;
+                if (newQuantity > avaliableStock) {
+                    return res.status(400).json({ success: false, message: `only ${avaliableStock}item in stock` })
+                }
             } else {
                 cart.cartItems.push({ productId: productId, quantity: quantity, productName:productName,price:price });
             }

@@ -230,7 +230,7 @@
                                     <div class="product-action w-100 clearfix">
                                         
                                       <div class="product-form__item--submit"> 
-                                            <button type="button" name="add" class="btn rounded product-form__cart-submit" onclick="addToCart('<%= product._id %>')"><span> Add to cart</span></button>
+                                            <button type="button" name="add" class="btn rounded product-form__cart-submit" onclick="addToCart('<%= product._id %>','<%= product.quantity %>')"><span> Add to cart</span></button>
                                         </div> 
                                         
                                     </div> 
@@ -606,7 +606,13 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script>
-            function addToCart(productId) {
+            function addToCart(productId,productq) {
+                console.log(productq,'hb');
+                
+                if(productq < 1){
+                showSnackbar('quantity is 0')
+                return;
+            }
                 const id = productId;                
                 const quantity = 1;
         

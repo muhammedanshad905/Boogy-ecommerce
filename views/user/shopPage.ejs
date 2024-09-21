@@ -283,7 +283,7 @@
                             
                                                 <div class="button-set style0 d-none d-md-block">
                                                     <ul>
-                                                        <li><a class="btn-icon btn cartIcon pro-addtocart-popup" data-product-id="<%= product._id %>" onclick="addToCart(event)"><i class="icon an an-cart-l"></i> <span class="tooltip-label top">Add to Cart</span></a></li>           
+                                                        <li><a class="btn-icon btn cartIcon pro-addtocart-popup" data-product-id="<%= product._id %>" data-quantity="<%= product.quantity %>" onclick="addToCart(event)"><i class="icon an an-cart-l"></i> <span class="tooltip-label top">Add to Cart</span></a></li>           
                                                     </ul>
                                                 </div>
                                                 <div class="wishlist-link iconset">
@@ -560,8 +560,17 @@
         productSection.insertAdjacentHTML('beforeend', productHTML);
     });
 }
-function addToCart(event) {            
+function addToCart(event) { 
+               
             const productId = event.currentTarget.getAttribute('data-product-id');
+            const productq = event.currentTarget.getAttribute('data-quantity');
+            console.log(productq);
+            
+            if(productq < 1){
+                showSnackbar('quantity is 0')
+                return;
+            }
+
             const quantity = 1; // Default quantity, adjust as needed
         
             fetch('/addToCartFromShop', {
