@@ -220,7 +220,7 @@
                                                             <li><button onclick='updateStatus("<%= orders._id %>","<%= item._id %>", "Order Shipped")' class="dropdown-item" >Shipped</button></li>
                                                             <li><button onclick='updateStatus("<%= orders._id %>","<%= item._id %>", "Delivered")' class="dropdown-item">Delivered</button></li>
                                                         <% }else if(item.orderStatus === 'Delivered') {%>
-                                                        <% }else if(item.orderStatus === 'Shipped') {%>
+                                                        <% }else if(item.orderStatus === 'Order Shipped') {%>
                                                             <li><button onclick='updateStatus("<%= orders._id %>","<%= item._id %>", "Delivered")' class="dropdown-item">Delivered</button></li>
                                                         <% }else if(item.orderStatus === 'Returned') {%>
                                                         <% }else if(item.orderStatus === 'Canceled') {%>
@@ -381,12 +381,9 @@
             Swal.fire({
                 position: 'center',
                 icon: 'success',
-                title: 'Order status updated successfully',
-                showConfirmButton: false,
-                timer: 1200
-            }).then((result) => {
-                location.reload(); 
-            });
+                title: 'Order status updated successfully'
+            })
+            location.reload()
         } else {
             Swal.fire({
                 position: 'center',

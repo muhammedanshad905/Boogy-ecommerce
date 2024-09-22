@@ -18,11 +18,8 @@ const getCart = async (req, res) => {
         .populate('cartItems.productId')
         .populate('cartItems.offerId')
 
-        // let user = null;
-        // if (req.session.user_id) {
-        //     user = await User.findById(req.session.user_id);
-        // }
 
+        
         if (!userCart) {
             res.render('cartManagement', { cart: [] });
         } else {
@@ -40,6 +37,7 @@ const getCart = async (req, res) => {
 
                 }
             })
+         console.log(product,'product');
          
             res.render('cartManagement', { cart: product,userCart:userCart });
         }
@@ -153,10 +151,17 @@ const updateQuantity = async (req, res) => {
         const userId = req.session.user_id;
         let cart = await Cart.findOne({ userId: userId });
         const index = cart.cartItems.findIndex(item => item.productId.equals(productId));
+
+        let product = await Product.findById(productId).populate('offer') 
+
+        if(change>product.quantity){
+            return res.status(200).json({message:`only${product.quantity} is left`,success:false})
+        }
         
         if (index !== -1) {
             
-            let product = await Product.findById(productId).populate('offer')            
+            let product = await Product.findById(productId).populate('offer') 
+
             let discountPrice =calculateDiscountPrice(product)
 
             cart.cartItems[index].quantity += parseInt(change);
