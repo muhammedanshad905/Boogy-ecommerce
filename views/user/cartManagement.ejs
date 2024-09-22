@@ -501,10 +501,9 @@
                     const productId = event.currentTarget.getAttribute('data-product-id')                    
                     const quantityElement = document.getElementById(`quantity-${productId}`);
                     let currentQuantity = parseInt(quantityElement.innerText);
-                    currentQuantity++
 
                     if (currentQuantity < 10) {
-                        updateQuantity(productId, currentQuantity);
+                        updateQuantity(productId, 1);
                     } else {
                         Swal.fire({
                             title: "Maximum quantity exceeded",
@@ -526,7 +525,6 @@
                     }).then(response => response.json())
                         .then(({ success, newQuantity, productPrice, newSubtotal, newGrandTotal,message }) => {
                             if (success) {
-                                alert(success,message)
                                 
                                 document.getElementById(`quantity-${productId}`).textContent = newQuantity;
                                 const productTotal = newQuantity * productPrice;

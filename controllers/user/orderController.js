@@ -284,7 +284,11 @@ const  loadOrderDetails=async(req,res)=>{
             return res.render('orderNotFound')
         }
         const orderedItems=order.orderedItems;
+        console.log(orderedItems,'orderedItems');
+        
         const orders = await Order.findById(orderId)
+        console.log(orders.orderedItems[0].orderStatus,'orders');
+        
 
         const subtotal=calculateSubtotal(orderedItems)
         const grandTotal=calculateGrandTotal(orderedItems)

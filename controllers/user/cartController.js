@@ -147,7 +147,9 @@ function calculateNewGrandTotal(cartItems) {
 
 const updateQuantity = async (req, res) => {
     try {
-        const { change, productId} = req.body;   
+        const { change, productId} = req.body; 
+        console.log(change,"change");
+          
         const userId = req.session.user_id;
         let cart = await Cart.findOne({ userId: userId });
         const index = cart.cartItems.findIndex(item => item.productId.equals(productId));
@@ -289,8 +291,6 @@ const razorpay = new Razorpay({
  const placeOrder = async (req, res) => {
     try {
         const { paymentMethod, selectedAddressId ,grandTotal } = req.body;    
-
-        console.log( req.body,' req.body');
         
         const userId = req.session.user_id;
         const address = await Address.findById(selectedAddressId);
@@ -307,7 +307,6 @@ const razorpay = new Razorpay({
             let orderditems=[]
 
             orderItem.forEach(items => {
-                console.log('inside');
                 
                 orderditems.push(
                     {
@@ -322,10 +321,8 @@ const razorpay = new Razorpay({
                 
             });
 
-console.log(orderditems,'orderditems ooo');
 
         for (let item of cart.cartItems) {
-            console.log('inside2');
 
             let productId = await Product.findById(item.productId);
             if (productId) {
@@ -341,7 +338,6 @@ console.log(orderditems,'orderditems ooo');
             grandTotals = Math.floor(grandTotals - (grandTotals * req.session.coupon / 100))
         }
         
-        console.log('inside3');
 
         let order = new Order({
             userId: userId,
@@ -359,7 +355,6 @@ console.log(orderditems,'orderditems ooo');
                 currency: 'INR',
                 receipt: `receipt_order_${Date.now()}`,
             };
-            console.log('inside4');
 
             const razorpayOrder = await razorpay.orders.create(options);
 
@@ -369,7 +364,6 @@ console.log(orderditems,'orderditems ooo');
                 signature: null
             };
             const a = await order.save();
-            console.log(a,'a1');
             
             req.session.couponId = null;
             req.session.coupon = null;
@@ -377,7 +371,6 @@ console.log(orderditems,'orderditems ooo');
                 { userId: req.session.user_id },
                 { $set: { cartItems: [] } }
             );
-            console.log('inside5');
 
             
             // console.log(razorpayOrder.amount,'vgtd');
@@ -390,10 +383,8 @@ console.log(orderditems,'orderditems ooo');
                 orderId: order._id,
             });
         } else {
-            console.log('inside6');
 
             const a = await order.save();
-            console.log(a,'dd');
             
             req.session.couponId = null;
             req.session.coupon = null;
@@ -404,7 +395,6 @@ console.log(orderditems,'orderditems ooo');
             res.json({ success: true, orderId: order._id });
         }
     } catch (error) {
-        console.log('inside7');
 
         console.error('Error placing order:', error);
         res.status(500).json({ success: false, error: 'Failed to place order.' });
