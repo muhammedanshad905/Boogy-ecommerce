@@ -735,10 +735,10 @@
                             .then(response => response.json())
                             .then(result => {
                                 if (result.success) {
-                                    alert('Address saved successfully');
-                                    location.reload();
+                                    showSnackbar('Address saved successfully');                                   
+                                     location.reload();
                                 } else {
-                                    alert('Error saving address: ' + result.error);
+                                    showSnackbar('Error saving address: ' + result.error);
                                 }
                             })
                             .catch(error => console.error('Error:', error));
@@ -758,7 +758,8 @@
                         event.preventDefault();
 
                         const selectedAddress = document.querySelector('input[name="selectAddress"]:checked');
-
+                        const grandTotal = document.getElementById('grandtotal').getAttribute('data-grandTotal');
+                    console.log(grandTotal,'gg');
                         let selectedAddressId;
                         if (selectedAddress) {
                             const selectedAddressIndex = selectedAddress.getAttribute('data-index');
@@ -766,8 +767,7 @@
                             selectedAddressId = selectedAddress.value;
 
                         } else {
-                            console.log('No address selected.');
-                        }
+                            showSnackbar('please select address');                        }
 
                         fetch('/placeOrder', {
                             method: 'POST',
@@ -776,13 +776,16 @@
                             },
                             body: JSON.stringify({
                                 paymentMethod: 'cashOnDelivery',
-                                selectedAddressId: selectedAddressId
+                                selectedAddressId: selectedAddressId,
+                                grandTotal:grandTotal
 
                             })
                         })
                             .then(response => response.json())
                             .then(data => {
                                 if (data.success) {
+                                    console.log('hhhhhhh');
+                                    
                                     showSnackbar('Order placed successfully!');
                                     setTimeout(() => {
                                         if (data.orderId) {
@@ -936,15 +939,11 @@
         .then(data => {
             if (data.success) {
                 const yy = document.getElementById('remove-coupon-btn');
-                console.log(yy,'gtf')
                 yy.style.display = 'block';
                 const tA = document.getElementById('grandtotal');
                 tA.textContent = data.newPrice
                 tA.setAttribute('old',`${data.oldPrice}`);
-                console.log(tA.getAttribute('old'));
-                
-                console.log(button,'frrde');
-                
+                                
                 button.style.display = 'none';
                 Swal.fire({
                     title: "Coupon Applied",

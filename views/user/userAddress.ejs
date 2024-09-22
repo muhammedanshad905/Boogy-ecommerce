@@ -25,13 +25,15 @@ body {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 0px;
 }
 
 nav {
-    background-color: #007BFF;
+    background-color: #15171a;
     padding: 10px 20px;
     color: #fff;
+    margin-left: -154px;
+    margin-right: -154px;
 }
 
 nav ul {
@@ -57,42 +59,72 @@ nav a:hover {
 }
 
 footer {
-    background-color: #007BFF;
-    color: #fff;
-    padding: 20px;
-    text-align: center;
-}
-
-footer h3 {
-    margin-top: 0;
+    background-color: #343a40;
+    color: white;
+    padding: 1.5em 0; /* Reduced padding to lower height */
+    width: 129%;
+    margin-left: -161px;
+    overflow: hidden;
 }
 
 .footer-content {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
+    max-width: 1200px; /* Center the content with max width */
+    margin: 0 auto;
+    padding: 0 2em; /* Added padding to prevent text from touching the edges */
 }
 
 .footer-content div {
-    margin: 10px 0;
+    flex: 1;
+    min-width: 200px;
+    margin: 0.5em; /* Reduced margin for better spacing */
+}
+
+.footer-content h3 {
+    border-bottom: 2px solid #007bff; /* Add a subtle accent color */
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
+    font-size: 1.2em;
+    color: #f8f9fa; /* Lighten heading text for better readability */
 }
 
 .footer-content ul {
     list-style: none;
     padding: 0;
-    margin: 0;
 }
 
-.footer-content li {
-    margin: 5px 0;
+.footer-content ul li {
+    margin-bottom: 0.5em;
 }
 
-.footer-content a {
-    color: #fff;
+.footer-content ul li a {
+    color: #ced4da; /* Slightly lighter color for links */
+    text-decoration: none;
+    transition: color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+}
+
+.footer-content ul li a:hover {
+    color: #007bff; /* Hover color */
+    transform: translateY(-2px); /* Subtle lift effect on hover */
+}
+
+.footer-bottom {
+    text-align: center;
+    padding: 1em 0;
+    font-size: 0.9em;
+    background-color: #23272b; /* Darker background for bottom section */
+    color: #adb5bd;
+    width: 100%;
+}
+
+.footer-bottom a {
+    color: #007bff;
     text-decoration: none;
 }
 
-.footer-content a:hover {
+.footer-bottom a:hover {
     text-decoration: underline;
 }
 
@@ -248,8 +280,8 @@ ul li {
 }
 
 ul li a {
-    color: #000; /* Adjust the icon color */
-    font-size: 24px; /* Adjust icon size */
+    color: #ffffff; /* Adjust the icon color */
+    font-size: 20px; /* Adjust icon size */
     text-decoration: none;
 }
 
@@ -290,10 +322,13 @@ button:hover {
   
 
       <main>
+        <div>
+            <h1 style="text-align: center;">My Address</h1>
+        </div>
     <section class="address-section">
-        <div class="address-cards">
+        <div style="display: flex; justify-content: space-between;" class="address-cards">
             <% addresses.forEach(address => { %>
-                <div class="address-card">
+                <div style="padding: 10px; border-radius:10px ; border: solid; border-width: 2px;" class="address-card">
                     <p><%= address.firstname %>, <%= address.lastname %></p>
                     <p><%= address.street %></p>
                     <p><%= address.city %></p>
@@ -319,34 +354,37 @@ button:hover {
 </main>
 
 
-        <footer>
-            <div class="footer-content">
-                <div>
-                    <h3>Contact Us</h3>
-                    <ul>
-                        <li><a href="#">Email</a></li>
-                        <li><a href="#">Phone</a></li>
-                        <li><a href="#">Address</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3>Follow Us</h3>
-                    <ul>
-                        <li><a href="#">Facebook</a></li>
-                        <li><a href="#">Twitter</a></li>
-                        <li><a href="#">Instagram</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3>Legal</h3>
-                    <ul>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Disclaimer</a></li>
-                    </ul>
-                </div>
-            </div>
-        </footer>
+<footer>
+    <div class="footer-content">
+        <div>
+            <h3>Company</h3>
+            <ul>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Careers</a></li>
+                <li><a href="#">Press</a></li>
+            </ul>
+        </div>
+        <div>
+            <h3>Help</h3>
+            <ul>
+                <li><a href="#">Customer Service</a></li>
+                <li><a href="#">Returns</a></li>
+                <li><a href="#">FAQs</a></li>
+            </ul>
+        </div>
+        <div>
+            <h3>Follow Us</h3>
+            <ul>
+                <li><a href="#">Facebook</a></li>
+                <li><a href="#">Twitter</a></li>
+                <li><a href="#">Instagram</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2024 Your Company. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Use</a></p>
+    </div>
+</footer>
 
         <!-- Add/Edit Address Modal -->
         <div id="editModal" class="modal">
