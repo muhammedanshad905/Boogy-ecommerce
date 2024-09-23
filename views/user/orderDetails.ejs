@@ -308,12 +308,22 @@
                                                             style="color:#444; padding:0; margin:0; text-decoration:underline; display:inline-block;padding:0 5px;">Unsubscribe</a>.
                                                     </p>
                                                 </td>
-                                                <a href="/"><button class="" type="button">home</button></a> 
-
-                                                <a href="/orderHistory"><button class="" type="button">History</button></a> 
-                                                <% if (order.paymentStatus == 'Pending' || order.paymentStatus == 'success' ){ %>
+                                                <a href="/"
+                                                style="color:#000000; font-family:'Roboto',Arial, Helvetica,
+                                                sans-serif; font-size:13px; font-weight:600; line-height:1.5; text-align:center; margin:0 0 10px;
+                                                text-decoration:none; padding:7px 22px; display:inline-block; letter-spacing:0.5px;"
+                                                title="Go to home">
+                                                <i class="fas fa-home"></i>
+                                            </a>
+                                            <a href="/orderHistory"
+                                            style="color:#000000; font-family:'Roboto',Arial, Helvetica,
+                                            sans-serif; font-size:13px; font-weight:600; line-height:1.5; text-align:center; margin:0 0 10px;
+                                            text-decoration:none; padding:7px 22px; display:inline-block; letter-spacing:0.5px;"
+                                             title="order history">
+                                            <i class="fas fa-history"></i>
+                                        </a>                                                <% if (orders.paymentStatus !== 'Paid' ){ %>
                                 
-                                                    <a>
+                                                    <a> 
                                                         <button id="repayButton" data-order-id="<%= orders._id %>" class="icon-button">
                                                           <i class="fas fa-credit-card"></i>
                                                         </button>
@@ -331,6 +341,7 @@
         </tbody>
     </table>
 
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <script>
         function downloadPdf(itemId) {
@@ -398,7 +409,7 @@
                             },
                             body: JSON.stringify({
                                 orderId: result.orderId,
-                                status: 'Paid' // Mark it as failed in the database
+                                status: 'Paid' 
                             })
                         });
         

@@ -271,7 +271,7 @@ const retryPayment = async (req, res) => {
 
 
 
-const  loadOrderDetails=async(req,res)=>{
+const  loadOrderDetails=async(req,res)=>{ 
     try {
         const {orderId}= req.query
         
@@ -287,7 +287,7 @@ const  loadOrderDetails=async(req,res)=>{
         console.log(orderedItems,'orderedItems');
         
         const orders = await Order.findById(orderId)
-        console.log(orders.orderedItems[0].orderStatus,'orders');
+        console.log(orders.paymentStatus,'orders');
         
 
         const subtotal=calculateSubtotal(orderedItems)

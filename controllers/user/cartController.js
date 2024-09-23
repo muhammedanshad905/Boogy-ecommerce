@@ -74,7 +74,6 @@ const addToCart = async (req, res) => {
         const productImage = product.productImage
         const avaliableStock = product.quantity
         const discountPrice =calculateDiscountPrice(product);
-        console.log(discountPrice,"discountPrice");
         
         if (!userId) {
             return res.status(401).json({ redirectUrl: '/login' });
@@ -456,7 +455,6 @@ const addToCartFromHome = async (req, res) => {
         const productImage = product.productImage
         const avaliableStock = product.quantity
         const discountPrice =calculateDiscountPrice(product);
-        console.log(discountPrice,"discountPrice");
         
         if (!userId) {
             return res.status(401).json({ redirectUrl: '/login' });
@@ -529,7 +527,6 @@ const addToCartFromShop = async (req, res) => {
         const productImage = product.productImage
         const avaliableStock = product.quantity
         const discountPrice =calculateDiscountPrice(product);
-        console.log(discountPrice,"discountPrice");
         
         if (!userId) {
             return res.status(401).json({ redirectUrl: '/login' });
