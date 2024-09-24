@@ -419,7 +419,7 @@
                                 <td>
                                     <% for(let product of order[i].orderedItems){%>
                                         <p>
-                                            <%= product.price %>
+                                            Rs<%= product.price %>
                                         </p>
                                         <%} %>
                                 </td>
@@ -430,7 +430,7 @@
                                         </p>
                                         <%} %>
                                 </td>
-                                <td>₹ <%= order[i].totalAmount%>
+                                <td>Rs <%= order[i].totalAmount%>
                                 </td>
                             </tr>
                             <% } %>
@@ -442,7 +442,7 @@
                                     <% } %>
                 </tbody>
             </table>
-            <h3>total is : ₹<%= grandTotal %>
+            <h3>total is : Rs<%= grandTotal %>
             </h3>
         </div>
 

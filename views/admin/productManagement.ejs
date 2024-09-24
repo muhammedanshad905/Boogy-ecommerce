@@ -300,7 +300,7 @@ body {
                     <tr>
                         <td><%= product.productName %></td>
                         <td><%= product.category ? product.category.name : 'No Category' %></td>
-                        <td>$<%= product.price %></td>
+                        <td>Rs<%= product.price %></td>
                         <td>
                             <% if (product.productImage && product.productImage.length > 0) { %>
                             <img src="/assets/productImages/<%= product.productImage[0] %>" alt="Product Image" class="img-thumbnail">

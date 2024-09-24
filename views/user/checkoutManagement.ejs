@@ -439,7 +439,7 @@
                                                             <%= items.productName %>
                                                         </td>
                                                         <td>
-                                                            <%= items.price%>
+                                                            Rs<%= items.price%>
                                                         </td>
                                                         <td>
                                                             <%= items.quantity %>
@@ -452,7 +452,7 @@
                                                 <% }) %>
                                         </table>
                                         <p style="margin-left: 400px;" id="grandtotal"
-                                            data-grandTotal=" <%= grandTotal %>"><strong>Grand Total: <%= grandTotal %>
+                                            data-grandTotal=" <%= grandTotal %>"><strong>Grand Total: Rs<%= grandTotal %>
                                                     </strong></p>
                                     </div>
                                 </div>
@@ -538,7 +538,7 @@
                                                                     <%= cpn.couponDiscount %>%</small>
                                                                 <small id="minId"
                                                                     data-couponmin="<%= cpn.couponMinPurchase %>">Min
-                                                                    Purchase: $<%= cpn.couponMinPurchase %></small>
+                                                                    Purchase: Rs<%= cpn.couponMinPurchase %></small>
                                                                 <small
                                                                     data-exprdate=" <%= new Date(cpn.couponExpiry).toLocaleDateString() %>">Expires
                                                                     on: <%= new

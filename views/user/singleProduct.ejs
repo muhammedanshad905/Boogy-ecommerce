@@ -208,9 +208,9 @@
                                     <% if (product.offer && product.offer.length > 0) { %>
                                         <% const discountedPrice = product.price - (product.price * (product.offer[0].discountPercentage / 100)); %>
                                         <span class="price">$<%= discountedPrice.toFixed(2) %></span>
-                                        <span class="original-price text-muted text-decoration-line-through">$<%= product.price.toFixed(2) %></span>
+                                        <span class="original-price text-muted text-decoration-line-through">Rs<%= product.price.toFixed(2) %></span>
                                     <% } else { %>
-                                        <span class="price">$<%= product.price.toFixed(2) %></span>
+                                        <span class="price">Rs<%= product.price.toFixed(2) %></span>
                                     <% } %>
                                     
                                     <div class="product-info">
@@ -280,7 +280,7 @@
                                             <!--End Product Name-->
                                             <!--Product Price-->
                                             <div class="product-price">
-                                                <span class="price">$<%= product.price.toFixed(2) %></span>
+                                                <span class="price">Rs<%= product.price.toFixed(2) %></span>
                                             </div>
                                             <!--End Product Price-->
                                             <!--Product Review-->
