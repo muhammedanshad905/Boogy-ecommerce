@@ -39,14 +39,34 @@ const verifyLogin = async (req, res) => {
 };
 
 
-const loadDashboard = async(req,res)=>{
+const loadDashboard = async (req, res) => {
     try {
-    
-      res.render('dashboard')  
+        const order = await Order.find().sort({ createdAt: -1 });
+
+        let grandTotal = 0;
+        let totalSalesCount = 0;
+
+        for (let orderData of order) {
+            grandTotal += orderData.totalAmount;
+
+            for (let product of orderData.orderedItems) {
+                totalSalesCount += product.quantity;
+            }
+        }
+
+        const totalOrderCount = order.length; 
+
+        res.render('dashboard', {
+            totalOrderCount,
+            totalSalesCount,
+            grandTotal,
+        });
     } catch (error) {
         console.log(error);
+        res.status(500).send('Internal Server Error');
     }
-}
+};
+
 
 // usermanage
 
