@@ -39,14 +39,33 @@ const verifyLogin = async (req, res) => {
 };
 
 
-const loadDashboard = async(req,res)=>{
+const loadDashboard = async (req, res) => {
     try {
-    
-      res.render('dashboard')  
+        const order = await Order.find().sort({ createdAt: -1 });
+
+        let grandTotal = 0;
+        let totalSalesCount = 0;
+
+        for (let orderData of order) {
+            grandTotal += orderData.totalAmount;
+
+            for (let product of orderData.orderedItems) {
+                totalSalesCount += product.quantity;
+            }
+        }
+
+        const totalOrderCount = order.length; 
+        res.render('dashboard', {
+            totalOrderCount,
+            totalSalesCount,
+            grandTotal,
+        });
     } catch (error) {
         console.log(error);
+        res.status(500).send('Internal Server Error');
     }
-}
+};
+
 
 // usermanage
 
@@ -254,78 +273,6 @@ const adminLogout = async (req,res) => {
     }
 }
 
-// const dashStatus = async (req, res) => {
-//     try {
-//         const period = req.query.period || 'daily'; // Default to 'daily' if no period is provided
-//         const now = new Date();
-//         let startDate, endDate, dateGroupFormat;
-
-//         // Calculate the start and end dates for the period
-//         if (period === 'daily') {
-//             startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-//             endDate = new Date(startDate);
-//             endDate.setDate(endDate.getDate() + 1); // End of the day
-//             dateGroupFormat = "%Y-%m-%d";
-//         } else if (period === 'weekly') {
-//             const dayOfWeek = now.getDay();
-//             startDate = new Date(now);
-//             startDate.setDate(startDate.getDate() - dayOfWeek); // Start of the week
-//             endDate = new Date(startDate);
-//             endDate.setDate(endDate.getDate() + 7); // End of the week
-//             dateGroupFormat = "%Y-%U";
-//         } else if (period === 'monthly') {
-//             startDate = new Date(now.getFullYear(), now.getMonth(), 1); // Start of the month
-//             endDate = new Date(startDate);
-//             endDate.setMonth(endDate.getMonth() + 1); // End of the month
-//             dateGroupFormat = "%Y-%m";
-//         } else if (period === 'yearly') {
-//             startDate = new Date(now.getFullYear(), 0, 1); // Start of the year
-//             endDate = new Date(startDate);
-//             endDate.setFullYear(endDate.getFullYear() + 1); // End of the year
-//             dateGroupFormat = "%Y";
-//         }
-
-//         console.log(`Start Date: ${startDate}`);
-//         console.log(`End Date: ${endDate}`);
-//         console.log(`Date Group Format: ${dateGroupFormat}`);
-
-//         // Aggregating orders based on the selected period
-//         const ordersByPeriod = await Order.aggregate([
-//             { $unwind: "$orderedItems" }, // Unwind the orderedItems array
-//            // { $match: { "orderedItems.orderDate": { $gte: startDate, $lt: endDate } } }, // Filter by date range
-//             {
-//                 $group: {
-//                     _id: { $dateToString: { format: dateGroupFormat, date: "$orderedItems.orderDate" } },
-//                     count: { $sum: 1 }
-//                 }
-//             },
-//             { $sort: { "_id": 1 } }
-//         ]);
-
-//         console.log('Orders by Period:', ordersByPeriod);
-//         // Aggregating order status counts
-//         const orderCounts = await Order.aggregate([
-//             //{ $match: { orderDate: { $gte: startDate, $lt: endDate } } }, // Filter by date range
-//             // { $unwind: '$orderedItems' },
-//             { $group: { _id: '$orderedItems.orderStatus', count: { $sum: 1 } } }
-//         ]);
-
-//         // Aggregating top categories
-//         const topCategories = await Order.aggregate([
-//             { $unwind: "$orderedItems" },
-//             // { $match: { orderDate: { $gte: startDate, $lt: endDate } } }, // Filter by date range
-//             { $group: { _id: '$orderedItems.category', count: { $sum: 1 } } },
-//             { $sort: { count: -1 } },
-//             { $limit: 10 }
-//         ]);
-                
-//         // Sending the aggregated data to the frontend
-//         res.json({ status: orderCounts, perDay: ordersByPeriod, category: topCategories });
-//     } catch (error) {
-//         console.log(error.message);
-//         res.status(500).send("Server Error");
-//     }
-// };
 
 const dashStatus = async (req, res) => {
     try {
