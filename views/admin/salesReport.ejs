@@ -453,7 +453,7 @@
         </div>
     </div>
 </body>
-
+ 
 
 <script>
     document.getElementById('toggleButton').addEventListener('click', function () {
@@ -546,23 +546,26 @@
 
   
         function downloadExcel() {
+            
       const tableRows = document.querySelectorAll('.sales-table  tbody tr');
       const data = Array.from(tableRows).map(row => {
-          const cells = row.querySelectorAll('td');
-          return {
-              createdAt: cells[0].textContent.trim(),
-              firstname: cells[1].textContent.trim(),
-              paymentMethod: cells[2].textContent.trim(),
-              productName: cells[3].textContent.trim(),
-              price: cells[4].textContent.trim(),
-              quantity: cells[5].textContent.trim(),
-              totalAmount: cells[6].textContent.trim(),
-             
-          };
+        const cells = row.querySelectorAll('td');
+        if (cells.length === 7) { // Check if the row contains the expected 7 td elements
+            return {
+                createdAt: cells[0].textContent.trim(),
+                firstname: cells[1].textContent.trim(),
+                paymentMethod: cells[2].textContent.trim(),
+                productName: cells[3].textContent.trim(),
+                price: cells[4].textContent.trim(),
+                quantity: cells[5].textContent.trim(),
+                totalAmount: cells[6].textContent.trim(),
+            };
+        } else {
+            console.warn('Skipping row due to missing cells:', row);
+            return null; // Skip rows that do not have the expected number of cells
+        }
           
-          
-        });
-        console.log( data,' data');
+        }).filter(row => row !== null);
 
       fetch('/admin/downloadExcel', {
           method: 'POST',
