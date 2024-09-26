@@ -44,7 +44,22 @@ const userSchema= new mongoose.Schema({
     resetPasswordExpires:{
         type:Date
     },
-},{
+    referralCode: {  // Referral Code field for each user
+        type: String,
+        default: function() {
+            return `REF${this._id}${Math.floor(Math.random() * 10000)}`;  // Generating a unique referral code
+        },
+    },
+    referredBy: {  // To track which user referred this one
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    wallet: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Wallet',
+    }
+}
+,{
     timestamps: true 
 })
 

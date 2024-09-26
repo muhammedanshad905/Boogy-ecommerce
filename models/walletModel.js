@@ -3,8 +3,6 @@ const mongoose = require('mongoose');
 const transactionSchema = new mongoose.Schema({
     transactionId: {
         type: String,
-        
-        unique: true
     },
     type: {
         type: String,

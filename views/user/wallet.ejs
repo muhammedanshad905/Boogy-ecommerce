@@ -442,11 +442,11 @@
             <span id="closeHistoryModal" class="close">&times;</span>
             <h2>Transaction History</h2>
             <div id="transactionHistory">
-                <% wallet.transactions.forEach(tran=> { %>
+                <% wallet.transactions.reverse().forEach(tran=> { %>
                     <div class="transaction-entry">
                         <div class="transaction-date">
                             <p><strong>Date:</strong>
-                                <%= tran.date %>
+                                <%= tran.date.toLocaleDateString() + " " + tran.date.toLocaleTimeString() %>
                             </p>
                         </div>
                         <div class="transaction-details">

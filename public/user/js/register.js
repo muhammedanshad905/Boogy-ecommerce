@@ -10,12 +10,15 @@ function loadpage(){
             const specialCharRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
             const numberRegex = /\d/;
 
-           
+            const referralCodeRegex = /^[a-zA-Z0-9]*$/; // Alphanumeric
+          
+            
             const firstname=document.getElementById('firstName').value.trim();
             const lastname=document.getElementById('lastName').value.trim();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
             const confirmpassword = document.getElementById('confirmpassword').value.trim();
+               const referralCode = document.getElementById('referralCode').value.trim();  // New Referral Code Field
 
             const error = document.getElementById('submit-error');
 
@@ -24,6 +27,14 @@ function loadpage(){
                 return;
             }else{
                 error.innerHTML = ''
+            }
+
+              
+            if (referralCode && !referralCodeRegex.test(referralCode)) {
+                error.innerHTML = 'Referral code can only contain letters and numbers';
+                return;
+            } else {
+                error.innerHTML = '';
             }
 
             if(!emailRegex.test(email)){
@@ -53,6 +64,10 @@ function loadpage(){
             }else{
                 error.innerHTML = ''
             }
+            
+            if (referralCode && !referralCodeRegex.test(referralCode)) {
+                errorMessage += 'Referral code can only contain letters and numbers.<br>';
+            }
 
             if(password != confirmpassword){
                 error.innerHTML = 'Passwords does not match';
@@ -72,7 +87,8 @@ function loadpage(){
                     lastname:lastname,
                     email: email,
                     password: password,
-                    confirmpassword:confirmpassword
+                    confirmpassword:confirmpassword,
+                    referralCode: referralCode
 
                 }),
             });

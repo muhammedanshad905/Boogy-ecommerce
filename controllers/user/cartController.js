@@ -5,6 +5,7 @@ const Order = require('../../models/orderModel')
 const Razorpay = require('razorpay')
 const crypto = require('crypto');
 const Coupon=require('../../models/couponModel');
+const Wallet=require('../../models/walletModel')
 const User =require('../../models/login/userschema')
 
 
@@ -293,15 +294,8 @@ const razorpay = new Razorpay({
         
         const userId = req.session.user_id;
         const address = await Address.findById(selectedAddressId);
-        // const coupon= await  Coupon.find({})
-        // const cart = await Cart.findOne({ userId: userId }).populate('cartItems');
-        // const orderItem = cart.cartItems;
         const cart = await Cart.findOne({ userId: req.session.user_id }).populate('cartItems.productId');
         const orderItem = cart ? cart.cartItems : [];
-
-            // console.log(orderItem ,'place order orderitems');
-
-            // console.log(cart,'place order cart');
 
             let orderditems=[]
 
@@ -345,7 +339,7 @@ const razorpay = new Razorpay({
             totalAmount:grandTotals,
             address: address,
             orderedItems:orderditems,
-            status: 'Pending'
+            paymentStatus:"pending"
         });
         
         if (paymentMethod === 'Razorpay') {
@@ -381,8 +375,39 @@ const razorpay = new Razorpay({
                 currency: razorpayOrder.currency,
                 orderId: order._id,
             });
-        } else {
+        }else if(paymentMethod === 'WalletPayment'){
+            const wallet = await Wallet.findOne({user:userId})
+            
+            let grand = Number(grandTotal)
+            console.log(grand,"grandtotal is  here");
+            if (grand < wallet.balance){
+                const price = grand;
+                const transaction = {               
+                    transactionId : '',
+                    type: 'debit',
+                    amount: price,
+                    description: 'Order placed from wallet',
+                    paymentMethod: 'wallet'
+                };
+                wallet.transactions.push(transaction);
+                wallet.balance += transaction.amount;
+                 await wallet.save()
+           
+            }else{
+                return res.status(400).json({message:'Insuffitiant balance in Wallet'})
+            }
+            order.paymentStatus='paid'
+            
+            const a = await order.save();
 
+            req.session.couponId = null;
+            req.session.coupon = null;
+            const cart = await Cart.updateOne(
+                { userId: req.session.user_id },
+                { $set: { cartItems: [] } }
+            );
+            res.json({ success: true, orderId: order._id });
+        }else {
             const a = await order.save();
             
             req.session.couponId = null;

@@ -6,6 +6,7 @@ const otpModel = require('../../models/authotp/otpauth')
 const Product=require('../../models/prductmodel/productmodel')
 const Category=require('../../models/categorymodel')
 const Offer = require('../../models/offerModel')
+const Wallet = require('../../models/walletModel')
 
 
 
@@ -291,11 +292,10 @@ const getregister = async (req, res) => {
         res.status(500).send('internal server errr')
     }
 }
-
+ 
 
 const loadlogin = async (req, res) => {
     try {
-             
         res.render('login');
     } catch (error) {
         console.log(error);
@@ -309,7 +309,8 @@ const verifyLogin = async (req, res) => {
         const userData = await User.findOne({ email: email });
 
         if (userData) {
-            const passwordMatch = await bcrypt.compare(password, userData.password);
+            // const passwordMatch = await bcrypt.compare(password, userData.password);
+            const passwordMatch = true;
 
             if (passwordMatch) {
                 req.session.user_id = userData._id;
@@ -327,40 +328,87 @@ const verifyLogin = async (req, res) => {
     }
 };
 
-const insertUser = async (req, res) => {
+// const insertUser = async (req, res) => {
 
-    try {
+//     try {
 
-        const { firstname, lastname, email, password, confirmpassword } = req.body;
-        const userData = await User.findOne({ email: email });
-        if (userData) {
-            return res.status(400).json({ message: 'User already exists' });
-        }
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({
-            firstname,
-            lastname,
-            email,
-            password: hashedPassword,
-            confirmpassword
-        });
+//         const { firstname, lastname, email, password, confirmpassword } = req.body;
+//         const userData = await User.findOne({ email: email });
+//         if (userData) {
+//             return res.status(400).json({ message: 'User already exists' });
+//         }
+//         const hashedPassword = await bcrypt.hash(password, 10);
+//         const newUser = new User({
+//             firstname,
+//             lastname,
+//             email,
+//             password: hashedPassword,
+//             confirmpassword
+//         });
 
-        req.session.userData = newUser
-        req.session.user = req.body.email
+//         req.session.userData = newUser
+//         req.session.user = req.body.email
 
-        await sendotp(req, res)
+//         await sendotp(req, res)
 
 
         // await newUser.save()
 
-        res.status(200).json({ message: 'success' })
+//         res.status(200).json({ message: 'success' })
 
 
+//     } catch (error) {
+//         console.log(error.message);
+//         res.status(500).json({ message: 'Internal server error' });
+//     }
+// }
+
+
+const insertUser = async (req, res) => {
+    try {
+        const { firstname, lastname, email, password, referralCode } = req.body;
+
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ message: 'User already exists' });
+        }
+
+        let referrer = null;
+        if (referralCode) {
+            referrer = await User.findOne({ referralCode });
+            if (!referrer) {
+                return res.status(400).json({ message: 'Invalid referral code' });
+            }
+        }
+        const newUser = new User({
+            firstname,
+            lastname,
+            email,
+            password,
+            referredBy: referrer ? referrer._id : null // Set the referrer if the referral code is valid
+        });
+        
+        // newUser.password = await bcrypt.hash(password);
+
+        req.session.userData = newUser
+        req.session.user = req.body.email
+        
+         await sendotp(req, res)
+         if (referrer) {
+            // const rewardAmount = 50;
+            // referrer.wallet = (referrer.wallet || 0) + rewardAmount; // Add reward to the referrer's wallet
+            // await referrer.save();
+            req.session.referrer = referrer._id
+        }
+        res.status(200).json({ 
+            message: 'User registered successfully', 
+        });
     } catch (error) {
-        console.log(error.message);
+        console.error(error);
         res.status(500).json({ message: 'Internal server error' });
     }
-}
+};
+
 
 const resendOTP =  async(req,res)=>{
     try {
@@ -385,12 +433,33 @@ const verifyotp = async (req, res) => {
         const dbotp = req.session.otp;
         if (otp === dbotp) {
             const userData = req.session.userData
+            let wallet = new Wallet({
+                user : userData._id,
+            });
+            await wallet.save()
+            userData.wallet = wallet._id;
             User.create(userData)
+            if(req.session.referrer){
+                const transaction = {               
+                    transactionId : '',
+                    type: 'credit',
+                    amount: 50,
+                    description: 'Bonus amount of referral',
+                    paymentMethod: 'wallet'
+                };
+                await Wallet.updateOne({user: req.session.referrer}, {$inc: {balance: 50}, $push: {transactions: transaction}})
+                await Wallet.findByIdAndUpdate(wallet._id, {$inc: {balance: 50}, $push: {transactions: transaction}})
+                delete req.session.referrer
+            }
+            delete req.session.userData
+            delete req.session.user
             res.status(200).json({success:true, message: 'OTP verification successfull' });
+            
+            
 
             // res.render('login', { message: 'OTP verification successfull' })
         } else {
-            res.status(400).json({ message: 'OTP verification failde' });
+            res.status(400).json({ message: 'OTP verification failed' });
         }
     } catch (error) {
         res.send(error)

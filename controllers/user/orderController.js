@@ -93,9 +93,13 @@ const cancelOrder=async(req,res)=>{
         const  {orderId,itemId}=req.body
         const order = await Order.findById(orderId)
         const item = order.orderedItems.find(item => item._id.toString() === itemId);
+        const product=await Product.findById(item.productId)
+       
+        product.quantity += item.quantity;
+        await product.save()
         item.orderStatus = 'Canceled';
         const updatedOrder = await order.save();
-        if(order.paymentMethod == 'Razorpay'){
+        if(order.paymentMethod === 'Razorpay' || order.paymentMethod === 'WalletPayment'){
             
             const wallet = await Wallet.findOne({ user: req.session.user_id });
 

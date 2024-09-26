@@ -208,7 +208,7 @@
                     <div class="row g-0 align-items-center w-100">
                         <!--Social Icons-->
                         <div class="col-4 col-sm-4 col-md-4 col-lg-5 d-none d-lg-block">
-                            
+
                         </div>
                         <!--End Social Icons-->
                         <!--Logo / Menu Toggle-->
@@ -220,10 +220,12 @@
                             <!--End Mobile Toggle-->
                             <!--Logo-->
                             <div class="logo mx-lg-auto"><a href="index.html"><img class="logo-img" style="max-width: 195px;
-    max-height: 82px;" src="/assets/logo/boogy logo .png" alt="Optimal Multipurpose eCommerce Bootstrap 5 Html Template" title="Optimal Multipurpose eCommerce Bootstrap 5 Html Template" /></a></div>
+    max-height: 82px;" src="/assets/logo/boogy logo .png"
+                                        alt="Optimal Multipurpose eCommerce Bootstrap 5 Html Template"
+                                        title="Optimal Multipurpose eCommerce Bootstrap 5 Html Template" /></a></div>
                             <!--End Logo-->
                         </div>
-                      
+
                         <div class="col-6 col-sm-6 col-md-6 col-lg-5 icons-col text-right d-flex justify-content-end">
                             <!--Search-->
                             <div class="site-search iconset"><i class="icon an an-search-l"></i><span
@@ -240,16 +242,16 @@
                                     class="tooltip-label">Account</span></div>
                             <div id="userLinks">
                                 <ul class="user-links">
-                                    <% if(cart !== null){ %>
+                                    <% if(cart !==null){ %>
                                         <li><a href="/loadProfile">Profile</a></li>
                                         <li><a href="/orderHistory">Orders</a></li>
                                         <li><a href="/loadWishlist">Wishlist</a></li>
                                         <li><a href="/UserLogout">Logout</a></li>
-                                     <% }else{ %>
+                                        <% }else{ %>
                                             <li><a href="/login">Login</a></li>
                                             <li><a href="/register">Sign Up</a></li>
-                                            <li><a href="/loadWishlist">Wishlist</a></li> 
-                                    <% } %>
+                                            <li><a href="/loadWishlist">Wishlist</a></li>
+                                            <% } %>
                                 </ul>
                             </div>
                             <!--End Setting Dropdown-->
@@ -275,7 +277,7 @@
 
                                         </li>
 
-                                       
+
                                     </ul>
                                 </nav>
                                 <!--End Desktop Menu-->
@@ -415,7 +417,8 @@
                         <div class="col-lg-6 col-md-12 col-sm-12">
                             <div class="your-order-payment">
                                 <div class="your-order">
-                                    <button style="display: none;" type="button" id="remove-coupon-btn">Remove Coupon</button>
+                                    <button style="display: none;" type="button" id="remove-coupon-btn">Remove
+                                        Coupon</button>
                                     <h2 class="order-title mb-3">Your Order</h2>
                                     <div class="table-responsive order-table style2">
                                         <table
@@ -433,7 +436,8 @@
                                                 <tbody>
                                                     <tr id="item-row-<% items._id%>">
                                                         <td>
-                                                            <img src="/assets/productImages/<%= items.productId.productImage[0]%>">
+                                                            <img
+                                                                src="/assets/productImages/<%= items.productId.productImage[0]%>">
                                                         </td>
                                                         <td>
                                                             <%= items.productName %>
@@ -452,8 +456,9 @@
                                                 <% }) %>
                                         </table>
                                         <p style="margin-left: 400px;" id="grandtotal"
-                                            data-grandTotal=" <%= grandTotal %>"><strong>Grand Total: Rs<%= grandTotal %>
-                                                    </strong></p>
+                                            data-grandTotal=" <%= grandTotal %>"><strong>Grand Total: Rs<%= grandTotal
+                                                    %>
+                                            </strong></p>
                                     </div>
                                 </div>
 
@@ -497,7 +502,24 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                               
+                                                <div class="accordion-item card mb-2">
+                                                    <div class="card-header" id="headingThree">
+                                                        <button class="card-link" type="button"
+                                                            data-bs-toggle="collapse" data-bs-target="#collapseThree"
+                                                            aria-expanded="false" aria-controls="collapseThree">Wallet
+                                                            Payment
+                                                        </button>
+                                                    </div>
+                                                    <div id="collapseThree" class="accordion-collapse collapse"
+                                                        aria-labelledby="headingThree"
+                                                        data-bs-parent="#accordionExample">
+                                                        <div class="card-body">
+                                                            <button class="btn" id="walletBtn" type="submit" value="Wallet"
+                                                                data-cart="<%= cart._id %>" onclick="submitCodOrder(event)">confirm Payment</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                                 <div class="accordion-item card mb-2">
 
                                                     <div id="collapseFour" class="accordion-collapse collapse"
@@ -514,7 +536,7 @@
                                 </div>
 
                             </div>
-                           
+
                             <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
                                 <div class="customer-box customer-coupon">
                                     <h3 class="rounded-1">
@@ -532,10 +554,12 @@
                                                             <li class="list-group-item">
                                                                 <small id="codeId"
                                                                     data-couponcode="<%= cpn.couponCode %>">coupenCode:
-                                                                    <%= cpn.couponCode %></small>
+                                                                    <%= cpn.couponCode %>
+                                                                </small>
                                                                 <small id="discountid"
                                                                     data-coupondiscount="<%= cpn.couponDiscount %>">Discount:
-                                                                    <%= cpn.couponDiscount %>%</small>
+                                                                    <%= cpn.couponDiscount %>%
+                                                                </small>
                                                                 <small id="minId"
                                                                     data-couponmin="<%= cpn.couponMinPurchase %>">Min
                                                                     Purchase: Rs<%= cpn.couponMinPurchase %></small>
@@ -543,9 +567,10 @@
                                                                     data-exprdate=" <%= new Date(cpn.couponExpiry).toLocaleDateString() %>">Expires
                                                                     on: <%= new
                                                                         Date(cpn.couponExpiry).toLocaleDateString() %>
-                                                                        </small>
+                                                                </small>
 
-                                                                        <button  type="button" class="apply-coupon-btn" data-index="<%= cpn %>">Apply Coupon</button>
+                                                                <button type="button" class="apply-coupon-btn"
+                                                                    data-index="<%= cpn %>">Apply Coupon</button>
 
                                                             </li>
                                                             <% }) %>
@@ -671,7 +696,7 @@
                 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                 <script>
-                      function toggleCoupons() {
+                    function toggleCoupons() {
                         const couponsDiv = document.getElementById('available-coupons');
                         const toggleButton = document.getElementById('toggle-coupons-btn');
 
@@ -685,8 +710,8 @@
                     }
                 </script>
                 <script>
-                   
-                  
+
+
 
 
                     document.getElementById('toggleAddressBtn').addEventListener('click', function () {
@@ -735,8 +760,8 @@
                             .then(response => response.json())
                             .then(result => {
                                 if (result.success) {
-                                    showSnackbar('Address saved successfully');                                   
-                                     location.reload();
+                                    showSnackbar('Address saved successfully');
+                                    location.reload();
                                 } else {
                                     showSnackbar('Error saving address: ' + result.error);
                                 }
@@ -759,7 +784,7 @@
 
                         const selectedAddress = document.querySelector('input[name="selectAddress"]:checked');
                         const grandTotal = document.getElementById('grandtotal').getAttribute('data-grandTotal');
-                    console.log(grandTotal,'gg');
+                        console.log(grandTotal, 'gg');
                         let selectedAddressId;
                         if (selectedAddress) {
                             const selectedAddressIndex = selectedAddress.getAttribute('data-index');
@@ -767,7 +792,8 @@
                             selectedAddressId = selectedAddress.value;
 
                         } else {
-                            showSnackbar('please select address');                        }
+                            showSnackbar('please select address');
+                        }
 
                         fetch('/placeOrder', {
                             method: 'POST',
@@ -777,15 +803,13 @@
                             body: JSON.stringify({
                                 paymentMethod: 'cashOnDelivery',
                                 selectedAddressId: selectedAddressId,
-                                grandTotal:grandTotal
+                                grandTotal: grandTotal
 
                             })
                         })
                             .then(response => response.json())
                             .then(data => {
                                 if (data.success) {
-                                    console.log('hhhhhhh');
-                                    
                                     showSnackbar('Order placed successfully!');
                                     setTimeout(() => {
                                         if (data.orderId) {
@@ -807,8 +831,7 @@
 
                     // razor pay
                     const grandTotal = document.getElementById('grandtotal').getAttribute('data-grandTotal');
-                    console.log(grandTotal,'gg');
-                    
+
                     document.getElementById('razBtn').addEventListener('click', function (event) {
                         event.preventDefault();
 
@@ -886,7 +909,7 @@
 
                                     rzp.on('payment.failed', async function (response) {
                                         console.log('drdfctrfdtrfdc');
-                                        
+
                                         await fetch('/updateOrderStatus', {
                                             method: 'POST',
                                             headers: {
@@ -917,89 +940,146 @@
                             .catch(err => console.error(err));
                     })
 
+
+                    // wallet payment
+
+                    document.getElementById('walletBtn').addEventListener('click', function (event) {
+                        event.preventDefault();
+
+                        const selectedAddress = document.querySelector('input[name="selectAddress"]:checked');
+                        const grandTotal = document.getElementById('grandtotal').getAttribute('data-grandTotal');
+                        let selectedAddressId;
+                        if (selectedAddress) {
+                            const selectedAddressIndex = selectedAddress.getAttribute('data-index');
+
+                            selectedAddressId = selectedAddress.value;
+
+                        } else {
+                            showSnackbar('please select address');                        }
+
+                        fetch('/placeOrder', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                paymentMethod: 'WalletPayment',
+                                selectedAddressId: selectedAddressId,
+                                grandTotal:grandTotal
+
+                            })
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    console.log('hhhhhhh');
+                                    
+                                    showSnackbar('Order placed successfully!');
+                                    setTimeout(() => {
+                                        if (data.orderId) {
+
+                                            window.location.href = `/loadOrdersuccess?orderId=${data.orderId}`;
+                                        } else {
+                                            showSnackbar('failed to get the orderId')
+                                        }
+                                    }, 1000);
+                                } else {
+                                    showSnackbar('Failed to place order.');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                showSnackbar('An error occurred while placing the order.');
+                            });
+                    });
+
+
                     document.querySelectorAll('.apply-coupon-btn').forEach(button => {
-    button.addEventListener('click', function (event) {
-        event.preventDefault();
+                        button.addEventListener('click', function (event) {
+                            event.preventDefault();
 
-        // Get the closest list item containing the coupon details
-        const listItem = this.closest('.list-group-item');
-        const couponCode = listItem.querySelector('[data-couponcode]').getAttribute('data-couponcode');
-        const discountPercentage = listItem.querySelector('[data-coupondiscount]').getAttribute('data-coupondiscount');
-        const totalAmount = document.getElementById('grandtotal').getAttribute('data-grandTotal');
-        const minimumAmount = listItem.querySelector('[data-couponmin]').getAttribute('data-couponmin');
+                            // Get the closest list item containing the coupon details
+                            const listItem = this.closest('.list-group-item');
+                            const couponCode = listItem.querySelector('[data-couponcode]').getAttribute('data-couponcode');
+                            const discountPercentage = listItem.querySelector('[data-coupondiscount]').getAttribute('data-coupondiscount');
+                            const totalAmount = document.getElementById('grandtotal').getAttribute('data-grandTotal');
+                            const minimumAmount = listItem.querySelector('[data-couponmin]').getAttribute('data-couponmin');
 
-        fetch('/applyCoupon', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ couponCode, totalAmount, discountPercentage })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const yy = document.getElementById('remove-coupon-btn');
-                yy.style.display = 'block';
-                const tA = document.getElementById('grandtotal');
-                tA.textContent = data.newPrice
-                tA.setAttribute('old',`${data.oldPrice}`);
-                                
-                button.style.display = 'none';
-                Swal.fire({
-                    title: "Coupon Applied",
-                    text: "Coupon applied successfully!",
-                    icon: "success"
-                })
-            } else {
-                Swal.fire({
-                    title: "Failed!",
-                    text: data.message,
-                    icon: "error"
-                });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    });
-});
+                            fetch('/applyCoupon', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ couponCode, totalAmount, discountPercentage })
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        const yy = document.getElementById('remove-coupon-btn');
+                                        yy.style.display = 'block';
+                                        const tA = document.getElementById('grandtotal');
+                                        tA.textContent = data.newPrice
+                                        tA.setAttribute('old', `${data.oldPrice}`);
 
-
-document.getElementById('remove-coupon-btn').addEventListener('click', function (event) {
-    event.preventDefault();
-
-    const totalAmount = document.getElementById('grandtotal').getAttribute('old');
-    fetch('/removeCoupon',{
-        method:'PUT',
-        headers : {
-            'Content-Type': 'application/json'
-        },
-        body:JSON.stringify({totalAmount})
-    })
-    .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                Swal.fire({
-                    title: "Coupon Removed",
-                    text: "Coupon removed successfully!",
-                    icon: "success"
-                }).then(() => {
-                    window.location.reload();
-                });
-            } else {
-                Swal.fire({
-                    title: "Failed!",
-                    text: data.message,
-                    icon: "error"
-                });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+                                        button.style.display = 'none';
+                                        Swal.fire({
+                                            title: "Coupon Applied",
+                                            text: "Coupon applied successfully!",
+                                            icon: "success"
+                                        })
+                                    } else {
+                                        Swal.fire({
+                                            title: "Failed!",
+                                            text: data.message,
+                                            icon: "error"
+                                        });
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                });
+                        });
+                    });
 
 
-})
+                    document.getElementById('remove-coupon-btn').addEventListener('click', function (event) {
+                        event.preventDefault();
+
+                        const totalAmount = document.getElementById('grandtotal').getAttribute('old');
+                        fetch('/removeCoupon', {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ totalAmount })
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    Swal.fire({
+                                        title: "Coupon Removed",
+                                        text: "Coupon removed successfully!",
+                                        icon: "success"
+                                    }).then(() => {
+                                        window.location.reload();
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: "Failed!",
+                                        text: data.message,
+                                        icon: "error"
+                                    });
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
+
+
+                    })
+
+
+
                 </script>
 
             </div>

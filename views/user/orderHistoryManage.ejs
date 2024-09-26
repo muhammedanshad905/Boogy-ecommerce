@@ -192,7 +192,9 @@
                                             </td>
                                             
                                            <td>
-                                            <% if(item.orderStatus === 'Pending' || item.orderStatus === 'success' ) {%>
+                                            <% if(item.orderStatus === 'Pending' || order.paymentStatus === 'Pending' ) {%>
+                                                <p class="text-success">payment pending</p>
+                                            <% }else if(item.orderStatus === 'Pending' || item.orderStatus === 'success' ) {%>
                                                 <p class="text-success">order placed</p>
                                             <% }else if(item.orderStatus === 'Delivered') {%>
                                                 <p class="text-success">order Delivered</p>
