@@ -161,7 +161,7 @@ const updateQuantity = async (req, res) => {
         }
         
         if (index !== -1) {
-            
+            let message = '';
             let product = await Product.findById(productId).populate('offer') 
 
             let discountPrice =calculateDiscountPrice(product)
@@ -170,6 +170,7 @@ const updateQuantity = async (req, res) => {
 
             if (cart.cartItems[index].quantity > product.quantity) {
                 cart.cartItems[index].quantity = product.quantity
+                message='maximum quantity reached'
             }
 
             if (cart.cartItems[index].quantity <= 0) {
@@ -185,9 +186,10 @@ const updateQuantity = async (req, res) => {
         res.status(200).json({
             success: true,
             newQuantity: cart.cartItems[index]?.quantity || 0,
-            productPrice: cart.cartItems[index]?.price || 0, // Adjust as per your schema
+            productPrice: cart.cartItems[index]?.price || 0,
             newSubtotal,
-            newGrandTotal
+            newGrandTotal,
+            message
         })
         }else{
             res.status(404).json({ error: 'Product not found in cart' });
@@ -195,7 +197,7 @@ const updateQuantity = async (req, res) => {
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ error: 'Internal server error'});
-        // next(error);
+        // next(error);  
     }
 }
 

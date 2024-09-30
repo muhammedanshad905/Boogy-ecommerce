@@ -525,6 +525,7 @@
                     }).then(response => response.json())
                         .then(({ success, newQuantity, productPrice, newSubtotal, newGrandTotal,message }) => {
                             if (success) {
+                                console.log(message,"succces");
                                 
                                 document.getElementById(`quantity-${productId}`).textContent = newQuantity;
                                 const productTotal = newQuantity * productPrice;
@@ -533,7 +534,13 @@
                                 // Update the cart subtotal and grand total
                                 document.getElementById('cart-subtotal').textContent = `$${newSubtotal.toFixed(2)}`;
                                 document.getElementById('cart-GrandTotal').textContent = `$${newGrandTotal.toFixed(2)}`;
-
+                                
+                            if(message)
+                            Swal.fire({
+                                    title: '',
+                                    text: `${message}`,
+                                    icon: 'error',
+                                });
                             } else {
                                 Swal.fire({
                                     title: 'Failed to update quantity',

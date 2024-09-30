@@ -131,33 +131,81 @@ const blockAndUnblockUser=async(req,res)=>{
     }
 } 
 
-const loadSales=async(req,res)=>{
-    try {
+// const loadSales=async(req,res)=>{
+//     try {
         
-        const order = await Order.find().sort({createdAt:-1})
-        let grandTotal = 0
-        let totalSalesCount = 0
-        for(let orderData of order){
-            grandTotal += orderData.totalAmount
-            for(let product of orderData.orderedItems){
-                totalSalesCount += product.quantity
+//         const order = await Order.find().sort({createdAt:-1})
+//         console.log(order,"slaedsasdg");
+        
+//         if (order.orderedItems.orderStatus !=='Canceled'){
+            
+
+//             let grandTotal = 0
+//             let totalSalesCount = 0
+//             for(let orderData of order){
+//             grandTotal += orderData.totalAmount
+//             for(let product of orderData.orderedItems){
+//                 totalSalesCount += product.quantity
+//             }
+//         }
+        
+//         const totalOrderCount = order.length; // Total number of orders
+//         // const totalSalesCount = order.reduce((acc, order) => acc + order.orderedItems.quantity, 0);
+//         res.render('salesReport',
+//         {
+//             totalOrderCount,
+//             totalSalesCount,
+//             order,
+//             grandTotal
+//         })
+//     }
+//     } catch (error) {
+//         console.log(error);
+        
+//     }
+// }
+
+const loadSales = async (req, res) => {
+    try {
+        const order = await Order.aggregate([
+            {
+                $match: {
+                    "orderedItems.orderStatus": { $eq: 'Delivered' } 
+                }
+            },
+            {
+                $sort: { createdAt: -1 } 
+            }
+        ]);
+
+        console.log(order);
+        
+
+        let grandTotal = 0;
+        let totalSalesCount = 0;
+
+        for (let orderData of order) {
+            grandTotal += orderData.totalAmount;
+            for (let product of orderData.orderedItems) {
+                totalSalesCount += product.quantity;
             }
         }
-        
-        const totalOrderCount = order.length; // Total number of orders
-        // const totalSalesCount = order.reduce((acc, order) => acc + order.orderedItems.quantity, 0);
-        res.render('salesReport',
-        {
+
+        const totalOrderCount = order.length; 
+
+        res.render('salesReport', {
             totalOrderCount,
             totalSalesCount,
             order,
             grandTotal
-        })
+        });
+
     } catch (error) {
         console.log(error);
-        
+        res.status(500).send("Error loading sales report");
     }
-}
+};
+
 
 const updateSales =async(req,res)=>{
     try {        

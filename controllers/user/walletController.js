@@ -17,7 +17,6 @@ const loadWallet=async(req,res)=>{
             });
             await wallet.save()
         }
-        console.log(wallet,'wallet is  here');
         
         
        res.render('wallet',{wallet}) 
@@ -30,7 +29,6 @@ const loadWallet=async(req,res)=>{
 const createOrder = async (req, res) => {
     const { amount } = req.body;
 
-    console.log('amount' , amount);
     const options = {
         amount: parseInt(amount),  // Ensure amount is an integer in paise
         currency: "INR",

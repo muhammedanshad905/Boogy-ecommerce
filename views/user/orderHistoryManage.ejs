@@ -188,11 +188,11 @@
                                                 </p>
                                             </td>
                                             <td class="product-price text-center">
-                                                <span class="amount fw-500">Rs<%= item.price.toFixed(2) %></span>
+                                                <span class="amount fw-500">Rs <%= orders.totalAmount %></span>
                                             </td>
                                             
                                            <td>
-                                            <% if(item.orderStatus === 'Pending' || order.paymentStatus === 'Pending' ) {%>
+                                            <% if(item.orderStatus === 'Pending' || orders.paymentStatus === 'Pending' ) {%>
                                                 <p class="text-success">payment pending</p>
                                             <% }else if(item.orderStatus === 'Pending' || item.orderStatus === 'success' ) {%>
                                                 <p class="text-success">order placed</p>

@@ -32,9 +32,7 @@ function calculateGrandTotal(order) {
 const loadOrdersuccess=async(req,res)=>{
     try {
         
-        
         const {orderId}= req.query
-        
         if(!orderId){
             return res.status(400).send('orderId is required')
         }
@@ -42,11 +40,7 @@ const loadOrdersuccess=async(req,res)=>{
         .populate('orderedItems')
         const orderedItems=order.orderedItems;
         const orders = await Order.findById(orderId)
-        console.log(orderedItems,'order items');
-        console.log(orders,"orders");
-        
-        
-
+       
         const subtotal=calculateSubtotal(orderedItems)
         const grandTotal=order.totalAmount
         
@@ -74,13 +68,16 @@ const loadOrderHistory=async(req,res)=>{
        const order=await Order.find({userId:req.session.user_id}).skip(skip).limit(limit).sort({createdAt:-1})
 
        const totalorders = await Order.countDocuments({userId:req.session.user_id});
-
+    //    const subtotal=calculateSubtotal(orderedItems)
+       const grandTotal=order.totalAmount
+       
        const totalPages=Math.ceil(totalorders/limit)
         res.render('orderHistoryManage',{
             order,
             totalPages,
             currentPage:page,
-            user
+            user,
+            grandTotal
         })
     } catch (error) {
         console.log(error);
@@ -99,7 +96,7 @@ const cancelOrder=async(req,res)=>{
         await product.save()
         item.orderStatus = 'Canceled';
         const updatedOrder = await order.save();
-        if(order.paymentMethod === 'Razorpay' || order.paymentMethod === 'WalletPayment'){
+        if((order.paymentMethod === 'Razorpay' || order.paymentMethod === 'WalletPayment') && order.paymentStatus === 'Paid'){
             
             const wallet = await Wallet.findOne({ user: req.session.user_id });
 

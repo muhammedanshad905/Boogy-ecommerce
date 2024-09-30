@@ -18,29 +18,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
-        *,
-        ::before,
-        ::after {
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            box-sizing: border-box;
-        }
+         .custom-repay-button {
+    background-color: #007bff; /* Blue background */
+    color: white; /* White text */
+    padding: 10px 20px; /* Add some padding */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Adjust font size */
+    cursor: pointer; /* Add pointer on hover */
+    transition: background-color 0.3s ease; /* Smooth background color transition */
+  }
 
-        a:hover {
-            opacity: 0.88;
-        }
-        .icon-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #007bff; /* Change the color as needed */
-  font-size: 20px; /* Adjust size */
-}
+  .custom-repay-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
 
-.icon-button:hover {
-  color: #0056b3; /* Hover effect */
-}
-
+  .custom-repay-button:active {
+    background-color: #003f7f; /* Even darker blue when clicked */
+  }
     </style>
 </head>
 
@@ -312,8 +307,8 @@
                                  <% if (orders.paymentStatus == 'Pending'){ %>
                                  
                                     <a>
-                                        <button id="repayButton" data-order-id="<%= orders._id %>" class="icon-button">
-                                          <i class="fas fa-credit-card"></i>
+                                        <button id="repayButton" data-order-id="<%= orders._id %>" class="custom-repay-button">
+                                          Repay Order
                                         </button>
                                       </a>
                                                                    <% } %>  
