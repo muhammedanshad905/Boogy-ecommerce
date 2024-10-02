@@ -88,18 +88,20 @@ const loadOrderHistory=async(req,res)=>{
 const cancelOrder=async(req,res)=>{
     try {        
         const  {orderId,itemId}=req.body
+        
         const order = await Order.findById(orderId)
         const item = order.orderedItems.find(item => item._id.toString() === itemId);
         const product=await Product.findById(item.productId)
-       
+    
         product.quantity += item.quantity;
         await product.save()
         item.orderStatus = 'Canceled';
         const updatedOrder = await order.save();
+        
         if((order.paymentMethod === 'Razorpay' || order.paymentMethod === 'WalletPayment') && order.paymentStatus === 'Paid'){
             
             const wallet = await Wallet.findOne({ user: req.session.user_id });
-
+            
             if (!wallet) {                
                 return res(400).json({ success: false, message: "Wallet not found" });
             }
@@ -111,9 +113,10 @@ const cancelOrder=async(req,res)=>{
                 amount: price,
                 description: 'Funds added to wallet due to order cancellation',
                 paymentMethod: 'Razorpay'
-            };
-            
+            };            
             wallet.transactions.push(transaction);
+            console.log(transaction.amount,"transaction");
+            
             wallet.balance += transaction.amount;            
 
             await wallet.save();

@@ -387,7 +387,6 @@ const razorpay = new Razorpay({
             const wallet = await Wallet.findOne({user:userId})
             
             let grand = Number(grandTotal)
-            console.log(grand,"grandtotal is  here");
             if (grand < wallet.balance){
                 const price = grand;
                 const transaction = {               
@@ -404,7 +403,7 @@ const razorpay = new Razorpay({
             }else{
                 return res.status(400).json({message:'Insuffitiant balance in Wallet'})
             }
-            order.paymentStatus='paid'
+            order.paymentStatus='Paid'
             
             const a = await order.save();
 

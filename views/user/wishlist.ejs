@@ -10,7 +10,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="description">
         <!-- Title Of Site -->
-        <title>Boogy.whishlist</title>
+        <title>Boogy|whishlist</title>
         <!-- Favicon -->
         <link rel="shortcut icon" href="assets/images/favicon.png" />
         <!-- Plugins CSS -->
@@ -201,9 +201,13 @@
                                                     <span class="amount fw-500">Rs<%= product.price %></span>
                                                 </td>
                                                 <td class="stock text-center">
-                                                    <span class="text-in-stock">
-                                                        <%= product.quantity > 0 ? 'In stock' : 'Out of stock' %>
-                                                    </span>
+                                                    
+                                                        <% if (product.quantity > 0) { %>
+                                                            <span class="text-success">In Stock</span>
+                                                        <% } else { %>
+                                                            <span class="text-danger">Out of Stock</span>
+                                                        <% } %>
+                                                    
                                                 </td>
                                                 <td class="product-subtotal text-center">
                                                     <a data-product-id="<%= product._id %>" data-quantity="<%= product.quantity %>" onclick="addToCart(event)"><button class="btn" type="button">Add to cart</button></a>

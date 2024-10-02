@@ -341,11 +341,17 @@
                                                 <span class="price">Rs<%= product.price.toFixed(2) %></span>
                                             <% } %>
                                         </div>
-                                        
-                                        <div class="product-review d-flex align-items-center justify-content-center">
+                                        <div class="stock">
+                                            <% if (product.quantity > 0) { %>
+                                                <span class="text-success">In Stock</span>
+                                            <% } else { %>
+                                                <span class="text-danger">Out of Stock</span>
+                                            <% } %>
+                                        </div>
+                                        <!-- <div class="product-review d-flex align-items-center justify-content-center">
                                             <i class="an an-star"></i><i class="an an-star"></i><i class="an an-star"></i><i class="an an-star"></i><i class="an an-star-o"></i>
                                             <span class="caption hidden ms-2">3 reviews</span>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             <% }) %>

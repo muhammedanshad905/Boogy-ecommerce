@@ -219,6 +219,13 @@
                                             <p>Discount Offer: <%= product.discount %>% off</p>
                                         <% } %>
                                     </div>
+                                    <div class="stock">
+                                        <% if (product.quantity > 0) { %>
+                                            <span class="text-success">In Stock</span>
+                                        <% } else { %>
+                                            <span class="text-danger">Out of Stock</span>
+                                        <% } %>
+                                    </div>
                                  
                                     
                                 </div>
@@ -229,8 +236,10 @@
                                     <div class="product-action w-100 clearfix">
                                         
                                       <div class="product-form__item--submit"> 
-                                            <button type="button" name="add" class="btn rounded product-form__cart-submit" onclick="addToCart('<%= product._id %>','<%= product.quantity %>')"><span> Add to cart</span></button>
-                                        </div> 
+                                        <button type="button" name="add" class="btn rounded product-form__cart-submit" onclick="addToCart('<%= product._id %>','<%= product.quantity %>')">
+                                            <span>Add to cart</span>
+                                        </button>
+                                                                                </div> 
                                         
                                     </div> 
                                    
@@ -281,6 +290,13 @@
                                             <!--Product Price-->
                                             <div class="product-price">
                                                 <span class="price">Rs<%= product.price.toFixed(2) %></span>
+                                            </div>
+                                            <div class="stock">
+                                                <% if (product.quantity > 0) { %>
+                                                    <span class="text-success">In Stock</span>
+                                                <% } else { %>
+                                                    <span class="text-danger">Out of Stock</span>
+                                                <% } %>
                                             </div>
                                             <!--End Product Price-->
                                             <!--Product Review-->
@@ -445,7 +461,12 @@
             function addToCart(productId,productq) {
                 
                 if(productq < 1){
-                showSnackbar('Out Of Stock')
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Out Of Stock',
+                        icon: 'error',
+                        confirmButtonText: 'Try Again'
+                    });
                 return;
             }
                 const id = productId;                
