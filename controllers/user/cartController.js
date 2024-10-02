@@ -232,14 +232,20 @@ const loadCheckout = async (req, res) => {
         let address = await Address.find({ userId: req.session.user_id });
         let cart = await Cart.findOne({ userId: req.session.user_id }).populate('cartItems.productId');
         let cartItems = cart ? cart.cartItems : [];
-        
-        console.log(cartItems,"cartItems");
-        console.log( cart ,' cart ');
-        
+        console.log(cart.cartItems[0],"jhgjdhfg" );
+        console.log(cartItems,"uuuuu");
+        cartItems = cartItems.filter(item => !item.productId.isBlocked);
+
+        await Cart.updateOne(
+            {  userId: req.session.user_id },
+            { $pull: { cartItems: { 'productId': { $in: cart.cartItems.filter(item => item.productId.isBlocked).map(item => item.productId._id) } } } }
+        );
 
         let grandTotal = cartItems.reduce((total, item) => {
-            return total + item.price * item.quantity + 5 + 10;
+            return total + item.price * item.quantity;
         }, 0);
+
+        grandTotal += 15;
        
        
         if(req.session.coupon){
@@ -392,7 +398,7 @@ const razorpay = new Razorpay({
                     paymentMethod: 'wallet'
                 };
                 wallet.transactions.push(transaction);
-                wallet.balance += transaction.amount;
+                wallet.balance -= transaction.amount;
                  await wallet.save()
            
             }else{

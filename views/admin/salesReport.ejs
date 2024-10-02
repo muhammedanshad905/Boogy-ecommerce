@@ -546,47 +546,57 @@
 
   
         function downloadExcel() {
-            
-      const tableRows = document.querySelectorAll('.sales-table  tbody tr');
-      const data = Array.from(tableRows).map(row => {
+    const tableRows = document.querySelectorAll('.sales-table  tbody tr');
+    const data = [];
+
+    tableRows.forEach(row => {
         const cells = row.querySelectorAll('td');
         if (cells.length === 7) { // Check if the row contains the expected 7 td elements
-            return {
-                createdAt: cells[0].textContent.trim(),
-                firstname: cells[1].textContent.trim(),
-                paymentMethod: cells[2].textContent.trim(),
-                productName: cells[3].textContent.trim(),
-                price: cells[4].textContent.trim(),
-                quantity: cells[5].textContent.trim(),
-                totalAmount: cells[6].textContent.trim(),
-            };
+            const createdAt = cells[0].textContent.trim();
+            const firstname = cells[1].textContent.trim();
+            const paymentMethod = cells[2].textContent.trim();
+            const productNames = Array.from(cells[3].querySelectorAll('p')).map(p => p.textContent.trim());
+            const prices = Array.from(cells[4].querySelectorAll('p')).map(p => p.textContent.trim().replace('Rs', ''));
+            const quantities = Array.from(cells[5].querySelectorAll('p')).map(p => p.textContent.trim());
+            const totalAmount = cells[6].textContent.trim();
+
+            productNames.forEach((productName, index) => {
+                data.push({
+                    createdAt: createdAt,
+                    firstname: firstname,
+                    paymentMethod: paymentMethod,
+                    productName: productName,
+                    price: prices[index] || '',
+                    quantity: quantities[index] || '',
+                    totalAmount: totalAmount
+                });
+            });
         } else {
             console.warn('Skipping row due to missing cells:', row);
-            return null; // Skip rows that do not have the expected number of cells
         }
-          
-        }).filter(row => row !== null);
+    });
 
-      fetch('/admin/downloadExcel', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ data: data }),
-      })
-      .then(response => response.blob())
-      .then(blob => {
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.style.display = 'none';
-          a.href = url;
-          a.download = 'sales-report.xlsx';
-          document.body.appendChild(a);
-          a.click();
-          window.URL.revokeObjectURL(url);
-      })
-      .catch(error => console.error('Error downloading Excel:', error));
-     }
+    fetch('/admin/downloadExcel', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ data: data }),
+    })
+    .then(response => response.blob())
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = 'sales-report.xlsx';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+    })
+    .catch(error => console.error('Error downloading Excel:', error));
+}
+
 
 
      function downloadPDF(salesReport) {

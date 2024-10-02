@@ -1,576 +1,625 @@
 <%- include('../layouts/header') %>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boogy.Category</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #F3F6F9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-        }
-        .sidebar {
-            width: 250px;
-            background-color: #ffffff;
-            height: 100vh;
-            padding: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-            position: fixed;
-        }
-        .sidebar h2 {
-            text-align: center;
-            margin-bottom: 40px;
-            color: #007BFF;
-        }
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
-        .sidebar ul li {
-            margin-bottom: 20px;
-        }
-        .sidebar ul li a {
-            text-decoration: none;
-            color: #000;
-            display: block;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        .sidebar ul li a:hover {
-            background-color: #F0F0F0;
-        }
-        .content {
-            flex-grow: 1;
-            padding: 20px;
-            margin-left: 250px; /* Same as the sidebar width */
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-        }
-        .header h1 {
-            color: #007BFF;
-        }
-        .header input[type="text"] {
-            padding: 10px;
-            width: 300px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .categories-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        .categories-table th, .categories-table td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ccc;
-        }
-        .categories-table th {
-            background-color: #f9f9f9;
-        }
-        .categories-table td img {
-            width: 50px;
-            height: 50px;
-            border-radius: 5px;
-            object-fit: cover;
-        }
-        .categories-table button {
-            padding: 5px 10px;
-            margin-right: 5px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .categories-table button.edit {
-            background-color: #007BFF;
-            color: #fff;
-        }
-        .categories-table button.listed {
-            background-color: #28a745;
-            color: #fff;
-        }
-        .add-category {
-            display: block;
-            width: 100%;
-            text-align: center;
-            padding: 10px;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            margin-top: 20px;
-            text-decoration: none;
-            transition: background-color 0.3s;
-        }
-        .add-category:hover {
-            background-color: #0056b3;
-        }
-        .logout {
-            margin-top: 20px;
-            text-align: center;
-        }
-        .logout a {
-            text-decoration: none;
-            color: #000;
-            padding: 10px 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            display: inline-block;
-            transition: background-color 0.3s;
-        }
-        .logout a:hover {
-            background-color: #F0F0F0;
-        }
+    <!DOCTYPE html>
+    <html lang="en">
 
-        /* Modal styling */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0,0,0,0.4); /* Black background with opacity */
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: 10% auto; /* 10% from the top and centered */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 50%; /* Could be more or less, depending on screen size */
-            border-radius: 10px;
-            position: relative;
-        }
-
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            color: #aaa;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        /* Form styling */
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        label {
-            margin-top: 10px;
-            font-weight: bold;
-        }
-
-        input[type="text"],
-        textarea {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-
-        button[type="submit"] {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        button[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-
-        /* Adjustments for images in table */
-        .img-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 50px;
-            height: 50px;
-        }
-
-        .img-container img {
-            max-width: 100%;
-            max-height: 100%;
-            border-radius: 5px;
-        }
-
-        /* General body styling */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-/* Search container styling */
-.search-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-
-/* Search form styling */
-.search-form {
-    display: flex;
-    align-items: center;
-    max-width: 600px;
-    width: 100%;
-}
-
-/* Search input styling */
-.search-input {
-    width: 100%;
-    padding: 10px;
-    border: 2px solid #ccc;
-    border-radius: 4px 0 0 4px;
-    font-size: 16px;
-    transition: border-color 0.3s;
-}
-
-.search-input:focus {
-    border-color: #007bff;
-    outline: none;
-}
-
-/* Search button styling */
-.search-button {
-    padding: 10px;
-    border: 2px solid #007bff;
-    border-radius: 0 4px 4px 0;
-    background-color: #007bff;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.search-button:hover {
-    background-color: #0056b3;
-}
-
-.search-button i {
-    font-size: 18px;
-}
-/* Basic pagination styling */
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    list-style: none;
-    padding: 0;
-    margin: 20px 0;
-}
-
-.pagination a {
-    display: inline-block;
-    padding: 10px 15px;
-    margin: 0 5px;
-    text-decoration: none;
-    color: #007bff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.pagination a:hover {
-    background-color: #f8f9fa;
-    color: #0056b3;
-}
-
-.pagination .active a {
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
-}
-
-.pagination .disabled a {
-    color: #6c757d;
-    pointer-events: none;
-    cursor: default;
-    border-color: #ddd;
-}
-
-/* Optional: Add a little spacing between pagination items */
-.pagination a {
-    margin: 0 2px;
-}
-
-    </style>
-</head>
-<body>
-    <div class="sidebar">
-        <h2>BOOGY</h2>
-        <ul>
-            <li><a href="/admin/dashboard">Dashboard</a></li>
-    <li><a href="/admin/loadOrderlist">Orders</a></li>
-    <li><a href="/admin/loadusermanage">Customers</a></li>
-    <li><a href="/admin/loadCoupon">Coupon</a></li>
-    <li><a href="/admin/loadOffer">Offers</a></li>
-    <li><a href="/admin/loadCategory">Categories</a></li>
-    <li><a href="/admin/loadProductmanage">Products</a></li>
-    <li><a href="/admin/logout">logout</a></li>
-
-
-           
-        </ul>
-    
-        <div class="logout">
-            <a href="#">Logout</a>
-        </div>
-    </div>
-    <div class="content">
-        <div class="search-container">
-            <form class="search-form" action="/admin/loadCategory" method="get">
-                <input type="text" name="search" value="<%= searchQuery %>" placeholder="Search by keyword or #" class="search-input">
-                <button type="submit" class="search-button">
-                    search<i class="icon-search"></i>
-                </button>
-            </form>
-        </div>
-        <div class="header">
-
-            <h1>Categories</h1>
-        </div>
-        <table class="categories-table">
-            <thead>
-                <tr>
-                    <th>Category Name</th>
-                    <th>Description</th>
-                    <th>Image</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <a href="/admin/loadAddCategory" class="add-category">+ Add Category</a>
-                <% categories.forEach(category => { %>
-                    <tr>
-                        <td><%= category.name %></td>
-                        <td><%= category.description %></td>
-                        <td>
-                            <div class="img-container">
-                                <img src="/assets/categoryImg/<%= category.image %>" alt="<%= category.name %> Image">
-                            </div>
-                        </td>
-                        <td>
-                            <button class="edit" onclick="openModal('<%= category._id %>', '<%= category.name %>', '<%= category.description %>')">Edit</button>
-                            <% if (category.isBlocked) { %>
-                                <button class="btn btn-success" onclick="blockAndUnblockProduct('<%= category._id %>', true)">Unlist</button>
-                            <% } else { %>
-                                <button class="btn btn-danger" onclick="blockAndUnblockProduct('<%= category._id %>', false)">List</button>
-                            <% } %>
-                        </td>
-                    </tr>
-                <% }) %>
-            </tbody>
-            <nav>
-                <div class="pagination">
-                    <% if (currentPage > 1) { %>
-                        <a href="/admin/loadCategory?page=<%= currentPage - 1 %>&search=<%= searchQuery %>">Previous</a>
-                    <% } %>
-                    <% for (let i = 1; i <= totalPages; i++) { %>
-                        <a href="/admin/loadCategory?page=<%= i %>&search=<%= searchQuery %>"><%= i %></a>
-                    <% } %>
-                    <% if (currentPage < totalPages) { %>
-                        <a href="/admin/loadCategory?page=<%= currentPage + 1 %>&search=<%= searchQuery %>">Next</a>
-                    <% } %>
-                </div>
-                
-            </nav>
-        </table>
-    </div>
-
-<!-- Modal -->
-
-<div id="editModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h2>Edit Category</h2>
-        <form id="editForm">
-            <input type="hidden" id="editId" name="id">
-            <div class="form-group">
-                <label for="editName">Name:</label>
-                <input type="text" id="editName" name="name" class="form-control" required>
-                <div class="error-message" id="nameError"></div>
-            </div>
-            <div class="form-group">
-                <label for="editDescription">Description:</label>
-                <textarea id="editDescription" name="description" class="form-control" rows="4" required></textarea>
-                <div class="error-message" id="descriptionError"></div>
-            </div>
-            <div class="form-group">
-                <label for="categoryImage">Category Image:</label>
-                <input type="file" id="categoryImage" name="categoryImage" accept="image/png, image/jpeg">
-                <div class="error-message" id="imageError"></div>
-            </div>
-            <button type="submit" class="btn btn-primary">Update Category</button>
-        </form>
-    </div>
-</div>
-
-    <script>
-        var modal = document.getElementById("editModal");
-    
-        // Function to open the modal
-        function openModal(id, name, description) {
-            document.getElementById("editId").value = id;
-            document.getElementById("editName").value = name;
-            document.getElementById("editDescription").value = description;
-            modal.style.display = "block";
-    
-            // Function to close the modal
-            function closeModal() {
-                modal.style.display = "none";
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Boogy.Category</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #F3F6F9;
+                margin: 0;
+                padding: 0;
+                display: flex;
             }
-    
-            // Close the modal if the user clicks anywhere outside of it
-            window.onclick = function(event) {
-                if (event.target == modal) {
-                    closeModal();
+
+            .sidebar {
+                width: 250px;
+                background-color: #ffffff;
+                height: 100vh;
+                padding: 20px;
+                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+                position: fixed;
+            }
+
+            .sidebar h2 {
+                text-align: center;
+                margin-bottom: 40px;
+                color: #007BFF;
+            }
+
+            .sidebar ul {
+                list-style: none;
+                padding: 0;
+            }
+
+            .sidebar ul li {
+                margin-bottom: 20px;
+            }
+
+            .sidebar ul li a {
+                text-decoration: none;
+                color: #000;
+                display: block;
+                padding: 10px;
+                border-radius: 5px;
+                transition: background-color 0.3s;
+            }
+
+            .sidebar ul li a:hover {
+                background-color: #F0F0F0;
+            }
+
+            .content {
+                flex-grow: 1;
+                padding: 20px;
+                margin-left: 250px;
+                /* Same as the sidebar width */
+            }
+
+            .header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 40px;
+            }
+
+            .header h1 {
+                color: #007BFF;
+            }
+
+            .header input[type="text"] {
+                padding: 10px;
+                width: 300px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+
+            .categories-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+
+            .categories-table th,
+            .categories-table td {
+                padding: 10px;
+                text-align: left;
+                border-bottom: 1px solid #ccc;
+            }
+
+            .categories-table th {
+                background-color: #f9f9f9;
+            }
+
+            .categories-table td img {
+                width: 50px;
+                height: 50px;
+                border-radius: 5px;
+                object-fit: cover;
+            }
+
+            .categories-table button {
+                padding: 5px 10px;
+                margin-right: 5px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            .categories-table button.edit {
+                background-color: #007BFF;
+                color: #fff;
+            }
+
+            .categories-table button.listed {
+                background-color: #28a745;
+                color: #fff;
+            }
+
+            .add-category {
+                display: block;
+                width: 100%;
+                text-align: center;
+                padding: 10px;
+                background-color: #007BFF;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                margin-top: 20px;
+                text-decoration: none;
+                transition: background-color 0.3s;
+            }
+
+            .add-category:hover {
+                background-color: #0056b3;
+            }
+
+            .logout {
+                margin-top: 20px;
+                text-align: center;
+            }
+
+            .logout a {
+                text-decoration: none;
+                color: #000;
+                padding: 10px 20px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                display: inline-block;
+                transition: background-color 0.3s;
+            }
+
+            .logout a:hover {
+                background-color: #F0F0F0;
+            }
+
+            /* Modal styling */
+            .modal {
+                display: none;
+                /* Hidden by default */
+                position: fixed;
+                /* Stay in place */
+                z-index: 1;
+                /* Sit on top */
+                left: 0;
+                top: 0;
+                width: 100%;
+                /* Full width */
+                height: 100%;
+                /* Full height */
+                overflow: auto;
+                /* Enable scroll if needed */
+                background-color: rgba(0, 0, 0, 0.4);
+                /* Black background with opacity */
+            }
+
+            .modal-content {
+                background-color: #fefefe;
+                margin: 10% auto;
+                /* 10% from the top and centered */
+                padding: 20px;
+                border: 1px solid #888;
+                width: 50%;
+                /* Could be more or less, depending on screen size */
+                border-radius: 10px;
+                position: relative;
+            }
+
+            .close {
+                position: absolute;
+                top: 10px;
+                right: 20px;
+                color: #aaa;
+                font-size: 28px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            /* Form styling */
+            form {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            label {
+                margin-top: 10px;
+                font-weight: bold;
+            }
+
+            input[type="text"],
+            textarea {
+                width: 100%;
+                padding: 10px;
+                margin-top: 5px;
+                margin-bottom: 15px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                box-sizing: border-box;
+            }
+
+            button[type="submit"] {
+                background-color: #007BFF;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                padding: 10px 20px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+            button[type="submit"]:hover {
+                background-color: #0056b3;
+            }
+
+            /* Adjustments for images in table */
+            .img-container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 50px;
+                height: 50px;
+            }
+
+            .img-container img {
+                max-width: 100%;
+                max-height: 100%;
+                border-radius: 5px;
+            }
+
+            /* General body styling */
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+            }
+
+            /* Search container styling */
+            .search-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 20px;
+            }
+
+            /* Search form styling */
+            .search-form {
+                display: flex;
+                align-items: center;
+                max-width: 600px;
+                width: 100%;
+            }
+
+            /* Search input styling */
+            .search-input {
+                width: 100%;
+                padding: 10px;
+                border: 2px solid #ccc;
+                border-radius: 4px 0 0 4px;
+                font-size: 16px;
+                transition: border-color 0.3s;
+            }
+
+            .search-input:focus {
+                border-color: #007bff;
+                outline: none;
+            }
+
+            /* Search button styling */
+            .search-button {
+                padding: 10px;
+                border: 2px solid #007bff;
+                border-radius: 0 4px 4px 0;
+                background-color: #007bff;
+                color: white;
+                font-size: 16px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .search-button:hover {
+                background-color: #0056b3;
+            }
+
+            .search-button i {
+                font-size: 18px;
+            }
+
+            /* Basic pagination styling */
+            .pagination {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                list-style: none;
+                padding: 0;
+                margin: 20px 0;
+            }
+
+            .pagination a {
+                display: inline-block;
+                padding: 10px 15px;
+                margin: 0 5px;
+                text-decoration: none;
+                color: #007bff;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                transition: background-color 0.3s, color 0.3s;
+            }
+
+            .pagination a:hover {
+                background-color: #f8f9fa;
+                color: #0056b3;
+            }
+
+            .pagination .active a {
+                background-color: #007bff;
+                color: white;
+                border-color: #007bff;
+            }
+
+            .pagination .disabled a {
+                color: #6c757d;
+                pointer-events: none;
+                cursor: default;
+                border-color: #ddd;
+            }
+
+            /* Optional: Add a little spacing between pagination items */
+            .pagination a {
+                margin: 0 2px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="sidebar">
+            <h2>BOOGY</h2>
+            <ul>
+                <li><a href="/admin/dashboard">Dashboard</a></li>
+                <li><a href="/admin/loadOrderlist">Orders</a></li>
+                <li><a href="/admin/loadusermanage">Customers</a></li>
+                <li><a href="/admin/loadCoupon">Coupon</a></li>
+                <li><a href="/admin/loadOffer">Offers</a></li>
+                <li><a href="/admin/loadCategory">Categories</a></li>
+                <li><a href="/admin/loadProductmanage">Products</a></li>
+                <li><a href="/admin/logout">logout</a></li>
+
+
+
+            </ul>
+
+            <div class="logout">
+                <a href="#">Logout</a>
+            </div>
+        </div>
+        <div class="content">
+            <div class="search-container">
+                <form class="search-form" action="/admin/loadCategory" method="get">
+                    <input type="text" name="search" value="<%= searchQuery %>" placeholder="Search by keyword or #"
+                        class="search-input">
+                    <button type="submit" class="search-button">
+                        search<i class="icon-search"></i>
+                    </button>
+                </form>
+            </div>
+            <div class="header">
+
+                <h1>Categories</h1>
+            </div>
+            <table class="categories-table">
+                <thead>
+                    <tr>
+                        <th>Category Name</th>
+                        <th>Description</th>
+                        <th>Image</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <a href="/admin/loadAddCategory" class="add-category">+ Add Category</a>
+                    <% categories.forEach(category=> { %>
+                        <tr>
+                            <td>
+                                <%= category.name %>
+                            </td>
+                            <td>
+                                <%= category.description %>
+                            </td>
+                            <td>
+                                <div class="img-container">
+                                    <img src="/assets/categoryImg/<%= category.image %>"
+                                        alt="<%= category.name %> Image">
+                                </div>
+                            </td>
+                            <td>
+                                <button class="edit"
+                                    onclick="openModal('<%= category._id %>', '<%= category.name %>', '<%= category.description %>')">Edit</button>
+                                <% if (category.isBlocked) { %>
+                                    <button class="btn btn-success"
+                                        onclick="blockAndUnblockProduct('<%= category._id %>', true)">Unlist</button>
+                                    <% } else { %>
+                                        <button class="btn btn-danger"
+                                            onclick="blockAndUnblockProduct('<%= category._id %>', false)">List</button>
+                                        <% } %>
+                            </td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+                <nav>
+                    <div class="pagination">
+                        <% if (currentPage> 1) { %>
+                            <a
+                                href="/admin/loadCategory?page=<%= currentPage - 1 %>&search=<%= searchQuery %>">Previous</a>
+                            <% } %>
+                                <% for (let i=1; i <=totalPages; i++) { %>
+                                    <a href="/admin/loadCategory?page=<%= i %>&search=<%= searchQuery %>">
+                                        <%= i %>
+                                    </a>
+                                    <% } %>
+                                        <% if (currentPage < totalPages) { %>
+                                            <a
+                                                href="/admin/loadCategory?page=<%= currentPage + 1 %>&search=<%= searchQuery %>">Next</a>
+                                            <% } %>
+                    </div>
+
+                </nav>
+            </table>
+        </div>
+
+        <!-- Modal -->
+
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>Edit Category</h2>
+                <form id="editForm">
+                    <input type="hidden" id="editId" name="id">
+                    <div class="form-group">
+                        <label for="editName">Name:</label>
+                        <input type="text" id="editName" name="name" class="form-control" required>
+                        <div class="error-message" id="nameError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="editDescription">Description:</label>
+                        <textarea id="editDescription" name="description" class="form-control" rows="4"
+                            required></textarea>
+                        <div class="error-message" id="descriptionError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="categoryImage">Category Image:</label>
+                        <input type="file" id="categoryImage" name="categoryImage" accept="image/png, image/jpeg">
+                        <div class="error-message" id="imageError"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Category</button>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            var modal = document.getElementById("editModal");
+
+            // Function to open the modal
+            function openModal(id, name, description) {
+                document.getElementById("editId").value = id;
+                document.getElementById("editName").value = name;
+                document.getElementById("editDescription").value = description;
+                modal.style.display = "block";
+
+                // Function to close the modal
+                function closeModal() {
+                    modal.style.display = "none";
                 }
-            };
-    
-            // Handle form submission with validation
-            document.getElementById('editForm').addEventListener('submit', async function(event) {
-                event.preventDefault();
-    
-                // Clear previous error messages
-                document.querySelectorAll('.error-message').forEach(elem => elem.textContent = '');
-    
-                let newName = document.getElementById('editName').value.trim();
-                let newDescription = document.getElementById('editDescription').value.trim();
-                let image = document.getElementById('categoryImage');
-    
-                let valid = true;
-    
-                // Validation
-                if (!newName) {
-                    document.getElementById('nameError').textContent = 'Name is required.';
-                    valid = false;
-                } else if (!/^[a-zA-Z\s]+$/.test(newName)) {
-                    document.getElementById('nameError').textContent = 'Name must contain only letters and spaces.';
-                    valid = false;
-                }
-    
-                if (!newDescription) {
-                    document.getElementById('descriptionError').textContent = 'Description is required.';
-                    valid = false;
-                }
-    
-                if (image.files.length > 0) {
-                    const file = image.files[0];
-                    if (!['image/png', 'image/jpeg'].includes(file.type)) {
-                        document.getElementById('imageError').textContent = 'Only PNG and JPEG images are allowed.';
+
+                // Close the modal if the user clicks anywhere outside of it
+                window.onclick = function (event) {
+                    if (event.target == modal) {
+                        closeModal();
+                    }
+                };
+
+                // Handle form submission with validation
+                document.getElementById('editForm').addEventListener('submit', async function (event) {
+                    event.preventDefault();
+
+                    // Clear previous error messages
+                    document.querySelectorAll('.error-message').forEach(elem => elem.textContent = '');
+
+                    let newName = document.getElementById('editName').value.trim();
+                    let newDescription = document.getElementById('editDescription').value.trim();
+                    let image = document.getElementById('categoryImage');
+
+                    let valid = true;
+
+                    // Validation
+                    if (!newName) {
+                        document.getElementById('nameError').textContent = 'Name is required.';
+                        valid = false;
+                    } else if (!/^[a-zA-Z\s]+$/.test(newName)) {
+                        document.getElementById('nameError').textContent = 'Name must contain only letters and spaces.';
                         valid = false;
                     }
-                }
-    
-                if (!valid) {
-                    return; // Stop form submission if validation fails
-                }
-    
-                let formData = new FormData();
-                formData.append('id', id);
-                if (name != newName) {
-                    formData.append('name', newName);
-                }
-                if (description != newDescription) {
-                    formData.append('description', newDescription);
-                }
-                if (image.files.length > 0) {
-                    formData.append('categoryImage', image.files[0]);
-                }
-    
-                try {
-                    var response = await fetch('/admin/editCategory', {
-                        method: 'PATCH',
-                        body: formData
-                    });
-    
-                    if (response.ok) {
-                        var data = await response.json();
-                        console.log('Category updated:', data);
-                        
-                        window.location.reload();
-                    } else {
-                        console.error('Failed to update category');
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                }
-            });
-        }
-    </script>
-    
-    <script>
-        function blockAndUnblockProduct(productId, status) {
-            const action = status ? 'unblock' : 'block';
-            Swal.fire({
-                title: "Are you sure?",
-                text: `You want to ${action} this product?`,
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: `Yes, ${action} it!`,
-                cancelButtonText: "No, cancel!",
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    fetch(`/admin/blockAndUnblockProduct/${productId}`, {
-                        method: 'GET'
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        Swal.fire({
-                            title: "Success!",
-                            text: data.message,
-                            icon: "success"
-                        }).then(() => {
-                            window.location.reload();
-                        });
-                    })
-                    .catch(error => {
-                        console.error("Error:", error);
-                        Swal.fire({
-                            title: "Error",
-                            text: "An error occurred while processing your request.",
-                            icon: "error"
-                        });
-                    });
-                }
-            });
-        }
-    </script>
 
-<%- include('../layouts/footer') %>
+                    if (!newDescription) {
+                        document.getElementById('descriptionError').textContent = 'Description is required.';
+                        valid = false;
+                    }
+
+                    if (image.files.length > 0) {
+                        const file = image.files[0];
+                        if (!['image/png', 'image/jpeg'].includes(file.type)) {
+                            document.getElementById('imageError').textContent = 'Only PNG and JPEG images are allowed.';
+                            valid = false;
+                        }
+                    }
+
+                    if (!valid) {
+                        return; // Stop form submission if validation fails
+                    }
+
+                    let formData = new FormData();
+                    formData.append('id', id);
+                    if (name != newName) {
+                        formData.append('name', newName);
+                    }
+                    if (description != newDescription) {
+                        formData.append('description', newDescription);
+                    }
+                    if (image.files.length > 0) {
+                        formData.append('categoryImage', image.files[0]);
+                    }
+
+                    try {
+                        var response = await fetch('/admin/editCategory', {
+                            method: 'PATCH',
+                            body: formData
+                        });
+
+                        if (response.ok) {
+                            var data = await response.json();
+                            console.log('Category updated:', data);
+
+                            window.location.reload();
+                        } else {
+                            console.error('Failed to update category');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        </script>
+
+        <script>
+            function blockAndUnblockProduct(productId, status) {
+                const action = status ? 'unblock' : 'block';
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: `You want to ${action} this product?`,
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: `Yes, ${action} it!`,
+                    cancelButtonText: "No, cancel!",
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(`/admin/blockAndUnblockProduct/${productId}`, {
+                            method: 'GET'
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                Swal.fire({
+                                    title: "Success!",
+                                    text: data.message,
+                                    icon: "success"
+                                }).then(() => {
+                                    window.location.reload();
+                                });
+                            })
+                            .catch(error => {
+                                console.error("Error:", error);
+                                Swal.fire({
+                                    title: "Error",
+                                    text: "An error occurred while processing your request.",
+                                    icon: "error"
+                                });
+                            });
+                    }
+                });
+            }
+        </script>
+
+        <%- include('../layouts/footer') %>

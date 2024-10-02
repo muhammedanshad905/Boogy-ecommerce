@@ -14,7 +14,7 @@ const loadProductmanage = async (req, res) => {
         
         // Build the query object
         const query = {
-            isBlocked: false, // Example filter; adjust as needed
+            // isBlocked: false, // Example filter; adjust as needed
             $or: [
                 { productName: { $regex: searchQuery, $options: 'i' } },
             ]
@@ -90,9 +90,9 @@ const blockAndUnblockProduct = async (req, res) => {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        // Toggle the isBlocked status
-        product.isBlocked = !product.isBlocked;
-        await product.save();
+        await Products.findByIdAndUpdate(product._id, {isBlocked: !product.isBlocked})
+        // product.isBlocked = !product.isBlocked;
+        // await product.save();
 
         let message = product.isBlocked ? "Product blocked successfully" : "Product unblocked successfully";
 

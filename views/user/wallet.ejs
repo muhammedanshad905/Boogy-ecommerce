@@ -426,7 +426,7 @@
     
 
     <!-- Add Funds Modal -->
-    <div id="addFundsModal" class="modal">
+    <div style="display: none;" id="addFundsModal" class="modal">
         <div class="modal-content">
             <span id="closeModal" class="close">&times;</span>
             <h2>Add Funds</h2>
@@ -442,26 +442,25 @@
             <span id="closeHistoryModal" class="close">&times;</span>
             <h2>Transaction History</h2>
             <div id="transactionHistory">
-                <% wallet.transactions.reverse().forEach(tran=> { %>
+                <% transactions.forEach(tran => { %>
                     <div class="transaction-entry">
                         <div class="transaction-date">
-                            <p><strong>Date:</strong>
-                                <%= tran.date.toLocaleDateString() + " " + tran.date.toLocaleTimeString() %>
-                            </p>
+                            <p><strong>Date:</strong> <%= new Date(tran.date).toLocaleDateString() + " " + new Date(tran.date).toLocaleTimeString() %></p>
                         </div>
                         <div class="transaction-details">
-                            <p><strong>Amount:</strong>
-                                <%= tran.amount %>
-                            </p>
-                            <p><strong>Payment Method:</strong>
-                                <%= tran.paymentMethod %>
-                            </p>
-                            <p class="transaction-status <%= tran.type.toLowerCase() %>">
-                                <%= tran.type %>
-                            </p>
+                            <p><strong>Amount:</strong> <%= tran.amount %></p>
+                            <p><strong>Payment Method:</strong> <%= tran.paymentMethod %></p>
+                            <p class="transaction-status <%= tran.type.toLowerCase() %>"><%= tran.type %></p>
                         </div>
                     </div>
-                    <% }) %>
+                <% }) %>
+            </div>
+    
+            <!-- Pagination Controls -->
+            <div class="pagination-controls">
+                <button id="prevPage" <%= currentPage === 1 ? 'disabled' : '' %> onclick="navigatePage(<%= currentPage - 1 %>)">Previous</button>
+                <span id="pageInfo">Page <%= currentPage %> of <%= totalPages %></span>
+                <button id="nextPage" <%= currentPage === totalPages ? 'disabled' : '' %> onclick="navigatePage(<%= currentPage + 1 %>)">Next</button>
             </div>
         </div>
     </div>
@@ -551,6 +550,15 @@
             }
         });
 
+
+        function navigatePage(page) {
+            console.log(page,"page");
+            
+        if (page > 0 && page <= <%= totalPages %>) {
+            window.location.href = `/loadWallet?page=${page}`;
+        }
+    }
+
         function verifyPayment(paymentDetails, amount) {
             fetch('/verifyPayments', {
                 method: 'POST',
@@ -578,8 +586,10 @@
         function updateWalletBalance(amount) {
             const walletBalanceElement = document.getElementById('walletBalance');
             const currentBalance = parseFloat(walletBalanceElement.innerText);
-            walletBalanceElement.innerText = (currentBalance + amount).toFixed(2);
+            walletBalanceElement.innerText = (currentBalance += amount).toFixed(2);
         }
+
+        
     </script>
 
 </body>

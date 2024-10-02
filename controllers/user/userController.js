@@ -6,7 +6,8 @@ const otpModel = require('../../models/authotp/otpauth')
 const Product=require('../../models/prductmodel/productmodel')
 const Category=require('../../models/categorymodel')
 const Offer = require('../../models/offerModel')
-const Wallet = require('../../models/walletModel')
+const Wallet = require('../../models/walletModel');
+const { default: mongoose } = require('mongoose');
 
 
 
@@ -498,20 +499,62 @@ const loadhome = async (req, res) => {
     }
 };
 
+// const productDetails = async (req, res) => {
+//     try {
+//         console.log(req.params.id,"idddddddddddddddddddddddd");
+//         const productId = new mongoose.Types.ObjectId(req.params.id)
+//         console.log(productId,"yyyyyyyy");
+        
+        
+//         const product = await Product.findById(req.params.id)
+//             .populate('category')
+//             .populate({
+//                 path: 'offer',
+//                 options: { limit: 1, sort: { _id: -1 } } 
+//             });
+
+//             let user = null;
+//             if (req.session.user_id) {
+//                 user = await User.findById(req.session.user_id);
+//             }
+//         const products = await Product.find({ isBlocked: false }).populate({
+//             path: 'offer',
+//             options: { limit: 1, sort: { _id: -1 } } 
+//         });
+
+//         if (!product) {
+//             return res.status(404).send('Product not found');
+//         }
+//         res.render('singleProduct', { product, products,user });
+       
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).send('Product Not Found');
+//     }
+// };
+
 const productDetails = async (req, res) => {
     try {
+        const productId = req.params.id;
+
+        // Check if the productId is a valid ObjectId (24 character hex string)
+        if (!mongoose.Types.ObjectId.isValid(productId)) {
+            return res.render('error-404')
+        }
+
         // Find the product and populate category and only the last offer
-        const product = await Product.findById(req.params.id)
+        const product = await Product.findById(productId)
             .populate('category')
             .populate({
                 path: 'offer',
                 options: { limit: 1, sort: { _id: -1 } } // Populate only the last offer
             });
 
-            let user = null;
-            if (req.session.user_id) {
-                user = await User.findById(req.session.user_id);
-            }
+        let user = null;
+        if (req.session.user_id) {
+            user = await User.findById(req.session.user_id);
+        }
+
         const products = await Product.find({ isBlocked: false }).populate({
             path: 'offer',
             options: { limit: 1, sort: { _id: -1 } } // Populate only the last offer
@@ -520,14 +563,14 @@ const productDetails = async (req, res) => {
         if (!product) {
             return res.status(404).send('Product not found');
         }
-        res.render('singleProduct', { product, products,user });
-       
+
+        res.render('singleProduct', { product, products, user });
+
     } catch (error) {
         console.error(error);
-        res.status(500).send('Product Not Found');
+        res.status(500).send('Internal Server Error');
     }
 };
-
 
 
 

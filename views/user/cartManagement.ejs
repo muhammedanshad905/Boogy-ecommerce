@@ -333,22 +333,22 @@
                                     <span class="col-6 col-sm-6 cart__subtotal-title">Subtotal</span>
                                     <span class="col-6 col-sm-6 text-right"><span class="money" id="cart-subtotal">
                                         
-                                        Rs<%=subtotal.toFixed(2) %></span></span>
+                                        Rs <%=subtotal.toFixed(2) %></span></span>
                                 </div>
                                 <div class="row border-bottom pb-2 pt-2">
                                     <span class="col-6 col-sm-6 cart__subtotal-title">Tax</span>
-                                    <span class="col-6 col-sm-6 text-right">Rs10.00</span>
+                                    <span class="col-6 col-sm-6 text-right">Rs 10.00</span>
                                 </div>
                                 <div class="row border-bottom pb-2 pt-2">
                                     <span class="col-6 col-sm-6 cart__subtotal-title">Shipping</span>
-                                    <span class="col-6 col-sm-6 text-right">Rs5</span>
+                                    <span class="col-6 col-sm-6 text-right">Rs 5</span>
                                 </div>
                                 <div class="row border-bottom pb-2 pt-2">
                                     
                                     <span class="col-6 col-sm-6 cart__subtotal-title">Total</span>
                                     <span class="col-6 col-sm-6 text-right"><span class="money" id="cart-GrandTotal">
                                         
-                                        Rs<%=(subtotal + 10 +5).toFixed(2) %></span></span>
+                                        Rs <%=(subtotal + 10 +5).toFixed(2) %></span></span>
                                 </div>
                                 <p class="cart__shipping m-0">Shipping &amp; taxes calculated at checkout</p>
                                 <p class="cart__shipping pt-0 m-0 fst-normal freeShipclaim"><i
@@ -532,8 +532,8 @@
                     
                                 document.getElementById(`product-total-${productId}`).textContent = `${productTotal.toFixed(2)}`;
                                 // Update the cart subtotal and grand total
-                                document.getElementById('cart-subtotal').textContent = `$${newSubtotal.toFixed(2)}`;
-                                document.getElementById('cart-GrandTotal').textContent = `$${newGrandTotal.toFixed(2)}`;
+                                document.getElementById('cart-subtotal').textContent = `Rs ${newSubtotal.toFixed(2)}`;
+                                document.getElementById('cart-GrandTotal').textContent = `Rs ${newGrandTotal.toFixed(2)}`;
                                 
                             if(message)
                             Swal.fire({

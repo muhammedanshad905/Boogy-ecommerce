@@ -34,6 +34,7 @@ const cartSchema = mongoose.Schema({
                 type: Number,
                 default: 1,
             },
+            
         },
     ],
 });

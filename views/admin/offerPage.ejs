@@ -22,23 +22,53 @@
 
         .sidebar {
             width: 250px;
-            background-color: #343a40;
-            color: white;
+            background-color: #ffffff;
             height: 100vh;
-            padding-top: 20px;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             position: fixed;
         }
 
-        .sidebar a {
-            color: white;
-            text-decoration: none;
-            display: block;
-            padding: 15px 20px;
-            margin: 10px 0;
+        .sidebar h2 {
+            text-align: center;
+            font-size: larger;
+            margin-bottom: 40px;
+            color: #007BFF;
         }
 
-        .sidebar a:hover {
-            background-color: #495057;
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 20px;
+            font-size: medium;
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: #000;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #F0F0F0;
+        }
+
+        .main-content {
+                margin-left: 250px;
+                margin-top: 20px;
+                width: 100%;
+                /* Adjust to match sidebar width */
+                padding: 20px;
+                background-color: #f8f9fa;
+                /* Optional: adds a different background for visibility */
+                min-height: 100vh;
+                /* Ensures the main content takes full height */
         }
 
         .container {
@@ -193,201 +223,173 @@
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar Column (col-lg-3 for sidebar, col-lg-9 for content) -->
-            <div class="col-12 col-sm-12 col-md-12 col-lg-3 left-col">
-                <div class="product-sticky-style mb-4">
-                    <div class="card dashboard-profile position-relative">
-                        <div class="card-image position-relative bg-blue">
-                            <div
-                                class="img-thumbnail position-absolute top-50 start-50 translate-middle col-10 bg-white text-center p-4">
-                                <h3 class="my-3 d-none">Boogy Store</h3>
-                                <p class="mt-3 mb-0">54 followers | 46 review</p>
-                                <p class="email d-flex-center justify-content-center mt-2">
-                                    <i class="an an-envelope-l me-2"></i>
-                                    <a href="mailto:sales@yousite.com">sales@yousite.com</a>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="list-group rounded-0 dashboard-links">
-                            <a href="/admin/dashboard" class="list-group-item list-group-item-action active">
-                                <i class="an an-home-l me-2"></i> Dashboard
-                            </a>
-                            <a href="/admin/loadusermanage" class="list-group-item list-group-item-action">
-                                <i class="an an-user-expand me-2"></i>User management
-                            </a>
-                            <a href="/admin/loadCategory" class="list-group-item list-group-item-action">
-                                <i class="an an-upload-l me-2"></i>category management
-                            </a>
-                            <a href="/admin/loadproductmanage" class="list-group-item list-group-item-action">
-                                <i class="an an-truck-l me-2"></i>product management
-                            </a>
-                            <a href="/admin/loadOrderlist" class="list-group-item list-group-item-action">
-                                <i class="an an-edit-l me-2"></i>order management
-                            </a>
-                            <a href="/admin/loadOffer" class="list-group-item list-group-item-action">
-                                <i class="an an-edit-l me-2"></i> % offer management
-                            </a>
-                            <a href="/admin/loadCoupon" class="list-group-item list-group-item-action">
-                                <i class="an an-edit-l me-2"></i>Coupon management
-                            </a>
-                            <a href="/admin/loadSales" class="list-group-item list-group-item-action">
-                                <i class="an an-edit-l me-2"></i>$ Sales
-                            </a>
-                            <a href="/admin/logout" class="list-group-item list-group-item-action">
-                                <i class="an an-power-off-r me-2"></i> Logout
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    
-            <!-- Main Content Column -->
-            <div class="col-12 col-sm-12 col-md-12 col-lg-9">
-                <div id="snackbar"></div>
-    
-                <h2>Offers</h2>
-                <p>Offers / Add Offer</p>
-    
-                <form action="/add-offer" method="POST">
-                    <div class="form-group">
-                        <label for="offerName">Offer Name</label>
-                        <input type="text" id="offerName" name="offerName" value="" required>
-                    </div>
-    
-                    <div class="form-group">
-                        <label for="offerType">Select Offer Type</label>
-                        <select id="offerType" name="offerType" onchange="toggleOfferType()" required>
-                            <option value="">Select an offer type</option>
-                            <option value="product" <%=offerType==='product' ? 'selected' : '' %>>Product Offer</option>
-                            <option value="category" <%=offerType==='category' ? 'selected' : '' %>>Category Offer</option>
-                        </select>
-                    </div>
-    
-                    <div class="form-group" id="productOfferField" style="display: <%= offerType === 'product' ? 'block' : 'none' %>;">
-                        <label for="productOffer">Select Product</label>
-                        <select id="productOffer" name="productOffer" onchange="toggleProductDetails()">
-                            <option value="">Select a product</option>
-                            <% products.forEach(function(product) { %>
-                                <option value="<%= product._id %>" <%=productOffer===product._id ? 'selected' : '' %>>
-                                    <%= product.productName %>
-                                </option>
-                            <% }) %>
-                        </select>
-                    </div>
-    
-                    <div class="form-group" id="productDetailsField" style="display: none;">
-                        <label for="productDetails">Product Details</label>
-                        <input type="text" id="productDetails" name="productDetails" value="<%= productDetails %>" placeholder="Enter product details">
-                    </div>
-    
-                    <div class="form-group" id="categoryOfferField" style="display: <%= offerType === 'category' ? 'block' : 'none' %>;">
-                        <label for="categoryOffer">Select Category</label>
-                        <select id="categoryOffer" name="categoryOffer">
-                            <option value="">Select a category</option>
-                            <% categories.forEach(function(category) { %>
-                                <option value="<%= category._id %>" <%=categoryOffer===category._id ? 'selected' : '' %>>
-                                    <%= category.name %>
-                                </option>
-                            <% }) %>
-                        </select>
-                    </div>
-    
-                    <div class="form-group">
-                        <label for="discountPercentage">Offer Percentage %</label>
-                        <input type="number" id="discountPercentage" name="discountPercentage" value="<%= discountPercentage %>" required>
-                    </div>
-    
-                    <div class="form-group">
-                        <label for="maxRedeem">Max Redeem Amount</label>
-                        <input type="number" id="maxRedeem" name="maxRedeem" value="<%= maxRedeem %>" required>
-                    </div>
-    
-                    <div class="form-group">
-                        <label for="offerDescription">Offer Description</label>
-                        <input type="text" id="offerDescription" name="offerDescription" value="<%= offerDescription %>" required>
-                    </div>
-    
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-success">Add Offer</button>
-                        <button type="reset" class="btn btn-secondary">Reset</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+
+    <div class="sidebar">
+        <h2>BOOGY</h2>
+        <ul>
+            <li><a href="/admin/dashboard">Dashboard</a></li>
+            <li><a href="/admin/loadOrderlist">Orders</a></li>
+            <li><a href="/admin/loadusermanage">Customers</a></li>
+            <li><a href="/admin/loadCoupon">Coupon</a></li>
+            <li><a href="/admin/loadOffer">Offers</a></li>
+            <li><a href="/admin/loadCategory">Categories</a></li>
+            <li><a href="/admin/loadProductmanage">Products</a></li>
+            <li><a href="/admin/logout">Logout</a></li>
+        </ul>
     </div>
-    
-            <script>
-                function toggleOfferType() {
-                    const offerType = document.getElementById('offerType').value;
-                    const productField = document.getElementById('productOfferField');
-                    const categoryField = document.getElementById('categoryOfferField');
-                    const productDetailsField = document.getElementById('productDetailsField');
+    <!-- Sidebar Column (col-lg-3 for sidebar, col-lg-9 for content) -->
 
-                    if (offerType === 'product') {
-                        productField.style.display = 'flex';
-                        categoryField.style.display = 'none';
-                        productDetailsField.style.display = 'none'; // Hide until a product is selected
-                    } else if (offerType === 'category') {
-                        productField.style.display = 'none';
-                        categoryField.style.display = 'flex';
-                        productDetailsField.style.display = 'none';
-                    }
-                }
 
-                function toggleProductDetails() {
-                    const productSelected = document.getElementById('productOffer').value;
-                    const productDetailsField = document.getElementById('productDetailsField');
+    <!-- Main Content Column -->
+    <!-- <div class="col-12 col-sm-12 col-md-12 col-lg-9"> -->
+    <div class="main-content">
+        <div id="snackbar"></div>
 
-                    if (productSelected) {
-                        productDetailsField.style.display = 'flex';
-                    } else {
-                        productDetailsField.style.display = 'none';
-                    }
-                }
+        <h2>Offers</h2>
+        <p>Offers / Add Offer</p>
 
-                document.querySelector('form').addEventListener('submit', function (event) {
-                    event.preventDefault();
+        <form action="/add-offer" method="POST">
+            <div class="form-group">
+                <label for="offerName">Offer Name</label>
+                <input type="text" id="offerName" name="offerName" value="" required>
+            </div>
 
-                    const formData = new FormData(this);
-                    const offerData = {
-                        offerName: formData.get('offerName'),
-                        offerType: formData.get('offerType'),
-                        productOffer: formData.get('productOffer') || null,
-                        categoryOffer: formData.get('categoryOffer') || null,
-                        discountPercentage: formData.get('discountPercentage'),
-                        maxRedeem: formData.get('maxRedeem'),
-                        offerDescription: formData.get('offerDescription')
-                    };
+            <div class="form-group">
+                <label for="offerType">Select Offer Type</label>
+                <select id="offerType" name="offerType" onchange="toggleOfferType()" required>
+                    <option value="">Select an offer type</option>
+                    <option value="product" <%=offerType==='product' ? 'selected' : '' %>>Product Offer</option>
+                    <option value="category" <%=offerType==='category' ? 'selected' : '' %>>Category Offer</option>
+                </select>
+            </div>
 
-                    fetch('/admin/addOffers', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(offerData)
-                    }).then(response => response.json())
-                        .then(data => {
-                            // Handle success
-                            showSnackbar(data.message)
-                        }).catch(error => {
-                            // Handle error
-                            console.error('Error:', error);
-                            showSnackbar(data.error)
-                        });
+            <div class="form-group" id="productOfferField"
+                style="display: <%= offerType === 'product' ? 'block' : 'none' %>;">
+                <label for="productOffer">Select Product</label>
+                <select id="productOffer" name="productOffer" onchange="toggleProductDetails()">
+                    <option value="">Select a product</option>
+                    <% products.forEach(function(product) { %>
+                        <option value="<%= product._id %>" <%=productOffer===product._id ? 'selected' : '' %>>
+                            <%= product.productName %>
+                        </option>
+                        <% }) %>
+                </select>
+            </div>
+
+            <div class="form-group" id="productDetailsField" style="display: none;">
+                <label for="productDetails">Product Details</label>
+                <input type="text" id="productDetails" name="productDetails" value="<%= productDetails %>"
+                    placeholder="Enter product details">
+            </div>
+
+            <div class="form-group" id="categoryOfferField"
+                style="display: <%= offerType === 'category' ? 'block' : 'none' %>;">
+                <label for="categoryOffer">Select Category</label>
+                <select id="categoryOffer" name="categoryOffer">
+                    <option value="">Select a category</option>
+                    <% categories.forEach(function(category) { %>
+                        <option value="<%= category._id %>" <%=categoryOffer===category._id ? 'selected' : '' %>>
+                            <%= category.name %>
+                        </option>
+                        <% }) %>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="discountPercentage">Offer Percentage %</label>
+                <input type="number" id="discountPercentage" name="discountPercentage" value="<%= discountPercentage %>"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="maxRedeem">Max Redeem Amount</label>
+                <input type="number" id="maxRedeem" name="maxRedeem" value="<%= maxRedeem %>" required>
+            </div>
+
+            <div class="form-group">
+                <label for="offerDescription">Offer Description</label>
+                <input type="text" id="offerDescription" name="offerDescription" value="<%= offerDescription %>"
+                    required>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-success">Add Offer</button>
+                <button type="reset" class="btn btn-secondary">Reset</button>
+            </div>
+        </form>
+    </div>
+    <!-- </div> -->
+
+    <script>
+        function toggleOfferType() {
+            const offerType = document.getElementById('offerType').value;
+            const productField = document.getElementById('productOfferField');
+            const categoryField = document.getElementById('categoryOfferField');
+            const productDetailsField = document.getElementById('productDetailsField');
+
+            if (offerType === 'product') {
+                productField.style.display = 'flex';
+                categoryField.style.display = 'none';
+                productDetailsField.style.display = 'none'; // Hide until a product is selected
+            } else if (offerType === 'category') {
+                productField.style.display = 'none';
+                categoryField.style.display = 'flex';
+                productDetailsField.style.display = 'none';
+            }
+        }
+
+        function toggleProductDetails() {
+            const productSelected = document.getElementById('productOffer').value;
+            const productDetailsField = document.getElementById('productDetailsField');
+
+            if (productSelected) {
+                productDetailsField.style.display = 'flex';
+            } else {
+                productDetailsField.style.display = 'none';
+            }
+        }
+
+        document.querySelector('form').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            const offerData = {
+                offerName: formData.get('offerName'),
+                offerType: formData.get('offerType'),
+                productOffer: formData.get('productOffer') || null,
+                categoryOffer: formData.get('categoryOffer') || null,
+                discountPercentage: formData.get('discountPercentage'),
+                maxRedeem: formData.get('maxRedeem'),
+                offerDescription: formData.get('offerDescription')
+            };
+
+            fetch('/admin/addOffers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(offerData)
+            }).then(response => response.json())
+                .then(data => {
+                    // Handle success
+                    showSnackbar(data.message)
+                }).catch(error => {
+                    // Handle error
+                    console.error('Error:', error);
+                    showSnackbar(data.error)
                 });
+        });
 
-                function showSnackbar(message) {
-                    var snackbar = document.getElementById("snackbar");
-                    snackbar.textContent = message; // Set the message
-                    snackbar.className = "show"; // Add the "show" class
-                    setTimeout(function () {
-                        snackbar.className = snackbar.className.replace("show", "");
-                    }, 3000); // Remove the "show" class after 3 seconds
-                }
+        function showSnackbar(message) {
+            var snackbar = document.getElementById("snackbar");
+            snackbar.textContent = message; // Set the message
+            snackbar.className = "show"; // Add the "show" class
+            setTimeout(function () {
+                snackbar.className = snackbar.className.replace("show", "");
+            }, 3000); // Remove the "show" class after 3 seconds
+        }
 
-            </script>
+    </script>
 </body>
 
 </html>

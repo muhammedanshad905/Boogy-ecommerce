@@ -38,7 +38,7 @@ adminroute.get('/loadProductmanage',auth.isLogin,productControl. loadProductmana
 adminroute.get('/addProductmanage',auth.isLogin,productControl.addProductmanage)
 adminroute.get('/addProduct',auth.isLogin,productControl.addProduct)
 adminroute.post('/addProduct',productUpload,productControl.addProduct);
-adminroute.get('/blockAndUnblockProduct',auth.isLogin,productControl.blockAndUnblockProduct);
+adminroute.get('/blockAndUnblockProducts',auth.isLogin,productControl.blockAndUnblockProduct);
 adminroute.get('/editProduct/:id',auth.isLogin, productControl.editProductPage);
 adminroute.post('/updateProduct/:id',productUpload, productControl.updateProduct);
 

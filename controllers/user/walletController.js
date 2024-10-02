@@ -7,24 +7,42 @@ const razorpayInstance = new Razorpay({
     key_secret: process.env.RAZORPAY_KEY_SECRET
 });
 
-const loadWallet=async(req,res)=>{
+
+
+const loadWallet = async (req, res) => {
     try {
-        let wallet=await Wallet.findOne({user:req.session.user_id})
+        const userId = req.session.user_id;
+        const page = parseInt(req.query.page) || 1; // Default to page 1
+        const itemsPerPage = 5; // Number of transactions per page
+
+        let wallet = await Wallet.findOne({ user: userId });
         
-        if(!wallet){
+        if (!wallet) {
             wallet = new Wallet({
-                user : req.session.user_id
+                user: userId
             });
-            await wallet.save()
+            await wallet.save();
         }
-        
-        
-       res.render('wallet',{wallet}) 
+
+        // Pagination logic
+        const totalTransactions = wallet.transactions.length;
+        const totalPages = Math.ceil(totalTransactions / itemsPerPage);
+        const paginatedTransactions = wallet.transactions
+            .slice((page - 1) * itemsPerPage, page * itemsPerPage) // Paginate the transactions
+            .reverse();
+
+        res.render('wallet', { 
+            wallet, 
+            transactions: paginatedTransactions, 
+            currentPage: page, 
+            totalPages 
+        });
     } catch (error) {
         console.log(error);
-        
+        res.status(500).send('Error loading wallet');
     }
-}
+};
+
 
 const createOrder = async (req, res) => {
     const { amount } = req.body;

@@ -9,21 +9,45 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            color: black;
         }
 
         .sidebar {
-            height: 100vh;
-            padding-top: 20px;
-        }
+                width: 250px;
+                background-color: #ffffff;
+                height: 100vh;
+                padding: 20px;
+                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+                position: fixed;
+            }
 
-        .sidebar .nav-link {
-            color: #333;
-            font-weight: bold;
-        }
+            .sidebar h2 {
+                text-align: center;
+                margin-bottom: 40px;
+                color: #007BFF;
+            }
 
-        .sidebar .nav-link.active {
-            color: #007bff;
-        }
+            .sidebar ul {
+                list-style: none;
+                padding: 0;
+            }
+
+            .sidebar ul li {
+                margin-bottom: 20px;
+            }
+
+            .sidebar ul li a {
+                text-decoration: none;
+                color: #000;
+                display: block;
+                padding: 10px;
+                border-radius: 5px;
+                transition: background-color 0.3s;
+            }
+
+            .sidebar ul li a:hover {
+                background-color: #F0F0F0;
+            }
 
         .coupon-list {
             margin-top: 20px;
@@ -127,7 +151,7 @@
         <div id="snackbar"></div>
 
         <div class="row">
-            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <!-- <nav class="col-md-2 d-none d-md-block bg-light sidebar">
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
@@ -160,7 +184,28 @@
                         </li>
                     </ul>
                 </div>
-            </nav>
+            </nav> -->
+            
+            <div class="sidebar">
+                <h2>BOOGY</h2>
+                <ul>
+                    <li><a href="/admin/dashboard">Dashboard</a></li>
+                    <li><a href="/admin/loadOrderlist">Orders</a></li>
+                    <li><a href="/admin/loadusermanage">Customers</a></li>
+                    <li><a href="/admin/loadCoupon">Coupon</a></li>
+                    <li><a href="/admin/loadOffer">Offers</a></li>
+                    <li><a href="/admin/loadCategory">Categories</a></li>
+                    <li><a href="/admin/loadProductmanage">Products</a></li>
+                    <li><a href="/admin/logout">logout</a></li>
+    
+    
+    
+                </ul>
+    
+                <div class="logout">
+                    <a href="#">Logout</a>
+                </div>
+            </div>
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
                 <h2 class="text-center mt-4">Coupons</h2>
