@@ -373,6 +373,42 @@ body::before {
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
+
+        .referral-container {
+    background-color: #333;
+    padding: 10px;
+    border-radius: 8px;
+    display: inline-block;
+    margin: 10px 0;
+}
+
+.referral-text {
+    color: white;
+    font-size: 16px;
+}
+
+.referral-code {
+    background-color: #555;
+    color: #f9f9f9;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-left: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.referral-code:hover {
+    background-color: #777;
+}
+
+.copy-notification {
+    display: none;
+    color: limegreen;
+    font-size: 14px;
+    margin-left: 10px;
+}
+
     </style>
 </head>
 
@@ -404,6 +440,14 @@ body::before {
                     <button id="editDetailsBtn">Edit Details</button>
                     <button id="changePasswordBtn">Change Password</button>
                 </div>
+                <div class="referral-container">
+                    <span style="color: white;" class="referral-text">Referral Code: 
+                        <span style="color: white;" class="referral-code" id="referralCode" onclick="copyReferralCode()">
+                            <%= user.referralCode %>
+                        </span>
+                    </span>
+                    <span style="color: #007bff;" class="copy-notification" id="copyNotification">Copied!</span>
+                 
             </div>
         </main>
         <footer>
@@ -630,6 +674,18 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleModal(document.getElementById('changePasswordModal'));
     });
 });
+
+
+function copyReferralCode() {
+    const referralCode = document.getElementById('referralCode').innerText;
+    navigator.clipboard.writeText(referralCode).then(() => {
+        const notification = document.getElementById('copyNotification');
+        notification.style.display = 'inline';
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 2000); // Hide notification after 2 seconds
+    });
+}
 
 
 </script>    
